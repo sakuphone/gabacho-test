@@ -783,7 +783,7 @@ function startGame(){
  // The real hands and board are already dealt; only their visibility is staged.
  // Do not run start-Don or CPU logic until the board card flips.
  g.phase='opening';openingDeal={counts:Array(g.count).fill(0),revealed:false};render();
- const perCard=82.5, initial=280;
+ const perCard=41.25, initial=280;
  for(let step=0;step<5*g.count;step++){
   const player=step%g.count;
   openingTimers.push(setTimeout(()=>{
