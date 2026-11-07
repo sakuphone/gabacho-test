@@ -547,8 +547,6 @@ section.details{margin-top:5px!important}
 .board-cards.opening-hidden::after{content:"✦";position:absolute;inset:0;margin:auto;width:100%;height:100%;box-sizing:border-box;border:4px solid #f2e9d3;border-radius:15px;background:repeating-linear-gradient(40deg,#255a98 0 7px,#3973b4 7px 12px);display:flex;align-items:center;justify-content:center;color:#e8f5ff;font-size:42px;box-shadow:0 7px 16px #0005;z-index:12}
 .board-cards.opening-revealed{animation:dealReveal .65s ease both}
 @keyframes dealReveal{0%{transform:rotateY(90deg) scale(.92);filter:brightness(2)}55%{transform:rotateY(0) scale(1.08)}100%{transform:rotateY(0) scale(1);filter:brightness(1)}}
-.deck-card.deal-pulse{animation:dealDeckPulse .16s ease}
-@keyframes dealDeckPulse{50%{transform:translateY(-6px) scale(1.06);filter:brightness(1.35)}}
 </style><style id="online-style">#onlineScreen .online-fields{display:grid;gap:12px;margin:15px auto;max-width:330px}#onlineScreen label{display:grid;gap:5px;text-align:left;color:#f5e1ac;font-weight:700}#onlineScreen input{width:100%;padding:13px;border-radius:10px;border:1px solid #d6b967;background:#fffdf6;color:#17382c;font-size:17px}#onlineMessage{min-height:2em;color:#ffe18d;white-space:pre-wrap}#onlineLobby{margin:16px auto;padding:14px;border:1px solid #d7b66b;border-radius:15px;background:#08382d}#onlineMembers{margin:12px 0;text-align:left;line-height:2}#onlineRoomCode{letter-spacing:3px;color:#ffe18d}#onlineScreen .entry-primary{margin:5px}#onlineGame .og-decision{border:2px solid #f7d47a;border-radius:14px;padding:10px;margin:10px 0;background:#174b39}#onlineGame .og-decision button{margin:5px;background:#ffe19a;color:#17382d;font-weight:800}
 
 /* v0.67: online match uses the CPU felt-table visual language. */
@@ -792,8 +790,6 @@ function startGame(){
    if(!openingDeal||g.phase!=='opening')return;
    openingDeal.counts[player]++;
    render();
-   const deck=document.querySelector('.deck-card');
-   if(deck){deck.classList.remove('deal-pulse');void deck.offsetWidth;deck.classList.add('deal-pulse')}
   },initial+step*perCard));
  }
  const dealtAt=initial+5*g.count*perCard;
