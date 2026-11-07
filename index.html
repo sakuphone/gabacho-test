@@ -1,0 +1,1389 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>がばちょ</title><meta name="theme-color" content="#102d28"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="がばちょ"><link rel="manifest" href="./manifest.webmanifest"><link rel="apple-touch-icon" href="./apple-touch-icon.png"><style>
+:root{font-family:system-ui,-apple-system,sans-serif;color:#f2faf6;background:#102d28}body{max-width:850px;margin:auto;padding:12px}h1{font-size:26px;margin:10px 0}section{background:#1c4b40;border:1px solid #3b7565;border-radius:16px;padding:14px;margin:12px 0}button,select{border:0;border-radius:10px;padding:11px;margin:3px;font-size:15px}button{background:#f4d27d;color:#16332a;font-weight:700}button:disabled{opacity:.36}.cards{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}.card{background:#fff;color:#122f2a;min-width:51px;height:77px;font-size:21px;border:3px solid transparent}.card.red{color:#c33146}.card.sel{border-color:#f4a900;transform:translateY(-5px)}.muted{color:#b7d3c9;font-size:13px}.tag{display:inline-block;background:#2b6558;border-radius:8px;padding:5px 9px;margin:3px}#status{font-weight:750;font-size:18px}#log{max-height:220px;overflow:auto;font-size:14px;line-height:1.8}#decision{border:1px solid #f4d27d;padding:12px;border-radius:12px;margin:12px 0}#decision[hidden],#suitChoice[hidden],#penalty[hidden]{display:none}.danger{background:#ffc2b7}.secondary{background:#d4e8e0}.player-count{font-size:23px;font-weight:900;color:#ffe18b;margin:0 3px}.player-name{font-weight:750}.player-box{display:inline-flex;align-items:center;gap:4px;flex-wrap:wrap}.player-box.active{outline:2px solid #f4d27d}.player-score{font-size:12px;opacity:.9}#settle{white-space:pre-line;font-weight:650;color:#ffdf8d}
+/* Opponents: visible face-down cards, while their values remain secret */
+#players{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px;margin-top:14px}
+.player-box{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:6px;min-width:0;min-height:132px;padding:11px 6px;margin:0;background:#123a34;border:1px solid #4d8072;border-radius:14px;box-sizing:border-box}
+.player-box.active{outline:2px solid #f4d27d;box-shadow:0 0 0 2px #6c5a2c inset}
+.player-heading{display:flex;gap:7px;align-items:center;justify-content:center;flex-wrap:wrap}
+.player-count{font-size:18px;font-weight:900;color:#ffe18b}
+.back-hand{position:relative;height:68px;width:100%;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.back-card{width:39px;height:57px;flex:none;margin-left:-22px;border:2px solid #e9f4ff;border-radius:5px;box-shadow:0 2px 5px #0007;background:repeating-linear-gradient(45deg,#164d8e 0 4px,#2769ae 4px 7px,#164d8e 7px 11px);position:relative;transform:rotate(var(--angle));}
+.back-card:first-child{margin-left:0}
+.back-card::after{content:'◆';position:absolute;inset:7px 5px;border:1px solid #c5defc;color:#c5defc;font-size:17px;text-align:center;line-height:36px;background:#ffffff14}
+.back-more{font-size:12px;background:#092c27;padding:3px 5px;border-radius:7px;z-index:2;margin-left:-8px}
+@media(max-width:450px){#players{grid-template-columns:repeat(2,minmax(0,1fr))}.player-box{min-height:127px}.back-card{width:35px;height:52px;margin-left:-21px}}
+
+/* v0.18 portrait-first felt table */
+:root{background:#09291f;color:#f9f5e8;font-family:system-ui,-apple-system,"Hiragino Kaku Gothic ProN",sans-serif}
+*{box-sizing:border-box}body{max-width:520px;padding:12px 12px 32px;margin:auto;background:radial-gradient(ellipse at 50% 37%,#16543e 0%,#0a3429 56%,#07251f 100%);min-height:100dvh}
+.brand{text-align:center;margin:8px 0 14px}.brand h1{font-size:30px;color:#f6db9d;margin:0;text-shadow:0 2px 4px #0008}.brand h1 small{font-size:13px;color:#d5c493}.brand-sub{letter-spacing:3px;color:#d0b875;font-size:9px}
+section{background:#123f34d9;border:1px solid #7a7147;border-radius:17px;padding:12px;margin:11px 0;box-shadow:0 8px 22px #001b1570}
+.setup{padding:10px}.setup label{font-size:13px;display:inline-block;margin-right:6px}.setup select{font-size:14px;padding:8px;background:#f8f3e5;color:#123b31}.setup>button{font-size:13px;padding:9px 12px}
+#players{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-top:12px}.player-box{min-height:104px;padding:7px 3px;background:linear-gradient(#154a3c,#0c322a);border-color:#6b775b;border-radius:12px;gap:3px}.player-box.active{outline:2px solid #ffdc72;box-shadow:0 0 14px #f8cc6e70}.player-heading{font-size:12px}.player-count{font-size:15px}.player-score{font-size:11px}.back-hand{height:51px}.back-card{height:43px;width:29px;margin-left:-17px;border-radius:4px}.back-card::after{inset:4px 3px;font-size:13px;line-height:27px}.player-box:first-child{grid-column:1/-1;min-height:52px;flex-direction:row;justify-content:space-around}.player-box:first-child .back-hand{width:auto;height:auto}
+.table-area{border:2px solid #a18a4b;background:radial-gradient(ellipse,#176448,#0b3e30);text-align:center;min-height:212px;padding:13px}.table-label{color:#f6d787;font-weight:750;font-size:14px;letter-spacing:2px;margin-bottom:10px}#board{display:flex;flex-direction:column;align-items:center;gap:8px}.board-cards{display:flex;justify-content:center;gap:4px;flex-wrap:wrap}.board-card{display:flex;flex-direction:column;justify-content:space-between;text-align:left;width:73px;height:104px;background:#fffdf7;color:#162c27;border-radius:9px;border:2px solid #e6e2d6;padding:7px;font-size:21px;font-weight:900;box-shadow:0 4px 9px #001e1877}.board-card.red{color:#c32e42}.board-card .pip{font-size:35px;text-align:center}.board-meta{color:#e4e9d9;font-size:12px;line-height:1.6}.board-meta strong{color:#f6d787}#status{font-size:15px;color:#fce5a2;margin:12px 0 6px}#settle{font-size:13px}
+.hand-area{background:#0b352b;border-color:#a18a4b}.hand-area h3{margin:0;font-size:17px;color:#f3dfaa}.hand-area #sum{font-size:12px;color:#d7e8da;font-weight:500}.cards{display:flex;flex-wrap:nowrap;overflow-x:auto;overflow-y:visible;gap:5px;padding:15px 3px 12px;margin:8px 0 0;scrollbar-width:thin}.card{flex:none;min-width:51px;width:51px;height:77px;border:2px solid #d5d5d5;border-radius:8px;box-shadow:0 3px 7px #0008;font-weight:800;transition:transform .14s,box-shadow .14s,opacity .14s}.card.playable:not(:disabled){border-color:#ffe08b;box-shadow:0 0 0 2px #f2b94b,0 0 15px 4px #ffcf5d9c;animation:glow 2s ease-in-out infinite alternate}.card.unplayable:not(:disabled){opacity:.55;filter:saturate(.65)}.card.sel,.card.sel.playable:not(:disabled){border-color:#fff1ad;transform:translateY(-9px);box-shadow:0 0 0 3px #ffd15c,0 0 18px #ffe17b}.card:disabled{opacity:.65}@keyframes glow{from{box-shadow:0 0 0 1px #eab648,0 0 7px 2px #eab64888}to{box-shadow:0 0 0 2px #ffe18b,0 0 17px 4px #ffe18baa}}#handHint{margin:0 0 8px;font-size:11px}
+.hand-area>button{font-size:14px;margin:3px;padding:11px 12px}.hand-area #play{background:linear-gradient(#ffe6a3,#d8a84b)}.hand-area #draw{background:#d4e8df}.hand-area #penalty{background:#ffbc9b}.hand-area #pass{background:#b3cfc5}.details{font-size:12px}.details #log{font-size:12px}
+@media(min-width:480px){.card{width:59px;height:88px}.board-card{width:83px;height:116px}}
+@media(prefers-reduced-motion:reduce){.card.playable:not(:disabled){animation:none}}
+
+/* v0.18: compact portrait layout, no horizontal hand clipping */
+body{padding:7px 9px 24px}
+.brand{margin:3px 0 5px}.brand h1{font-size:24px}
+body>.muted{margin:3px 3px 5px;font-size:10px;line-height:1.3}
+section{margin:7px 0;padding:9px}
+.setup{padding:8px}.setup label{font-size:12px}.setup select{padding:6px;margin:1px;font-size:13px}
+#players{gap:5px;margin-top:7px}.player-box{min-height:87px;padding:5px 3px;gap:1px}.player-box:first-child{min-height:36px}.back-hand{height:43px}.back-card{height:36px;width:26px;margin-left:-16px}.back-card::after{inset:3px 2px;line-height:25px}
+.table-area{min-height:0;padding:9px}.table-label{margin-bottom:5px;font-size:12px}.board-card{width:63px;height:87px;font-size:18px;padding:5px}.board-card .pip{font-size:29px}.board-meta{font-size:11px}#board{gap:5px}#status{margin:6px 0 3px;font-size:14px}
+.hand-area{padding:9px}.hand-area h3{font-size:15px}
+.cards{display:flex;flex-wrap:nowrap;align-items:flex-end;justify-content:center;overflow:visible;gap:0;padding:18px 1px 13px;margin:4px 0 0;min-height:110px;width:100%;touch-action:manipulation}
+.cards .card{position:relative;display:flex;align-items:flex-start;justify-content:center;flex:0 0 52px;min-width:0;width:52px;height:81px;margin:0;padding:8px 1px 0;border-radius:8px;font-size:20px;white-space:nowrap;touch-action:manipulation;-webkit-tap-highlight-color:transparent;box-shadow:0 3px 6px #0008}
+.cards .card:first-child{margin-left:0!important}
+.cards .card.sel{z-index:50;transform:translateY(-13px);box-shadow:0 0 0 3px #ffd15c,0 0 22px 6px #ffe17bcc}
+.cards .card.playable:not(:disabled){box-shadow:0 0 0 2px #f2b94b,0 0 18px 5px #ffcf5dbb;animation:glowStrong 1.3s ease-in-out infinite alternate}
+.cards .card.unplayable:not(:disabled){opacity:.65}
+@keyframes glowStrong{from{box-shadow:0 0 0 2px #eab648,0 0 8px 2px #eab64899}to{box-shadow:0 0 0 3px #ffe18b,0 0 20px 7px #ffe18bd9}}
+#handHint{font-size:10px;margin:0 0 5px}.hand-area>button{font-size:12px;padding:10px 8px;margin:2px}
+@media(min-width:480px){.cards .card{flex-basis:60px;width:60px;height:90px}.board-card{width:70px;height:96px}}
+@media(prefers-reduced-motion:reduce){.cards .card.playable:not(:disabled){animation:none}}
+
+/* v0.18: cute CPU avatars, visible draw pile and escalating rounds */
+.player-avatar{width:45px;height:45px;border:2px solid #f7e3a1;border-radius:14px;display:grid;place-items:center;font-size:29px;background:linear-gradient(140deg,#45cbb6,#247d85);box-shadow:0 2px 8px #0005}
+.player-box:not(:first-child){min-height:135px}.player-box:not(:first-child) .back-hand{height:33px}.player-box:not(:first-child) .back-card{height:30px;width:22px;margin-left:-14px}.player-box:not(:first-child) .back-card::after{line-height:19px;font-size:10px}
+.board-piles{display:flex;justify-content:center;align-items:center;gap:22px}.pile{display:flex;flex-direction:column;align-items:center;gap:5px;min-width:82px}.pile-label{font-size:12px;color:#f4e7b8;font-weight:700}.deck-card{width:63px;height:87px;border:3px solid #f2ead0;border-radius:9px;background:repeating-linear-gradient(45deg,#194c91 0 5px,#286db6 5px 9px,#194c91 9px 14px);display:grid;place-items:center;box-shadow:3px 3px 0 #0b284a,5px 5px 0 #e8e0c4,0 5px 10px #0007;color:#e5f0ff;font-size:30px}.deck-card:before{content:'✦';border:2px solid #d9e7ff;padding:7px 11px;border-radius:5px;background:#ffffff1a}.deck-card.empty{background:#244a42;box-shadow:none;border-style:dashed;opacity:.65}.deck-card.empty:before{content:'0';border:0;font-size:25px}.round-chip{display:inline-block;border:1px solid #f4d27d;border-radius:99px;padding:5px 12px;margin-top:7px;background:#174f3e;color:#ffe09a;font-weight:800;font-size:13px}
+
+/* v0.18: face-to-face seating, compact portrait */
+body{max-width:520px;padding:7px 8px 24px;background:radial-gradient(ellipse at center,#138465 0%,#086248 48%,#05392d 100%)}
+.setup{position:relative;background:transparent;border:0;box-shadow:none;padding:4px;margin:3px 0}
+.setup label{font-size:11px;white-space:nowrap}.setup select{font-size:12px;padding:5px 3px;max-width:64px}
+.setup>button{font-size:12px;padding:8px 10px;background:#ffdc77}
+#matchInfo{text-align:center;font-size:12px;color:#ffe49c;font-weight:800;margin:5px 0}
+#players.seats{position:relative;display:block;height:220px;margin:0;border:2px solid #b99a50;border-radius:48% 48% 20% 20%;background:radial-gradient(ellipse at center,#127c5c,#07503f);overflow:hidden}
+#players .player-box{position:absolute!important;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:0!important;width:95px;height:107px;margin:0;padding:3px 2px;border:0;background:transparent;box-shadow:none;outline:0!important;gap:0}
+#players .player-box.active .player-avatar{box-shadow:0 0 0 3px #ffdc71,0 0 14px #ffd25a}
+#players .player-heading{display:flex;flex-direction:column;gap:0;font-size:11px;line-height:1.1}
+#players .player-avatar{width:46px;height:46px;font-size:28px;border:2px solid #f4e6bf;border-radius:14px}
+#players .player-count{font-size:13px}#players .player-score{font-size:10px}
+#players .back-hand{height:30px!important;width:90px!important;overflow:visible}
+#players .back-card{height:28px!important;width:19px!important;margin-left:-11px!important}
+#players .back-card:first-child{margin-left:0!important}
+#players .back-card::after{inset:2px;font-size:9px;line-height:19px}
+#players .seat-0{display:none!important}
+#players.seats-2 .seat-1{left:calc(50% - 47px);top:5px}
+#players.seats-3 .seat-1{left:3%;top:65px}#players.seats-3 .seat-2{right:3%;top:65px}
+#players.seats-4 .seat-1{left:1%;top:76px}#players.seats-4 .seat-2{left:calc(50% - 47px);top:2px}#players.seats-4 .seat-3{right:1%;top:76px}
+#players.seats-5 .seat-1{left:0;top:100px}#players.seats-5 .seat-2{left:16%;top:3px}#players.seats-5 .seat-3{right:16%;top:3px}#players.seats-5 .seat-4{right:0;top:100px}
+#players.seats-5 .player-box{width:81px}#players.seats-5 .seat-2{left:calc(28% - 40px)}#players.seats-5 .seat-3{right:calc(28% - 40px)}
+.table-area{margin-top:-20px;position:relative;z-index:1;background:radial-gradient(ellipse,#0e7354,#084b3a);border:2px solid #cba95c;padding:8px}
+.table-label{font-size:12px}.board-piles{gap:18px}.board-card{width:65px;height:88px}.hand-area{background:transparent;border:0;box-shadow:none;margin:2px 0;padding:7px 0}.hand-area h3{font-size:14px}
+.hand-area .cards{min-height:112px}.hand-area .card{border-radius:8px}.hand-area>button{border-radius:24px;padding:11px 8px}
+#standings{margin-top:9px;text-align:left;font-size:13px}#standings h3{color:#ffe6a1}.standing{padding:5px;border-bottom:1px solid #ffffff3b}
+#nextGame{display:block;width:min(100%,420px);margin:12px auto 14px;background:#ffda79;color:#183a2b;border:2px solid #fff0b6;border-radius:16px;font-size:20px;font-weight:900;padding:17px 20px;min-height:58px;box-shadow:0 5px 16px #0005}#nextGame[hidden]{display:none}
+@media(max-width:370px){#players.seats{height:204px}#players .player-box{width:80px}.setup label{font-size:10px}.setup select{max-width:54px}#players.seats-4 .seat-2{left:calc(50% - 40px)}}
+
+/* v0.18: larger opponent avatars/cards; keep all card backs inside table */
+#players.seats{height:292px;overflow:hidden;border-radius:44% 44% 16% 16%}
+#players .player-box{width:112px;height:143px;padding:2px 1px;gap:2px;overflow:visible}
+#players .player-heading{align-items:center;gap:2px;font-size:12px;line-height:1.15}
+#players .player-avatar{width:60px;height:60px;font-size:37px;border-radius:17px;border-width:3px}
+#players .player-count{font-size:15px}
+#players .player-score{font-size:11px}
+#players .back-hand{width:108px!important;height:48px!important;overflow:hidden!important;flex-shrink:0}
+#players .back-card{width:30px!important;height:43px!important;margin-left:-19px!important;border-width:2px!important;border-radius:5px}
+#players .back-card:first-child{margin-left:0!important}
+#players .back-card::after{inset:4px 3px;font-size:13px;line-height:27px}
+#players.seats-2 .seat-1{left:calc(50% - 56px);top:8px}
+#players.seats-3 .seat-1{left:2%;top:60px}
+#players.seats-3 .seat-2{right:2%;top:60px}
+#players.seats-4 .seat-1{left:0;top:122px}
+#players.seats-4 .seat-2{left:calc(50% - 56px);top:4px}
+#players.seats-4 .seat-3{right:0;top:122px}
+#players.seats-5 .player-box{width:108px}
+#players.seats-5 .seat-1{left:0;top:144px}
+#players.seats-5 .seat-2{left:calc(28% - 54px);top:4px}
+#players.seats-5 .seat-3{right:calc(28% - 54px);top:4px}
+#players.seats-5 .seat-4{right:0;top:144px}
+.table-area{margin-top:-8px}
+@media(max-width:370px){
+ #players.seats{height:282px}
+ #players .player-box{width:98px}
+ #players .player-avatar{width:55px;height:55px;font-size:34px}
+ #players .back-hand{width:94px!important}
+ #players .back-card{width:27px!important;height:40px!important;margin-left:-18px!important}
+ #players.seats-4 .seat-2,#players.seats-2 .seat-1{left:calc(50% - 49px)}
+ #players.seats-5 .player-box{width:94px}
+ #players.seats-5 .seat-2{left:calc(28% - 47px)}
+ #players.seats-5 .seat-3{right:calc(28% - 47px)}
+}
+
+/* v0.18: keep side-player cards INSIDE the table, readable even when five or more */
+#players.seats{overflow:hidden}
+#players.seats-5 .seat-4 .back-hand{transform:translateX(-67px);width:112px!important;overflow:visible!important}
+#players.seats-5 .seat-1 .back-hand{transform:translateX(67px);width:112px!important;overflow:visible!important}
+#players.seats-5 .seat-4 .player-score{transform:translateX(-47px)}
+#players.seats-5 .seat-1 .player-score{transform:translateX(47px)}
+#players.seats-5 .seat-4 .back-card,#players.seats-5 .seat-1 .back-card{height:40px!important;width:28px!important;margin-left:-17px!important}
+#players.seats-5 .seat-4 .back-card:first-child,#players.seats-5 .seat-1 .back-card:first-child{margin-left:0!important}
+#players.seats-5 .seat-4 .back-hand,#players.seats-5 .seat-1 .back-hand{height:44px!important}
+/* The back fan for side seats starts next to the avatar and fans inward. */
+#players.seats-5 .seat-4 .back-hand{justify-content:flex-end}
+#players.seats-5 .seat-1 .back-hand{justify-content:flex-start}
+.card.joker-card{font-size:16px!important;padding:4px 1px!important;line-height:1.12;overflow:hidden;background:linear-gradient(150deg,#fff9df,#f7e5ff);border-color:#e0bd66}
+.card.joker-card .joker-face{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:2px}
+.card.joker-card .joker-art{font-size:36px;line-height:1.05;filter:drop-shadow(0 1px 1px #0005)}
+.card.joker-card .joker-word{font-size:9px;font-weight:950;letter-spacing:.6px;color:#642a7c}
+@media(max-width:370px){
+ #players.seats-5 .seat-4 .back-hand{transform:translateX(-54px);width:100px!important}
+ #players.seats-5 .seat-1 .back-hand{transform:translateX(54px);width:100px!important}
+ #players.seats-5 .seat-4 .back-card,#players.seats-5 .seat-1 .back-card{width:26px!important;margin-left:-16px!important}
+}
+
+/* v0.18: fan layout based on the approved portrait mockup. */
+:root{color-scheme:dark}
+body{max-width:540px;padding:8px 9px 24px;background:radial-gradient(ellipse at 50% 42%,#117456,#07503d 72%,#04382f)}
+.brand{text-align:left;padding:4px 6px}.brand h1{font-size:23px;color:#fff7d8}.brand h1 small{color:#e8dfc6}
+.brand-sub,body>.muted{display:none}
+.setup{margin:0;padding:3px 2px 0}
+.setup label{font-size:11px;font-weight:700;margin:0 3px 4px 0}
+.setup select{background:#fff8e5;border-radius:12px;padding:6px 3px;font-weight:800;color:#132f28}
+.setup>button{background:linear-gradient(#ffeaa0,#ffd05b);border-radius:16px;font-weight:850}
+#matchInfo{font-size:13px;background:#073a31;border:1px solid #dbb964;border-radius:18px;padding:7px;margin:4px 12px -4px;position:relative;z-index:3}
+#players.seats{height:340px;border:3px solid #d8b765;border-radius:46% 46% 13% 13%;background:radial-gradient(ellipse at 50% 45%,#0f7458,#064d3d 78%);overflow:hidden;margin-top:0}
+#players .player-box{width:154px!important;height:152px!important;display:block!important;position:absolute!important;padding:0!important;overflow:visible!important;min-height:0!important}
+#players .player-heading{position:absolute;z-index:5;top:64px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:1px;width:88px;text-shadow:0 2px 4px #002c22}
+#players .player-avatar{width:56px;height:56px;font-size:35px;background:linear-gradient(140deg,#66d5c1,#16858b);border:3px solid #fff4d4;border-radius:17px;box-shadow:0 4px 9px #002a226b}
+#players .player-name{font-size:12px;background:#064638;border-radius:10px;padding:1px 7px}
+#players .player-count{font-size:16px;color:#ffe38c;background:#064638;border-radius:9px;padding:0 7px}
+#players .player-score{position:absolute;z-index:6;top:139px;left:50%;transform:translateX(-50%);white-space:nowrap;font-size:10px;color:#e7eee6;background:#053d32b8;padding:1px 4px;border-radius:8px}
+#players .back-hand,#players.seats-5 .seat-1 .back-hand,#players.seats-5 .seat-4 .back-hand{position:absolute!important;z-index:2;left:50%!important;top:0!important;transform:translateX(-50%)!important;width:145px!important;height:90px!important;display:block!important;overflow:visible!important;pointer-events:none}
+#players .back-card,#players.seats-5 .seat-1 .back-card,#players.seats-5 .seat-4 .back-card{position:absolute!important;left:50%!important;top:7px!important;width:39px!important;height:60px!important;margin:0!important;border:2px solid #f1f5ff!important;border-radius:5px!important;transform:translate(calc(-50% + var(--fx)),var(--fy)) rotate(var(--fa))!important;transform-origin:50% 95%;z-index:var(--zi);background:repeating-linear-gradient(45deg,#104b8c 0 4px,#2c70b5 4px 7px,#104b8c 7px 11px);box-shadow:0 2px 4px #001d32a0}
+#players .back-card::after{content:'✥';position:absolute;inset:4px;border:1px solid #c5dfff;border-radius:2px;display:grid;place-items:center;font-size:17px;line-height:1;color:#e6f1ff;background:#ffffff16}
+#players .back-more{position:absolute;right:-2px;top:45px;background:#042c25;padding:3px;border-radius:7px;font-size:11px;z-index:40}
+#players.seats-2 .seat-1{top:10px!important;left:calc(50% - 77px)!important;right:auto!important}
+#players.seats-3 .seat-1{top:42px!important;left:0!important;right:auto!important}
+#players.seats-3 .seat-2{top:42px!important;right:0!important;left:auto!important}
+#players.seats-4 .seat-1{top:75px!important;left:0!important;right:auto!important}
+#players.seats-4 .seat-2{top:5px!important;left:calc(50% - 77px)!important;right:auto!important}
+#players.seats-4 .seat-3{top:75px!important;right:0!important;left:auto!important}
+#players.seats-5 .seat-1{top:174px!important;left:-22px!important;right:auto!important}
+#players.seats-5 .seat-2{top:4px!important;left:calc(26% - 77px)!important;right:auto!important}
+#players.seats-5 .seat-3{top:4px!important;right:calc(26% - 77px)!important;left:auto!important}
+#players.seats-5 .seat-4{top:174px!important;right:-22px!important;left:auto!important}
+/* Side opponents: fans extend toward table center, never off-screen. */
+#players.seats-5 .seat-1 .back-hand{left:105px!important;top:8px!important;transform:none!important;width:100px!important}
+#players.seats-5 .seat-4 .back-hand{left:-45px!important;top:8px!important;transform:none!important;width:100px!important}
+#players.seats-5 .seat-1 .back-card{transform:translate(calc(-50% + var(--fx) * .58),var(--fy)) rotate(calc(var(--fa) * .8))!important}
+#players.seats-5 .seat-4 .back-card{transform:translate(calc(-50% + var(--fx) * .58),var(--fy)) rotate(calc(var(--fa) * .8))!important}
+#players.seats-5 .seat-1 .player-heading{left:60px}
+#players.seats-5 .seat-4 .player-heading{left:95px}
+#players.seats-5 .seat-1 .player-score{left:60px;transform:translateX(-50%)}
+#players.seats-5 .seat-4 .player-score{left:95px;transform:translateX(-50%)}
+.table-area{margin-top:-6px;position:relative;z-index:1;border:2px solid #f1cf73;background:radial-gradient(ellipse,#0e7454,#07503e);border-radius:25px;padding:11px 8px 8px}
+.table-label{font-size:15px;color:#fff3c3}
+.board-piles{gap:25px}.board-card{width:75px;height:108px;border-radius:10px}.board-card .pip{font-size:40px}
+.deck-card{width:75px!important;height:108px!important}
+.round-chip{font-size:14px!important;border:1px solid #dabb6b;border-radius:22px;padding:5px 16px;display:inline-block;margin:7px auto 0;color:#ffe49b}
+.hand-area{margin:0;padding:8px 0}.hand-area h3{font-size:14px;margin:3px 0;color:#f6e6bc}
+.hand-area .cards{min-height:146px;align-items:flex-end;padding:23px 2px 16px}
+.hand-area .cards .card{height:116px;width:69px;flex-basis:69px;font-size:23px;border-radius:10px;transform-origin:50% 100%;background:#fffdf7}
+.hand-area .cards .card.sel{transform:translateY(-14px)}
+.hand-area .cards .card.playable:not(:disabled){border-color:#ffe48b;box-shadow:0 0 0 2px #eab648,0 0 15px 4px #fbd45b9c}
+.hand-area .cards .joker-card{background:#fff9e9!important}
+.hand-area .cards .joker-art{font-size:48px!important}.hand-area .cards .joker-word{font-size:12px!important}
+.hand-area>button{padding:12px 9px;font-size:13px;margin:3px 2px;border-radius:24px}
+.hand-area #play{background:linear-gradient(#ffeba1,#ffd059)}
+@media(max-width:390px){#players.seats{height:325px}#players .player-box{width:142px!important}#players.seats-5 .seat-2{left:calc(26% - 71px)!important}#players.seats-5 .seat-3{right:calc(26% - 71px)!important}#players.seats-5 .seat-1{left:-24px!important}#players.seats-5 .seat-4{right:-24px!important}#players .back-card{width:34px!important;height:53px!important}.hand-area .cards .card{height:104px;width:62px;flex-basis:62px}}
+@media(max-width:340px){#players .player-avatar{width:49px;height:49px;font-size:31px}#players .back-card{width:30px!important;height:48px!important}#players.seats-5 .seat-1 .back-hand{left:95px!important}#players.seats-5 .seat-4 .back-hand{left:-35px!important}}
+
+/* v0.19: seating and card orientation follow the approved reference mockup.
+   Every back is a normal playing card, without perspective stretching. */
+#players.seats{height:365px;border-radius:42% 42% 15% 15%;overflow:hidden}
+#players .back-hand,#players.seats-5 .seat-1 .back-hand,#players.seats-5 .seat-4 .back-hand{width:150px!important;height:90px!important;top:0!important}
+#players .back-card{width:39px!important;height:60px!important}
+/* Opponents at the top: cards are upright and spread horizontally. */
+#players.seats-5 .seat-2{top:10px!important;left:calc(26% - 77px)!important}
+#players.seats-5 .seat-3{top:10px!important;right:calc(26% - 77px)!important}
+/* Side opponents: 90-degree rotated card backs, stacked vertically.
+   Center the entire stack near the corresponding screen edge. */
+#players.seats-5 .seat-1{top:177px!important;left:0!important}
+#players.seats-5 .seat-4{top:177px!important;right:0!important}
+#players.seats-5 .seat-1 .back-hand{left:20px!important;top:-8px!important;transform:none!important;width:90px!important;height:180px!important}
+#players.seats-5 .seat-4 .back-hand{left:calc(100% - 110px)!important;top:-8px!important;transform:none!important;width:90px!important;height:180px!important}
+#players.seats-5 .seat-1 .back-card,#players.seats-5 .seat-4 .back-card{top:50%!important;left:50%!important;transform:translate(calc(-50% + var(--side-x)),calc(-50% + var(--side-y))) rotate(calc(90deg + var(--side-a)))!important;transform-origin:center center!important}
+#players.seats-5 .seat-1 .player-heading{left:114px!important;top:45px!important}
+#players.seats-5 .seat-4 .player-heading{left:40px!important;top:45px!important}
+#players.seats-5 .seat-1 .player-score{left:114px!important;top:128px!important}
+#players.seats-5 .seat-4 .player-score{left:40px!important;top:128px!important}
+/* Put side stacks against the edges, but always keep the full backs visible. */
+#players.seats-5 .seat-1 .back-hand{left:-7px!important}
+#players.seats-5 .seat-4 .back-hand{left:calc(100% - 83px)!important}
+@media(max-width:390px){
+ #players.seats{height:355px}
+ #players.seats-5 .seat-2{left:calc(26% - 71px)!important}
+ #players.seats-5 .seat-3{right:calc(26% - 71px)!important}
+ #players.seats-5 .seat-1 .player-heading{left:104px!important}
+ #players.seats-5 .seat-4 .player-heading{left:38px!important}
+ #players.seats-5 .seat-1 .player-score{left:104px!important}
+ #players.seats-5 .seat-4 .player-score{left:38px!important}
+}
+
+/* v0.21: reference proportions, compact single-screen mobile table. */
+html{overflow-x:hidden}body{overflow-x:hidden;max-width:520px;padding:5px 7px 14px}
+.brand{margin:0;padding:0 6px}.brand h1{font-size:20px;line-height:1.35}
+.setup{padding:2px 1px 0;border:0;background:transparent;box-shadow:none;margin:2px 0 0}
+.setup label{font-size:clamp(9px,2.55vw,12px);margin:0 2px 2px 0;white-space:nowrap}
+.setup select{font-size:12px;padding:5px 2px;margin:0 1px;min-width:39px}
+.setup>button{font-size:12px;padding:7px 8px;margin:1px}
+#matchInfo{margin:4px 9px -3px;font-size:12px;padding:5px}
+#players.seats{height:clamp(270px,72vw,345px);border-radius:43% 43% 13% 13%;margin:0;border-width:2px}
+#players .player-box{width:clamp(102px,32vw,142px)!important;height:140px!important;background:none!important;border:0!important;box-shadow:none!important;outline:none!important}
+#players .player-heading{top:63px;left:50%;width:76px;gap:0}
+#players .player-avatar{width:clamp(42px,12vw,55px);height:clamp(42px,12vw,55px);font-size:clamp(27px,8vw,35px);border-radius:14px}
+#players .player-name{font-size:11px;line-height:1.2}
+#players .player-count{font-size:15px;line-height:1.2}
+#players .player-score{top:131px;font-size:9px}
+#players .back-hand{width:125px!important;height:76px!important}
+#players .back-card{width:clamp(29px,8vw,38px)!important;height:clamp(45px,12vw,58px)!important}
+/* Only CPU2 and CPU3 are opposite the player: their cards point away. */
+#players.seats-5 .seat-2 .back-card,#players.seats-5 .seat-3 .back-card{transform:translate(calc(-50% + var(--fx)),var(--fy)) rotate(calc(180deg + var(--fa)))!important;transform-origin:50% 95%}
+/* CPU1 and CPU4 retain the original sideways orientation. */
+#players.seats-5 .seat-1{top:calc(50% - 45px)!important;left:0!important}
+#players.seats-5 .seat-4{top:calc(50% - 45px)!important;right:0!important}
+#players.seats-5 .seat-2{top:5px!important;left:calc(26% - 16vw)!important}
+#players.seats-5 .seat-3{top:5px!important;right:calc(26% - 16vw)!important}
+#players.seats-5 .seat-1 .back-hand{left:-11px!important;top:-8px!important;width:70px!important;height:160px!important}
+#players.seats-5 .seat-4 .back-hand{left:calc(100% - 59px)!important;top:-8px!important;width:70px!important;height:160px!important}
+#players.seats-5 .seat-1 .player-heading{left:calc(50% + 14px)!important;top:36px!important}
+#players.seats-5 .seat-4 .player-heading{left:calc(50% - 14px)!important;top:36px!important}
+#players.seats-5 .seat-1 .player-score{left:calc(50% + 14px)!important;top:110px!important}
+#players.seats-5 .seat-4 .player-score{left:calc(50% - 14px)!important;top:110px!important}
+.table-area{margin-top:-2px;padding:7px 6px 5px;border-radius:18px}
+.table-label{font-size:12px;margin-bottom:3px}.board-piles{gap:17px}
+.board-card{width:58px;height:79px;font-size:18px}.board-card .pip{font-size:29px}
+.deck-card{width:58px!important;height:79px!important}.pile{min-width:68px;gap:2px}.pile-label{font-size:10px}
+.board-meta{font-size:10px}.round-chip{font-size:11px!important;margin-top:2px;padding:3px 11px}
+#status{font-size:12px;margin:4px 0 2px}
+.hand-area{padding:5px 3px;margin:3px 0}.hand-area h3{font-size:13px}
+.hand-area .cards{min-height:99px;padding:15px 2px 9px;margin:0;overflow:visible}
+.hand-area .cards .card{height:83px;width:clamp(42px,12vw,62px);flex-basis:clamp(42px,12vw,62px);font-size:20px}
+.hand-area .cards .joker-art{font-size:37px!important}.hand-area .cards .joker-word{font-size:10px!important}
+.hand-area>button{font-size:12px;padding:9px 8px;margin:2px 1px}
+#handHint{font-size:9px}.details{margin-top:7px}
+@media(max-width:390px){#players.seats{height:clamp(260px,74vw,300px)}#players.seats-5 .seat-1 .back-hand{left:-6px!important}#players.seats-5 .seat-4 .back-hand{left:calc(100% - 64px)!important}}
+@media(max-width:350px){.setup label{font-size:9px}.setup select{font-size:11px}.setup>button{font-size:10px;padding:6px 5px}#players.seats-5 .seat-1 .player-heading{left:calc(50% + 8px)!important}#players.seats-5 .seat-4 .player-heading{left:calc(50% - 8px)!important}}
+
+/* v0.21: approved felt-table composition; opponent cards never overlap portraits */
+body{max-width:500px;padding:6px 9px 20px;background:radial-gradient(ellipse at 50% 47%,#12684e,#063a30 77%,#03291f);overflow-x:hidden}
+.brand{padding:3px 8px;margin:0 0 3px}.brand h1{font-size:21px}
+.setup{background:transparent;border:0;box-shadow:none;padding:0;margin:0}
+.setup label{font-size:clamp(9px,2.6vw,12px);margin:0 2px 3px 0}.setup select{font-size:12px;padding:6px 4px;max-width:55px}.setup>button{font-size:12px;padding:8px 9px;margin:0;background:linear-gradient(#ffeaa6,#ffcc45)}
+#matchInfo{margin:4px 8px -11px;z-index:10;background:#043a2f;border:2px solid #d6b45d;font-weight:800}
+#players.seats{height:clamp(320px,94vw,440px)!important;margin:0!important;border:3px solid #d8b86a!important;border-radius:38% 38% 13% 13%!important;background:radial-gradient(ellipse,#106449,#064132)!important;overflow:hidden!important;position:relative!important}
+#players .seat-0{display:none!important}
+#players .player-box{background:none!important;border:0!important;outline:none!important;box-shadow:none!important;width:115px!important;height:130px!important;min-height:0!important;position:absolute!important;padding:0!important;margin:0!important}
+#players .player-heading{position:absolute!important;top:62px!important;left:50%!important;transform:translateX(-50%)!important;display:flex!important;flex-direction:column!important;gap:0!important;width:90px!important;z-index:5!important}
+#players .player-avatar{width:53px!important;height:53px!important;font-size:33px!important;border:3px solid #f6ead0!important;border-radius:15px!important}
+#players .player-name{font-size:12px!important;line-height:1.2!important}#players .player-count{font-size:15px!important;line-height:1.2!important}
+#players .player-score{display:none!important}
+#players .back-hand{position:absolute!important;left:50%!important;top:0!important;width:110px!important;height:66px!important;transform:translateX(-50%)!important;overflow:visible!important;z-index:2!important}
+#players .back-card{width:30px!important;height:48px!important;top:7px!important;left:50%!important;transform:translate(calc(-50% + var(--fx)*.78),calc(var(--fy) * .5)) rotate(var(--fa))!important;transform-origin:50% 50%!important;border:2px solid #fff!important}
+#players .back-card::after{font-size:14px!important;inset:3px!important}
+/* Upper seats: 180 degrees opposite the player's own hand; fan above the avatar */
+#players .seat-2 .back-card,#players .seat-3 .back-card{transform:translate(calc(-50% + var(--fx)*.78),0px) rotate(calc(180deg + var(--fa)))!important}
+/* Left/right seats: preserve horizontal card orientation, stacked vertically at the edges */
+#players .seat-1 .back-hand,#players .seat-4 .back-hand{top:8px!important;width:48px!important;height:190px!important;transform:none!important}
+#players .seat-1 .back-card,#players .seat-4 .back-card{width:35px!important;height:54px!important;top:50%!important;left:50%!important;transform:translate(-50%,calc(-50% + var(--side-y)*1.03)) rotate(90deg)!important}
+#players .seat-1 .player-heading,#players .seat-4 .player-heading{top:56px!important}
+#players.seats-5 .seat-2{top:20px!important;left:calc(27% - 57px)!important;right:auto!important}
+#players.seats-5 .seat-3{top:20px!important;left:calc(73% - 57px)!important;right:auto!important}
+#players.seats-5 .seat-1{top:calc(57% - 65px)!important;left:5px!important;right:auto!important}
+#players.seats-5 .seat-4{top:calc(57% - 65px)!important;right:5px!important;left:auto!important}
+#players.seats-5 .seat-1 .back-hand{left:-4px!important}
+#players.seats-5 .seat-4 .back-hand{left:calc(100% - 44px)!important}
+#players.seats-5 .seat-1 .player-heading{left:76px!important}
+#players.seats-5 .seat-4 .player-heading{left:38px!important}
+#players.seats-4 .seat-2{top:15px!important;left:calc(50% - 57px)!important}
+#players.seats-4 .seat-1{top:calc(55% - 65px)!important;left:5px!important}
+#players.seats-4 .seat-3{top:calc(55% - 65px)!important;right:5px!important;left:auto!important}
+#players.seats-4 .seat-1 .back-hand{left:-4px!important}
+#players.seats-4 .seat-3 .back-hand{left:calc(100% - 44px)!important;top:8px!important;width:48px!important;height:190px!important;transform:none!important}
+#players.seats-4 .seat-3 .back-card{width:35px!important;height:54px!important;top:50%!important;left:50%!important;transform:translate(-50%,calc(-50% + var(--side-y)*1.03)) rotate(90deg)!important}
+#players.seats-4 .seat-1 .player-heading{left:76px!important}
+#players.seats-4 .seat-3 .player-heading{left:38px!important;top:56px!important}
+#players.seats-3 .seat-1{top:30px!important;left:calc(27% - 57px)!important}
+#players.seats-3 .seat-2{top:30px!important;right:calc(27% - 57px)!important;left:auto!important}
+#players.seats-3 .seat-1 .back-hand{left:50%!important;top:0!important;width:110px!important;height:66px!important;transform:translateX(-50%)!important}
+#players.seats-3 .seat-1 .back-card{width:30px!important;height:48px!important;top:7px!important;transform:translate(calc(-50% + var(--fx)*.78),0px) rotate(calc(180deg + var(--fa)))!important}
+#players.seats-3 .seat-1 .player-heading{left:50%!important;top:62px!important}
+#players.seats-2 .seat-1{top:25px!important;left:calc(50% - 57px)!important}
+#players.seats-2 .seat-1 .back-hand{left:50%!important;top:0!important;width:110px!important;height:66px!important;transform:translateX(-50%)!important}
+#players.seats-2 .seat-1 .back-card{width:30px!important;height:48px!important;top:7px!important;transform:translate(calc(-50% + var(--fx)*.78),0px) rotate(calc(180deg + var(--fa)))!important}
+#players.seats-2 .seat-1 .player-heading{left:50%!important;top:62px!important}
+.table-area{margin:-4px 4px 0!important;padding:9px 6px!important;border:2px solid #e5c26e!important;border-radius:20px!important;background:radial-gradient(ellipse,#0a6148,#073e31)!important}
+.table-label{font-size:14px!important}.board-piles{gap:22px!important}.board-card{width:69px!important;height:95px!important}.deck-card{width:69px!important;height:95px!important}
+.hand-area{padding:4px 2px!important;margin:5px 0!important;border:0!important;background:transparent!important;box-shadow:none!important}
+.hand-area h3{font-size:14px!important}.hand-area .cards{padding:15px 3px 12px!important;min-height:120px!important;justify-content:center!important;overflow:visible!important}
+.hand-area .cards .card{height:98px!important;width:clamp(44px,13vw,62px)!important;flex-basis:clamp(44px,13vw,62px)!important;font-size:21px!important}
+.hand-area>button{border-radius:24px!important;font-size:13px!important;padding:12px 10px!important}
+.hand-area #play{background:linear-gradient(#ffe69a,#ffcd43)!important}
+@media(max-width:380px){#players.seats{height:325px!important}#players .player-box{width:100px!important}#players.seats-5 .seat-2{left:calc(27% - 50px)!important}#players.seats-5 .seat-3{left:calc(73% - 50px)!important}#players.seats-5 .seat-1 .player-heading{left:70px!important}#players.seats-5 .seat-4 .player-heading{left:30px!important}#players .back-card{width:27px!important;height:44px!important}}
+
+/* v0.23: shorter vertical layout while preserving v0.21 seating/orientation */
+body{padding-top:3px!important;padding-bottom:10px!important}
+.brand{padding:0 6px!important;margin:0!important}.brand h1{font-size:19px!important}
+.setup{padding:0!important}.setup label{margin-bottom:0!important}.setup select{padding:4px 3px!important}.setup>button{padding:6px 8px!important}
+#matchInfo{padding:4px!important;margin-top:2px!important;margin-bottom:-9px!important}
+#players.seats{height:clamp(255px,76vw,335px)!important}
+#players.seats-5 .seat-2,#players.seats-5 .seat-3{top:8px!important}
+#players.seats-5 .seat-1,#players.seats-5 .seat-4{top:calc(54% - 65px)!important}
+#players.seats-4 .seat-2{top:7px!important}
+#players.seats-4 .seat-1,#players.seats-4 .seat-3{top:calc(53% - 65px)!important}
+#players .seat-1 .back-hand,#players .seat-4 .back-hand,#players.seats-4 .seat-3 .back-hand{height:150px!important}
+#players .seat-1 .back-card,#players .seat-4 .back-card,#players.seats-4 .seat-3 .back-card{transform:translate(-50%,calc(-50% + var(--side-y)*.78)) rotate(90deg)!important}
+.table-area{padding:5px 5px!important;margin-top:-3px!important}
+.table-label{font-size:12px!important;margin-bottom:3px!important}
+.board-card{width:61px!important;height:82px!important}.board-card .pip{font-size:30px!important}
+.deck-card{width:61px!important;height:82px!important}
+.board-piles{gap:18px!important}.board-meta{line-height:1.25!important}
+.round-chip{padding:2px 10px!important;margin-top:3px!important}
+#status{margin:3px 0 1px!important;font-size:12px!important}
+.hand-area{padding:2px!important;margin:2px 0!important}
+.hand-area .cards{min-height:103px!important;padding:11px 3px 8px!important}
+.hand-area .cards .card{height:88px!important}
+.hand-area>button{padding:9px 8px!important;margin:2px 1px!important}
+section.details{margin-top:5px!important}
+@media(max-width:380px){#players.seats{height:clamp(250px,78vw,290px)!important}}
+
+/* v0.23: 5-player upper opponents hold cards in a downward-opening fan.
+   Change CPU2/CPU3 only; retain side-seat layout and compact sizing. */
+#players.seats-5 .seat-2 .back-card,
+#players.seats-5 .seat-3 .back-card{
+  transform:translate(calc(-50% + var(--fx)*.78),0px) rotate(var(--fa))!important;
+  transform-origin:50% 0%!important;
+}
+#players.seats-5 .seat-2 .back-hand,
+#players.seats-5 .seat-3 .back-hand{
+  top:0!important;
+}
+
+/* v0.26: isolated seat geometry. No text/portrait may overlap another seat. */
+#players.seats-5 .seat-2,#players.seats-5 .seat-3{top:10px!important}
+#players.seats-5 .seat-2 .back-hand,#players.seats-5 .seat-3 .back-hand{
+ top:0!important;left:50%!important;width:126px!important;height:74px!important;
+ transform:translateX(-50%)!important;z-index:2!important;
+}
+/* Reference fan: cards converge at the TOP, opening at the BOTTOM. */
+#players.seats-5 .seat-2 .back-card,#players.seats-5 .seat-3 .back-card{
+ top:4px!important;left:50%!important;
+ transform:translate(calc(-50% + var(--fx) * .62),0px) rotate(calc(var(--fa) * -1))!important;
+ transform-origin:50% 0%!important;
+}
+#players.seats-5 .seat-2 .player-heading,#players.seats-5 .seat-3 .player-heading{
+ top:86px!important;left:50%!important;transform:translateX(-50%)!important;
+ width:78px!important;z-index:4!important;
+}
+/* The side opponents live below the upper opponents, not on top of them. */
+#players.seats-5 .seat-1,#players.seats-5 .seat-4{
+ top:calc(63% - 65px)!important;
+}
+#players.seats-5 .seat-1 .player-heading{
+ top:38px!important;left:87px!important;transform:translateX(-50%)!important;
+ width:70px!important;
+}
+#players.seats-5 .seat-4 .player-heading{
+ top:38px!important;left:28px!important;transform:translateX(-50%)!important;
+ width:70px!important;
+}
+#players.seats-5 .seat-1 .back-hand,#players.seats-5 .seat-4 .back-hand{top:3px!important}
+#players .player-name,#players .player-count{white-space:nowrap!important;position:relative!important;z-index:6!important}
+#players .player-heading{isolation:isolate}
+@media(max-width:380px){
+ #players.seats-5 .seat-1 .player-heading{left:78px!important}
+ #players.seats-5 .seat-4 .player-heading{left:23px!important}
+ #players.seats-5 .seat-2 .player-heading,#players.seats-5 .seat-3 .player-heading{top:81px!important}
+}
+
+/* v0.25: keep the approved fan orientation; separate top and side seat labels.
+   Side avatars start below the top CPU's count, including on narrow iPhones. */
+#players.seats-5 .seat-1,#players.seats-5 .seat-4{
+ top:calc(63% - 25px)!important;
+}
+#players.seats-5 .seat-2 .player-heading,#players.seats-5 .seat-3 .player-heading{
+ top:78px!important;
+}
+#players.seats-5 .seat-1 .player-heading,#players.seats-5 .seat-4 .player-heading{
+ top:25px!important;
+}
+#players.seats-5 .seat-1 .back-hand,#players.seats-5 .seat-4 .back-hand{
+ top:-13px!important;
+}
+@media(max-width:380px){
+ #players.seats-5 .seat-1,#players.seats-5 .seat-4{top:calc(63% - 21px)!important}
+ #players.seats-5 .seat-2 .player-heading,#players.seats-5 .seat-3 .player-heading{top:75px!important}
+}
+
+/* v0.26: CPU4's cards are held horizontally, stacked downward like the supplied photo.
+   Keep CPU1, CPU2 and CPU3 untouched. */
+#players.seats-5 .seat-4 .back-card{
+  transform:translate(-50%,calc(-50% + var(--side-y)*.78)) rotate(calc(-90deg + var(--side-a)))!important;
+  z-index:calc(30 - var(--zi))!important;
+}
+
+/* v0.28: CPU4 reference: top card is in FRONT of the lower cards.
+   Preserve CPU1/2/3, and keep CPU4 within the right border. */
+#players.seats-5 .seat-4 .back-card{
+ transform:translate(-50%,calc(-50% + var(--side-y)*.78)) rotate(90deg)!important;
+ z-index:calc(100 - var(--zi))!important;
+}
+#players.seats-5 .seat-4 .back-hand{left:calc(100% - 54px)!important;}
+
+/* v0.28: Don type and payment explanation, visible immediately at game end */
+#settle:empty{display:none}
+#settle.result-panel{white-space:normal;color:#fff4c8;background:linear-gradient(145deg,#074233,#115f49);border:2px solid #ffda79;border-radius:17px;padding:15px 12px;margin:12px 2px;box-shadow:0 0 24px #ffd67533;text-align:center;font-weight:500;font-size:14px}
+.result-kicker{font-size:12px;color:#d9e6d7;letter-spacing:1px}
+.result-title{font-size:clamp(25px,7vw,38px);font-weight:950;color:#ffe185;text-shadow:0 2px 10px #aa782f77;margin:6px 0}
+.result-type{font-size:17px;font-weight:800;color:#fff}
+.result-detail{margin:10px auto;padding:9px;background:#002b2466;border-radius:10px;line-height:1.75;text-align:left;max-width:400px}
+.result-payment{border-top:1px solid #e7c77777;padding:8px 0;font-weight:750}
+.result-payment:last-child{padding-bottom:0}
+.result-breakdown{font-size:12px;color:#c9dfd2;font-weight:400}
+#settle .result-badge{display:inline-block;border:1px solid #e9c56c;border-radius:999px;padding:3px 12px;color:#ffe6a0;margin-top:5px}
+
+/* v0.30: 4-player CPU2 uses the reference downward-opening fan. */
+#players.seats-4 .seat-2 .back-card{
+  top:4px!important;left:50%!important;
+  transform:translate(calc(-50% + var(--fx) * .62),0px) rotate(calc(var(--fa) * -1))!important;
+  transform-origin:50% 0%!important;
+}
+#players.seats-4 .seat-2 .back-hand{
+  top:0!important;left:50%!important;width:126px!important;height:74px!important;
+  transform:translateX(-50%)!important;
+}
+/* Highlight available fallback actions when the current hand cannot play. */
+.hand-area>button.action-glow:not(:disabled){
+  background:linear-gradient(160deg,#fff4bc,#ffcc49)!important;
+  color:#173c2c!important;border:2px solid #fff0a3!important;
+  box-shadow:0 0 0 2px #e5a932,0 0 16px 5px #ffd76aab!important;
+  animation:actionPulse 1.2s ease-in-out infinite alternate!important;
+}
+@keyframes actionPulse{from{box-shadow:0 0 0 1px #e5a932,0 0 8px 2px #ffd76a88}to{box-shadow:0 0 0 3px #ffe9a3,0 0 21px 7px #ffd76acb}}
+@media(prefers-reduced-motion:reduce){.hand-area>button.action-glow:not(:disabled){animation:none!important}}
+
+
+/* v0.30: 場のジョーカーをひと目で判別できる表示にする */
+.board-card.board-joker{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:space-around!important;padding:3px 2px!important;background:linear-gradient(145deg,#fff6c8,#fffaf0 52%,#ead9ff)!important;border:2px solid #f3c952!important;color:#42204f!important;overflow:hidden!important;gap:0!important}
+.board-joker-title{font-size:clamp(12px,3.4vw,18px)!important;font-weight:1000!important;letter-spacing:-.5px!important;line-height:1.05!important;white-space:nowrap!important}
+.board-joker-art{font-size:clamp(31px,9vw,53px)!important;line-height:1!important;filter:drop-shadow(0 1px 1px #4324)!important}
+.board-joker-foot{font-size:clamp(8px,2.4vw,12px)!important;font-weight:900!important;line-height:1.1!important;white-space:nowrap!important}
+
+/* v0.33: separate home, settings and game views */
+[hidden]{display:none!important}
+.entry-screen{min-height:calc(100dvh - 100px);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px 19px 50px;background:radial-gradient(ellipse at 50% 35%,#1c795b,#0b3b30 65%,#08281f);border:1px solid #a78b4b;border-radius:22px;box-shadow:inset 0 0 45px #001f194d}
+.entry-emblem{font-size:84px;filter:drop-shadow(0 5px 12px #0009);margin-bottom:12px}
+.entry-overline{font-size:11px;letter-spacing:4px;color:#dfc17e;font-weight:800}
+.entry-title{font-size:56px;letter-spacing:6px;color:#ffe1a0;text-shadow:0 3px 9px #0009;margin:10px 0}
+.entry-heading{font-size:28px;color:#ffe1a0;margin:16px 0 4px}
+.entry-lead{color:#e5e2ca;font-size:14px;margin:8px 0 38px}
+.entry-primary{width:100%;max-width:340px;padding:17px 18px;font-size:19px;border-radius:14px;background:linear-gradient(150deg,#fff0b8,#e3ac46);color:#163c2c;box-shadow:0 5px 0 #8b622c,0 10px 25px #0007}
+.entry-primary span{float:right}
+.entry-note{font-size:12px;color:#c2d3c7;margin-top:26px}
+.settings-fields{width:100%;max-width:340px;text-align:left;margin:5px 0 24px}
+.settings-fields label{display:flex;align-items:center;justify-content:space-between;font-weight:750;padding:12px 14px;margin:9px 0;background:#0c382e;border:1px solid #8b8257;border-radius:12px;font-size:15px}
+.settings-fields select{min-width:90px;background:#fdf4db;color:#173c30;font-size:17px;font-weight:800}
+.entry-back{margin-top:23px;background:transparent;color:#e9d7a7;border:1px solid #8b8257;padding:11px 24px}
+.game-topbar{display:flex;justify-content:space-between;align-items:center;color:#e3d09c;font-size:11px;padding:2px 5px}
+.game-topbar button{background:#174d3e;border:1px solid #a58a51;color:#ffe4a7;font-size:12px;padding:7px 12px}
+#gameScreen .setup{padding:0;margin:0}
+
+#backToChampion:not([hidden]){display:block;width:100%;margin:12px 0 16px;border:1px solid #e9c46f;border-radius:12px;padding:13px 12px;background:#0b493a;color:#ffdf92;font-size:16px;font-weight:800;cursor:pointer}
+/* v0.36: rules and match champion */
+.rules-open{width:100%;max-width:340px;margin-top:19px;background:#124b3d;border:1.5px solid #e6c67c;color:#fff1c9;font-size:17px;font-weight:800}
+.rules-screen{justify-content:flex-start;min-height:calc(100dvh - 100px);gap:10px}
+.rules-body{width:100%;max-width:530px;text-align:left;color:#f2eddd;max-height:65dvh;overflow:auto;overscroll-behavior:contain;background:#092f27a8;border:1px solid #b99a57;border-radius:15px;padding:12px 17px;font-size:14px;line-height:1.75}
+.rules-body h3{color:#ffe0a1;font-size:16px;margin:15px 0 4px}.rules-body p{margin:0 0 12px}
+.champion-overlay{position:fixed;inset:0;z-index:10000;background:#001d19e8;display:flex;align-items:center;justify-content:center;padding:16px;overflow:auto}
+.champion-box{width:min(100%,430px);max-height:94dvh;overflow:auto;text-align:center;background:radial-gradient(ellipse at 50% 0%,#22795b,#0b3a30 70%);border:3px solid #e9c46f;border-radius:25px;box-shadow:0 0 35px #e7c26e66,0 20px 80px #000b;padding:24px 19px 26px;color:#fff7e5}
+.champion-confetti{font-size:23px;letter-spacing:5px}.champion-cup{font-size:72px;margin:8px 0;filter:drop-shadow(0 3px 12px #ffe39c88)}
+.champion-box h2{font-size:27px;color:#ffdd83;margin:15px 0 7px}.champion-name{font-size:37px;font-weight:900;color:#fff2c0;text-shadow:0 2px 10px #0008;overflow-wrap:anywhere}.champion-score{font-size:20px;color:#ffe3a1;margin:12px 0 18px;font-weight:800}
+.champion-ranking{text-align:left;background:#072e26bb;border-radius:12px;padding:12px;margin:12px 0 19px;font-size:14px;line-height:2}.champion-ranking div{border-bottom:1px solid #ffffff22}.champion-ranking div:last-child{border:0}.champion-box .entry-back{margin-top:13px;width:100%;max-width:340px}
+
+/* v0.37: Remove the unused lower felt area in four-player matches.
+   Opponent positions and card orientation stay unchanged. */
+#players.seats-4{height:clamp(225px,62vw,275px)!important}
+#players.seats-4 .seat-1,#players.seats-4 .seat-3{top:calc(50% - 65px)!important}
+@media(max-width:380px){#players.seats-4{height:clamp(215px,64vw,245px)!important}}
+
+/* v0.38: Cut away the empty lower part of the four-player felt table.
+   Keep the three opponents visible and bring the board, hand and buttons upward. */
+#players.seats-4{height:clamp(198px,49vw,218px)!important}
+#players.seats-4 .seat-1,#players.seats-4 .seat-3{top:calc(50% - 65px)!important}
+#gameScreen .table-area{margin-top:-5px!important}
+@media(max-width:380px){#players.seats-4{height:clamp(194px,52vw,205px)!important}}
+#onlineGame .og-decision{border:2px solid #f7d47a;border-radius:14px;padding:10px;margin:10px 0;background:#174b39}#onlineGame .og-decision button{margin:5px;background:#ffe19a;color:#17382d;font-weight:800}
+
+/* v0.67: 山札の右に現在のマークを大きく表示 */
+.current-suit{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-width:78px;align-self:center}
+.current-suit-label{font-size:11px;color:#f6e5ae;font-weight:750;white-space:nowrap}
+.current-suit-symbol{display:flex;align-items:center;justify-content:center;width:72px;height:77px;border:2px solid #e5c46e;border-radius:13px;background:#fffaf0;color:#1d302a;font-size:59px;line-height:1;box-shadow:0 3px 12px #001e1870}
+.current-suit-symbol.red{color:#c92d42}
+@media(max-width:420px){.current-suit{min-width:61px;gap:3px}.current-suit-label{font-size:9px}.current-suit-symbol{width:59px;height:67px;font-size:51px}}
+#onlineGame .og-chat{margin-top:15px;text-align:left;border:1px solid #d7b86b;border-radius:12px;padding:10px;background:#103d32;color:#f9e9be}
+#onlineGame .og-chat summary{cursor:pointer;font-weight:800;padding:5px}
+#onlineGame .og-chat-log{max-height:200px;overflow-y:auto;overflow-wrap:anywhere;margin:9px 0;padding:8px;background:#082b23;border-radius:8px;font-size:13px}
+#onlineGame .og-chat-log div{padding:4px 0;border-bottom:1px solid #ffffff15}
+#onlineGame .og-chat form{display:flex;gap:6px}#onlineGame .og-chat input{min-width:0;flex:1;padding:10px;border-radius:8px;border:1px solid #d7b86b;background:#fff;color:#143b30}#onlineGame .og-chat form button{background:#eacb7a;color:#173b30;border-radius:8px;padding:8px 12px}
+#onlineGame .og-chat small{display:block;margin-top:8px;color:#c4cfc2}
+ .top-card-choice{margin:12px auto;padding:15px;border:2px solid #e5c471;border-radius:14px;background:#0b4839;color:#fff0c7;text-align:center}.top-card-choice p{font-size:13px}.top-card-choice button{margin:5px;padding:10px 15px;border-radius:10px;border:1px solid #d7b56a;background:#fff6db;color:#173b30;font-weight:bold}#topCardOptions{display:flex;flex-wrap:wrap;justify-content:center}#onlineGame .og-top-choice{padding:12px;border:2px solid #e5c471;border-radius:12px;background:#0b4839;color:#fff0c7;text-align:center}#onlineGame .og-top-choice button{padding:10px;margin:5px;background:#fff6db;color:#173b30;border-radius:9px;font-weight:bold}
+/* v0.0.15: overlapping fan for cards played together (CPU + online). */
+.board-cards,.og-board-stack{--stack-step:clamp(13px,4vw,28px);position:relative;display:block!important;flex:none;align-self:center;width:calc(var(--card-width) + (var(--stack-count) - 1) * var(--stack-step));height:var(--card-height);max-width:none;}
+.board-cards{--card-width:73px;--card-height:104px}
+.board-cards>.board-card,.og-board-stack>.og-face{position:absolute!important;top:0;left:calc(var(--stack-index) * var(--stack-step));margin:0!important;z-index:var(--stack-index);box-sizing:border-box;}
+.og-board-stack{--card-width:65px;--card-height:89px}
+@media(max-width:370px){.og-board-stack{--card-width:59px;--card-height:82px}}
+</style><style id="online-style">#onlineScreen .online-fields{display:grid;gap:12px;margin:15px auto;max-width:330px}#onlineScreen label{display:grid;gap:5px;text-align:left;color:#f5e1ac;font-weight:700}#onlineScreen input{width:100%;padding:13px;border-radius:10px;border:1px solid #d6b967;background:#fffdf6;color:#17382c;font-size:17px}#onlineMessage{min-height:2em;color:#ffe18d;white-space:pre-wrap}#onlineLobby{margin:16px auto;padding:14px;border:1px solid #d7b66b;border-radius:15px;background:#08382d}#onlineMembers{margin:12px 0;text-align:left;line-height:2}#onlineRoomCode{letter-spacing:3px;color:#ffe18d}#onlineScreen .entry-primary{margin:5px}#onlineGame .og-decision{border:2px solid #f7d47a;border-radius:14px;padding:10px;margin:10px 0;background:#174b39}#onlineGame .og-decision button{margin:5px;background:#ffe19a;color:#17382d;font-weight:800}
+
+/* v0.67: online match uses the CPU felt-table visual language. */
+#onlineGame.og-felt{margin:15px -5px 8px;padding:10px 8px 14px;border:2px solid #cba95c;border-radius:22px;background:radial-gradient(ellipse at 50% 35%,#127c5c 0%,#07503f 70%,#05392d 100%);box-shadow:inset 0 0 26px #021e1866,0 7px 18px #001a1666;color:#ffedc1}
+#onlineGame .og-heading{font-size:12px;letter-spacing:2px;color:#f4d27d;font-weight:800;margin:3px 0 8px}
+#onlineGame .og-opponent{border:2px solid #b99a50;border-radius:48% 48% 22% 22%;padding:10px 8px 15px;background:radial-gradient(ellipse,#168365,#07503f);display:flex;flex-direction:column;align-items:center;gap:4px;min-height:150px}
+#onlineGame .og-avatar{width:58px;height:58px;border:3px solid #f4e6bf;border-radius:17px;display:grid;place-items:center;font-size:33px;background:linear-gradient(140deg,#45cbb6,#247d85);box-shadow:0 2px 8px #0005}
+#onlineGame .og-opponent.og-active .og-avatar{box-shadow:0 0 0 3px #ffdc71,0 0 16px #ffd25a}
+#onlineGame .og-name{font-size:14px;font-weight:800;color:#fff2ce}
+#onlineGame .og-score{font-size:12px;color:#e6d59e}
+#onlineGame .og-back-row{display:flex;align-items:center;justify-content:center;min-height:44px;padding-left:15px;margin:3px 0 0}
+#onlineGame .og-back-row .og-back{display:block;flex:none;width:29px;height:42px;margin-left:-14px;border:2px solid #f0e7cf;border-radius:5px;background:repeating-linear-gradient(45deg,#194c91 0 5px,#286db6 5px 9px,#194c91 9px 14px);box-shadow:1px 2px 4px #0008}
+#onlineGame .og-back-more{font-size:11px;margin-left:7px;color:#ffdf91}
+#onlineGame .og-board{margin:-3px 0 8px;border:2px solid #cba95c;border-radius:18px;padding:10px 6px 12px;background:radial-gradient(ellipse,#0e7354,#084b3a);position:relative}
+#onlineGame .og-board-title{font-size:12px;font-weight:800;color:#f4e7b8;margin:0 0 9px}
+#onlineGame .og-piles{display:flex;justify-content:center;align-items:center;gap:clamp(9px,3vw,20px)}
+#onlineGame .og-pile{display:flex;flex-direction:column;align-items:center;gap:5px;min-width:0}
+#onlineGame .og-pile-label{font-size:11px;font-weight:700;color:#f4e7b8}
+#onlineGame .og-face{width:65px;height:89px;border:3px solid #e6dfca;border-radius:9px;background:#fff9ed;color:#182b25;box-shadow:0 4px 10px #0008;display:flex;flex-direction:column;justify-content:space-between;align-items:center;padding:6px 3px;font-weight:900;font-size:21px}
+#onlineGame .og-face.og-red{color:#c52d43}
+#onlineGame .og-face .og-bigpip{font-size:34px;line-height:1}
+#onlineGame .og-deck{width:65px;height:89px;border:3px solid #f2ead0;border-radius:9px;background:repeating-linear-gradient(45deg,#194c91 0 5px,#286db6 5px 9px,#194c91 9px 14px);display:grid;place-items:center;box-shadow:3px 3px 0 #0b284a,0 5px 10px #0007;color:#e5f0ff;font-size:28px}
+#onlineGame .og-deck:before{content:'✦';border:2px solid #d9e7ff;padding:7px 11px;border-radius:5px;background:#ffffff1a}
+#onlineGame .og-suit-tile{width:70px;height:89px;border:2px solid #d5b45c;border-radius:12px;background:#fffaf0;display:grid;place-items:center;font-size:48px;font-weight:900;box-shadow:0 4px 10px #0007;color:#192923}
+#onlineGame .og-suit-tile.og-red{color:#c52d43}
+#onlineGame .og-msg{padding:9px 7px;margin:8px 0;border:1px solid #9f8754;border-radius:10px;background:#0a4536;font-weight:700;font-size:13px;min-height:36px}
+#onlineGame .og-hand-area{padding:8px 0 0}
+#onlineGame .og-hand-title{font-size:15px;font-weight:800;color:#f3dfaa;text-align:left;margin:6px 3px}
+#onlineGame .og-cards.og-hand{display:flex;flex-wrap:nowrap;justify-content:center;gap:0;overflow:visible;padding:19px 0 14px;margin:0;min-height:110px}
+#onlineGame button.og-card{position:relative;flex:0 1 52px;min-width:0;width:52px;height:81px;margin-left:0;padding:8px 0 0;border:2px solid #d5d5d5;border-radius:8px;background:#fffaf0;color:#132e28;font-size:19px;font-weight:900;box-shadow:0 3px 7px #0008;touch-action:manipulation}
+#onlineGame button.og-card.og-red{color:#c52d43}
+#onlineGame button.og-card.og-playable:not(:disabled){border-color:#ffe08b;box-shadow:0 0 0 2px #f2b94b,0 0 15px 4px #ffcf5d9c;animation:glow 2s ease-in-out infinite alternate}
+#onlineGame button.og-card.og-unplayable:not(:disabled){opacity:.65}
+#onlineGame button.og-card.sel,#onlineGame button.og-card.sel.og-playable:not(:disabled){z-index:10;transform:translateY(-12px);border-color:#fff1ad;background:#fff2c3;box-shadow:0 0 0 3px #ffd15c,0 0 18px #ffe17b}
+#onlineGame .og-actions{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin:5px 0}
+#onlineGame .og-actions button{border-radius:20px;padding:12px 13px;min-height:43px;background:linear-gradient(#ffe6a3,#d8a84b);color:#173a2e;font-weight:800}
+#onlineGame .og-actions #ogDraw{background:#d4e8df}
+#onlineGame .og-actions #ogPass{background:#b3cfc5}
+#onlineGame .og-actions button:disabled{opacity:.4}
+#onlineGame .og-me-score{font-size:12px;color:#e6d59e;margin:3px}
+#onlineGame .og-decision{border:2px solid #f7d47a;border-radius:14px;padding:12px;margin:10px 0;background:#174b39}
+#onlineGame .og-decision button{margin:5px;background:#ffe19a;color:#17382d;font-weight:800}
+@media(max-width:370px){#onlineGame .og-piles{gap:8px}#onlineGame .og-face,#onlineGame .og-deck{width:59px;height:82px}#onlineGame .og-suit-tile{width:61px;height:82px}#onlineGame button.og-card{font-size:17px}}
+</style><style>
+#onlineGame{margin:20px 0;padding:16px 12px;border:1px solid #dfbd71;border-radius:18px;background:#093d31;color:#ffedc1;text-align:center}
+#onlineGame .og-cards{display:flex;justify-content:center;flex-wrap:wrap;gap:5px;margin:12px 0}
+#onlineGame button.og-card{width:48px;height:76px;padding:4px 1px;border-radius:8px;background:#fff9ec;color:#132e28;font-size:19px;font-weight:800;border:2px solid #c8ad74}
+#onlineGame button.og-card.sel{border:3px solid #ffb800;background:#fff0b2;transform:translateY(-7px)}
+#onlineGame button.og-card:disabled{opacity:.65}
+#onlineGame .og-actions{display:flex;flex-wrap:wrap;gap:7px;justify-content:center}
+#onlineGame .og-actions button{padding:10px;border-radius:9px;background:#f5cf75;color:#173a2e;font-weight:700}
+#onlineGame .og-actions button:disabled{opacity:.4}
+#onlineGame .og-back{display:inline-block;width:30px;height:45px;background:repeating-linear-gradient(40deg,#183d83,#183d83 4px,#6e97d8 5px,#6e97d8 7px);border:2px solid white;border-radius:5px;margin-left:-10px}
+#onlineGame .og-msg{min-height:28px;margin:10px 0}
+#onlineGame .og-decision{border:2px solid #f7d47a;border-radius:14px;padding:10px;margin:10px 0;background:#174b39}#onlineGame .og-decision button{margin:5px;background:#ffe19a;color:#17382d;font-weight:800}
+.cpu-difficulty-desc{margin:4px 0 16px;padding:12px 14px;border:1px solid #b99a56;border-radius:12px;background:#194936;color:#f5e9cb;line-height:1.6;font-size:14px}
+/* v0.67: 設定フォームの選択欄を右端に整列 */
+#settingsScreen .settings-fields{width:100%;max-width:390px;margin:12px auto 24px;box-sizing:border-box}
+#settingsScreen .settings-fields label{display:grid;grid-template-columns:minmax(0,1fr) 154px;align-items:center;gap:12px;min-height:72px;padding:12px 16px;margin:10px 0;box-sizing:border-box}
+#settingsScreen .settings-fields select{display:block;width:100%;min-width:0;max-width:none;box-sizing:border-box;margin:0;padding:11px 30px 11px 14px;text-align:left;text-align-last:left;border-radius:12px;border:1px solid rgba(155,126,65,.28);font-size:17px;font-weight:800;appearance:auto;-webkit-appearance:menulist}
+@media(max-width:390px){#settingsScreen .settings-fields label{grid-template-columns:minmax(0,1fr) 144px;padding:11px 12px;gap:8px}#settingsScreen .settings-fields select{font-size:16px;padding-left:10px}}
+
+/* v0.67: CPUの説明を選択欄と同じ枠内に収める */
+#settingsScreen .settings-fields label:has(#cpuDifficulty){row-gap:8px}
+#settingsScreen .settings-fields .cpu-difficulty-desc{grid-column:1/-1;grid-row:2;margin:0;padding:12px 0 2px;border:0;border-top:1px solid rgba(220,188,111,.4);border-radius:0;background:transparent;color:#f5e9cb;line-height:1.65;font-size:14px;font-weight:400;min-width:0}
+
+/* v0.67: 長い難易度名を省略せず表示し、矢印と文字が重ならないよう調整 */
+#settingsScreen #cpuDifficulty{font-size:15px!important;letter-spacing:-.04em;padding-left:10px!important;padding-right:24px!important;appearance:none!important;-webkit-appearance:none!important;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2316382d' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m7 10 5 5 5-5'/%3E%3C/svg%3E")!important;background-repeat:no-repeat!important;background-position:right 7px center!important;background-size:13px 13px!important;}
+@media(max-width:390px){#settingsScreen .settings-fields label:has(#cpuDifficulty){grid-template-columns:minmax(0,1fr) 150px!important}}
+</style><style id="v059-suit-style">
+#onlineGame .og-suit-choice{border:2px solid #d6b565;border-radius:16px;background:#0b4938;padding:13px 9px;margin:12px 0;text-align:center;box-shadow:0 5px 18px #001a1660}
+#onlineGame .og-suit-title{font-size:16px;font-weight:850;color:#ffe4a2;margin-bottom:10px}
+#onlineGame .og-suit-options{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+#onlineGame .og-suit-options button{margin:0;padding:8px 0;background:#fff9ed;color:#142a22;font-size:39px;min-height:65px;border:2px solid #d7ba6b;border-radius:12px}
+#onlineGame .og-suit-options button:nth-child(2),#onlineGame .og-suit-options button:nth-child(3){color:#c52d43}
+#onlineGame .og-suit-cancel{margin-top:9px;background:#c5d7ce;color:#163a2d}
+</style><style id="v069-ranking-style">.ranking-filters{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0}.ranking-filters label{color:#f6e0a7;font-size:13px}.ranking-filters select{display:block;width:100%;margin-top:6px;border-radius:10px;padding:10px;color:#123c30;background:#fff8e7}.ranking-rows{margin:14px 0;text-align:left}.ranking-row{display:grid;grid-template-columns:35px 1fr auto;gap:9px;align-items:center;background:#0a392d;border:1px solid #bd995d70;border-radius:12px;padding:12px;margin:7px 0;color:#fff5d9}.ranking-row small{display:block;opacity:.7;font-size:11px}.ranking-row strong{color:#ffda80}.ranking-entry{border:1px solid #d8b46d80;border-radius:12px;padding:12px;margin:12px 0}.ranking-entry p{font-size:13px}.ranking-entry input{width:100%;padding:11px;border-radius:9px;border:1px solid #d8b46d;margin-bottom:8px;background:#fff;color:#142f26}.ranking-entry button{margin:0!important}.ranking-entry [role=status]{font-size:12px;margin-top:7px;overflow-wrap:anywhere}</style><style id="v001-suit-near-hand">
+.cpu-suit-choice{border:2px solid #d6b565;border-radius:16px;background:#0b4938;padding:12px 9px;margin:10px 0;text-align:center;box-shadow:0 5px 18px #001a1660}
+.cpu-suit-choice[hidden]{display:none!important}
+.cpu-suit-title{font-size:16px;font-weight:850;color:#ffe4a2;margin-bottom:10px}
+.cpu-suit-options{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.cpu-suit-options button{margin:0;padding:8px 0;background:#fff9ed;color:#142a22;font-size:39px;min-height:65px;border:2px solid #d7ba6b;border-radius:12px}
+.cpu-suit-options button:nth-child(2),.cpu-suit-options button:nth-child(3){color:#c52d43}
+#onlineGame .og-hand-area .og-suit-choice{margin:12px 0 2px}
+</style></head><body>
+<style id="v005-j-glow">.card.j-addable,#onlineGame .og-card.j-addable{box-shadow:0 0 0 2px #ffdb69,0 0 14px 4px #ffe47b9c!important;animation:jAddGlow 1.3s ease-in-out infinite alternate;position:relative}@keyframes jAddGlow{from{filter:brightness(1)}to{filter:brightness(1.22)}}</style><style id="don-fx-style">
+/* v0.0.12: lightning impact overlay; game state and scoring unchanged. */
+#donFx{position:fixed;inset:0;z-index:12000;pointer-events:none;display:grid;place-items:center;overflow:hidden;opacity:0;visibility:hidden;isolation:isolate;--fx-duration:2000ms}
+#donFx.fx-show{visibility:visible;animation:donFxFade var(--fx-duration) linear both}
+#donFx.fx-reverse,#donFx.fx-start{--fx-duration:3000ms}
+#donFx .don-fx-dark{position:absolute;inset:0;background:#03040be8;animation:donFxDark var(--fx-duration) ease-out both}
+#donFx .don-fx-flash{position:absolute;inset:0;background:#fff;mix-blend-mode:screen;animation:donFxFlash var(--fx-duration) linear both}
+#donFx .don-fx-wash{position:absolute;inset:-20%;background:radial-gradient(circle,var(--fx-glow),transparent 60%);animation:donFxWash var(--fx-duration) ease-out both}
+#donFx .don-fx-burst{position:absolute;width:min(130vw,760px);aspect-ratio:1;border-radius:50%;background:repeating-conic-gradient(from 0deg,transparent 0deg 9deg,var(--fx-ray) 10deg 13deg,transparent 14deg 19deg);-webkit-mask-image:radial-gradient(circle,transparent 0 13%,#000 22% 70%,transparent 80%);mask-image:radial-gradient(circle,transparent 0 13%,#000 22% 70%,transparent 80%);animation:donFxBurst var(--fx-duration) ease-out both}
+#donFx .don-fx-ring{position:absolute;width:min(55vw,300px);aspect-ratio:1;border:9px solid var(--fx-text);border-radius:50%;box-shadow:0 0 24px var(--fx-glow),inset 0 0 20px var(--fx-glow);animation:donFxRing var(--fx-duration) ease-out both}
+#donFx .don-fx-ring.ring-two{animation-delay:130ms}
+#donFx .don-fx-sparks{position:absolute;inset:0;display:grid;place-items:center}
+#donFx .don-fx-spark{position:absolute;width:clamp(5px,1.8vw,12px);height:clamp(18px,6vw,48px);border-radius:70% 70% 30% 30%;background:linear-gradient(#fff,var(--fx-text),transparent);box-shadow:0 0 14px var(--fx-glow);transform:rotate(var(--angle)) translateY(-12px) scale(.1);animation:donFxSpark var(--fx-duration) ease-out both;animation-delay:var(--delay)}
+#donFx .don-fx-word{position:relative;z-index:2;font-size:clamp(47px,14vw,108px);font-weight:1000;letter-spacing:-.07em;white-space:nowrap;color:var(--fx-text);-webkit-text-stroke:2px var(--fx-stroke);text-shadow:0 4px 0 var(--fx-stroke),0 9px 28px var(--fx-glow),0 0 45px var(--fx-glow);animation:donFxPop var(--fx-duration) cubic-bezier(.16,1,.3,1) both;transform-origin:center}
+#donFx.fx-reverse .don-fx-word{font-size:clamp(42px,12vw,96px);animation:donFxReverse var(--fx-duration) cubic-bezier(.16,1,.3,1) both}
+#donFx.fx-start .don-fx-word{font-size:clamp(42px,12vw,96px);background:linear-gradient(110deg,#ffed79,#ff81d2,#7ef5ff,#fff19d,#bd89ff);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:donFxPop var(--fx-duration) cubic-bezier(.16,1,.3,1) both,donRainbow 700ms linear infinite}
+#donFx.fx-don{--fx-text:#ffe88d;--fx-stroke:#99530a;--fx-glow:#ffba27b0;--fx-ray:#ffdb75cf}
+#donFx.fx-draw{--fx-text:#c4f0ff;--fx-stroke:#1765b8;--fx-glow:#3fa9ffba;--fx-ray:#83caffdf}
+#donFx.fx-reverse{--fx-text:#ffd4d9;--fx-stroke:#a90e34;--fx-glow:#ff315cdd;--fx-ray:#ff5479ed}
+#donFx.fx-start{--fx-text:#fff5ba;--fx-stroke:#a14eae;--fx-glow:#e68bffdc;--fx-ray:#f4caffed}
+body.don-screen-shake{animation:donScreenShake 850ms cubic-bezier(.35,.05,.6,.95) both}
+@keyframes donScreenShake{0%,100%{transform:translate(0,0)}10%{transform:translate(-11px,5px)}20%{transform:translate(12px,-7px)}30%{transform:translate(-12px,-4px)}40%{transform:translate(10px,7px)}50%{transform:translate(-8px,4px)}60%{transform:translate(7px,-5px)}75%{transform:translate(-4px,3px)}90%{transform:translate(2px,-1px)}}
+@keyframes donFxFade{0%{opacity:0}5%,86%{opacity:1}100%{opacity:0}}
+@keyframes donFxDark{0%{opacity:0}8%{opacity:1}30%{opacity:.86}85%{opacity:.78}100%{opacity:0}}
+@keyframes donFxFlash{0%,13%{opacity:0}16%{opacity:.94}20%{opacity:0}27%{opacity:.42}30%,100%{opacity:0}}
+@keyframes donFxPop{0%,12%{transform:scale(.12) rotate(-13deg);opacity:0}19%{transform:scale(1.45) rotate(5deg);opacity:1}28%{transform:scale(.91) rotate(-3deg)}40%{transform:scale(1.08)}70%{transform:scale(1)}100%{transform:scale(1.18);opacity:1}}
+@keyframes donFxReverse{0%,12%{transform:translateX(100vw) rotate(24deg) scale(.4);opacity:0}22%{transform:translateX(-10vw) rotate(-10deg) scale(1.4);opacity:1}34%{transform:translateX(4vw) rotate(3deg) scale(.96)}45%{transform:translateX(0) scale(1.1)}100%{transform:translateX(0) scale(1.2);opacity:1}}
+@keyframes donFxBurst{0%,11%{transform:scale(.12) rotate(-25deg);opacity:0}22%{opacity:1}100%{transform:scale(2.2) rotate(38deg);opacity:0}}
+@keyframes donFxWash{0%{opacity:0;transform:scale(.2)}24%{opacity:1}100%{opacity:0;transform:scale(1.6)}}
+@keyframes donFxRing{0%,15%{transform:scale(.1);opacity:0}22%{opacity:1}75%,100%{transform:scale(5);opacity:0}}
+@keyframes donFxSpark{0%,13%{transform:rotate(var(--angle)) translateY(-12px) scale(.1);opacity:0}20%{opacity:1}65%,100%{transform:rotate(var(--angle)) translateY(-72vh) scale(.7);opacity:0}}
+@keyframes donRainbow{0%{background-position:0% 0}100%{background-position:100% 0}}
+@media(prefers-reduced-motion:reduce){#donFx.fx-show,#donFx .don-fx-word,#donFx .don-fx-burst,#donFx .don-fx-wash,#donFx .don-fx-dark,#donFx .don-fx-flash,#donFx .don-fx-ring,#donFx .don-fx-spark,body.don-screen-shake{animation-duration:.15s!important}}
+
+/* Thunder strike: dim -> lightning -> impact -> afterglow. */
+#donFx .don-fx-lightning{position:absolute;inset:0;width:100%;height:100%;overflow:visible;z-index:1;filter:drop-shadow(0 0 7px var(--fx-light)) drop-shadow(0 0 19px var(--fx-light));opacity:0;animation:donLightning var(--fx-duration) steps(1,end) both}
+#donFx .don-fx-lightning .bolt-halo{fill:none;stroke:var(--fx-light);stroke-width:14;stroke-linecap:round;stroke-linejoin:round;opacity:.48}
+#donFx .don-fx-lightning .bolt-core{fill:none;stroke:#fffef2;stroke-width:3.8;stroke-linecap:round;stroke-linejoin:round}
+#donFx .don-fx-lightning .bolt-small{fill:none;stroke:var(--fx-light);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+#donFx .don-fx-impact{position:absolute;inset:0;z-index:1;background:radial-gradient(circle at 50% 50%,#ffffff 0%,var(--fx-light) 14%,transparent 55%);opacity:0;animation:donImpact var(--fx-duration) ease-out both}
+#donFx.fx-don{--fx-light:#ffd66a}#donFx.fx-draw{--fx-light:#75cfff}#donFx.fx-reverse{--fx-light:#ff5979}#donFx.fx-start{--fx-light:#d6a5ff}
+#donFx.fx-show .don-fx-word{animation-name:donThunderPop}
+#donFx.fx-reverse.fx-show .don-fx-word{animation-name:donThunderReverse}
+#donFx.fx-start.fx-show .don-fx-word{animation-name:donThunderPop,donRainbow}
+@keyframes donLightning{0%,9%{opacity:0}10%,13%{opacity:.95}14%,17%{opacity:0}18%,22%{opacity:1}23%,28%{opacity:0}29%,31%{opacity:.7}32%,49%{opacity:0}50%,52%{opacity:.55}53%,100%{opacity:0}}
+@keyframes donImpact{0%,17%{opacity:0;transform:scale(.2)}21%{opacity:.95;transform:scale(.7)}27%{opacity:0;transform:scale(1.7)}43%{opacity:.3;transform:scale(1)}50%,100%{opacity:0;transform:scale(2)}}
+@keyframes donThunderPop{0%,13%{opacity:0;transform:scale(.05) rotate(-8deg)}17%{opacity:.2;transform:scale(.14)}20%,24%{opacity:1;transform:scale(1.45) rotate(-4deg)}25%,29%{transform:scale(1.45) rotate(-4deg)}37%{transform:scale(.94) rotate(2deg)}55%{transform:scale(1.08)}100%{opacity:1;transform:scale(1.13)}}
+@keyframes donThunderReverse{0%,13%{opacity:0;transform:translateX(100vw) scale(.25) rotate(20deg)}20%,26%{opacity:1;transform:translateX(-5vw) scale(1.45) rotate(-7deg)}27%,30%{transform:translateX(-5vw) scale(1.45) rotate(-7deg)}40%{transform:translateX(2vw) scale(.94)}55%{transform:translateX(0) scale(1.1)}100%{opacity:1;transform:scale(1.15)}}
+@media(prefers-reduced-motion:reduce){#donFx .don-fx-lightning,#donFx .don-fx-impact{animation:none!important;opacity:0!important}}
+
+/* v0.0.12: ominous brush lettering, inferno, and premium card shatter. */
+#donFx .don-fx-word{
+ font-family:system-ui,-apple-system,"Hiragino Kaku Gothic ProN",sans-serif;
+ font-weight:900;font-style:normal;letter-spacing:-.055em;line-height:1.35;
+ paint-order:stroke fill;-webkit-text-stroke:clamp(2px,.8vw,6px) #090509;
+ color:var(--fx-text);text-shadow:3px 5px 0 #170708,-3px -2px 0 #050309,0 10px 1px #050309,0 0 15px var(--fx-glow),0 0 46px var(--fx-glow);
+ filter:drop-shadow(0 9px 0 #080307) drop-shadow(0 0 14px var(--fx-light));
+ z-index:8;
+}
+#donFx.fx-reverse .don-fx-word{color:#ffe0d5;-webkit-text-stroke:clamp(2px,.8vw,6px) #350008;text-shadow:4px 5px 0 #080205,0 0 18px #ff164b,0 0 46px #c6001c}
+#donFx.fx-start .don-fx-word{background:linear-gradient(165deg,#fff9cf 0%,#e9bd55 26%,#8c3b16 48%,#ffe28c 65%,#fff1c7 83%,#773b8e 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;-webkit-text-stroke:clamp(2px,.8vw,6px) #210b2b;text-shadow:0 8px 0 #110317,0 0 30px #b65dff}
+#donFx .don-fx-inferno{position:absolute;inset:-22%;z-index:1;pointer-events:none;opacity:0;mix-blend-mode:screen;background:radial-gradient(ellipse 48% 38% at 50% 55%,#fff6bd 0%,#ffb132 14%,#e7440b 32%,#6d0b04aa 53%,transparent 78%),conic-gradient(from 25deg at 50% 52%,transparent 0deg,#f74a16b0 18deg,transparent 34deg,#ffb22e99 56deg,transparent 80deg,#f84a14a8 105deg,transparent 128deg,#fa961b9c 170deg,transparent 196deg,#ff4215bb 230deg,transparent 258deg,#ffbf3a9c 310deg,transparent 340deg);animation:donInferno var(--fx-duration) ease-out both}
+#donFx.fx-draw .don-fx-inferno{filter:hue-rotate(165deg) saturate(1.25)}
+#donFx.fx-reverse .don-fx-inferno{filter:hue-rotate(-28deg) saturate(1.5) brightness(.8)}
+#donFx.fx-start .don-fx-inferno{filter:hue-rotate(235deg) saturate(1.25)}
+#donFx .don-fx-debris{position:absolute;inset:0;z-index:5;overflow:hidden;pointer-events:none;display:none;perspective:650px}
+#donFx.fx-reverse .don-fx-debris,#donFx.fx-start .don-fx-debris{display:block}
+#donFx .don-fx-flying-card{position:absolute;left:50%;top:50%;width:clamp(33px,11vw,69px);aspect-ratio: .71;background:linear-gradient(135deg,#fffdf0,#e5e4df);border:2px solid #f6f0df;border-radius:5px;box-shadow:0 3px 15px #000d,0 0 13px #f90a;display:grid;place-items:center;color:#12111a;font:bold clamp(24px,6vw,43px) Georgia,serif;opacity:0;will-change:transform,opacity;animation:donCardScatter var(--fx-duration) cubic-bezier(.14,.65,.3,1) both;animation-delay:var(--card-delay)}
+#donFx .don-fx-flying-card.red{color:#bd0c23}
+#donFx .don-fx-flying-card::after{content:attr(data-rank);position:absolute;left:4px;top:2px;font:bold 11px Georgia,serif}
+#donFx .don-fx-flying-card:nth-child(3n){background:linear-gradient(140deg,#eee8e1,#a4a1a5);box-shadow:0 0 22px #000e}
+#donFx .don-fx-flying-card:nth-child(4n){filter:brightness(.8)}
+@keyframes donInferno{0%,13%{opacity:0;transform:scale(.06) rotate(-18deg)}20%{opacity:.95;transform:scale(.58) rotate(8deg)}30%{opacity:.95;transform:scale(1.2) rotate(-5deg)}60%{opacity:.66;transform:scale(1.65) rotate(10deg)}100%{opacity:0;transform:scale(2.15) rotate(18deg)}}
+@keyframes donCardScatter{0%,15%{opacity:0;transform:translate3d(-50%,-50%,0) rotate(0deg) scale(.1)}23%{opacity:1;transform:translate3d(calc(-50% + var(--mid-x)),calc(-50% + var(--mid-y)),90px) rotate(var(--mid-r)) scale(1.25)}55%{opacity:1}90%,100%{opacity:0;transform:translate3d(calc(-50% + var(--end-x)),calc(-50% + var(--end-y)),-130px) rotate(var(--end-r)) scale(var(--end-scale))}}
+@media(prefers-reduced-motion:reduce){#donFx .don-fx-inferno,#donFx .don-fx-flying-card{animation:none!important;opacity:0!important}}
+</style><div id="donFx" aria-hidden="true"><div class="don-fx-dark"></div><div class="don-fx-wash"></div><div class="don-fx-burst"></div><div class="don-fx-ring"></div><div class="don-fx-ring ring-two"></div><div class="don-fx-inferno"></div><div class="don-fx-sparks"></div><div class="don-fx-debris"></div><svg class="don-fx-lightning" viewBox="0 0 360 720" preserveAspectRatio="none" aria-hidden="true"><path class="bolt-halo" d="M18 0 L74 99 L54 155 L143 236 L119 302 L180 360"/><path class="bolt-core" d="M18 0 L74 99 L54 155 L143 236 L119 302 L180 360"/><path class="bolt-halo" d="M350 0 L289 91 L314 160 L225 231 L247 294 L180 360"/><path class="bolt-core" d="M350 0 L289 91 L314 160 L225 231 L247 294 L180 360"/><path class="bolt-small" d="M0 440 L78 412 L105 362 L160 351 M360 468 L280 426 L250 384 L192 365 M90 720 L133 586 L116 510 L179 379"/></svg><div class="don-fx-impact"></div><div class="don-fx-flash"></div><div class="don-fx-word">ドン！</div></div><header class="brand"><h1>がばちょ <small>v0.0.15</small></h1><span class="brand-sub">GABACHO CARD GAME</span></header><p class="muted">相手の裏向きトランプと枚数を表示／CPU対戦／2〜5人／ジョーカー2〜4枚／A・2・8対応／終了時にCPU手札公開</p>
+<div id="homeScreen" class="entry-screen"><div class="entry-emblem">🃏</div><div class="entry-overline">THE CARD GAME</div><h2 class="entry-title">がばちょ</h2><p class="entry-lead">ドンを狙え。ジョーカーで逆転。</p><button class="entry-primary" onclick="showSettings()">ゲームスタート <span>▶</span></button><button class="entry-primary" onclick="showOnline()">🌐 オンラインで遊ぶ</button><button class="entry-back" onclick="showRanking()">🏆 全国ランキング</button><button class="entry-back rules-open" onclick="showRules()">📖 ルール説明</button><p class="entry-note">CPU対戦 · 2〜5人 · オフライン対応</p></div>
+<div id="onlineScreen" class="entry-screen" hidden><div class="entry-overline">ONLINE LOBBY · BETA</div><h2 class="entry-heading">🌐 オンライン対戦ロビー</h2><p class="entry-lead">部屋コードを共有して友達と集合</p><div class="online-fields"><label>ニックネーム<input id="onlineName" maxlength="20" placeholder="名前を入力" autocomplete="nickname"></label><label>部屋コード<input id="onlineCode" maxlength="8" placeholder="例：AB12CD" autocapitalize="characters"></label></div><button class="entry-primary" onclick="createOnlineRoom()">部屋を作る</button><button class="entry-primary" onclick="joinOnlineRoom()">コードで参加</button><p id="onlineMessage" role="status"></p><div id="onlineLobby" hidden><h3>部屋コード：<span id="onlineRoomCode"></span></h3><button onclick="copyOnlineCode()">コードをコピー</button><div id="onlineMembers"></div><button id="onlineStart" onclick="startOnlineMatch()" hidden>ゲーム開始</button><p class="muted">2〜3人対戦β版。参加人数に合わせて開始します。ホストが接続中の間、ゲームが同期されます。通信が切れたら新しい部屋でやり直してください。</p><div id="onlineGame" hidden></div><button class="entry-back" onclick="leaveOnlineRoom()">部屋から退出</button></div><button class="entry-back" onclick="leaveOnlineRoom();showHome()">← ホームへ戻る</button></div>
+<div id="rulesScreen" class="entry-screen rules-screen" hidden><div class="entry-overline">HOW TO PLAY</div><h2 class="entry-heading">📖 がばちょのルール</h2><div class="rules-body"><h3>🎯 勝利条件</h3><p>相手が場に出したカードの数字の合計と、自分の手札の数字の合計が一致したら「ドン！」。ドンが成立するとそのゲームは終了し、得点を精算します。設定したゲーム数が終わった時点の総合得点が最も高い人が優勝！</p><h3>🃏 基本の出し方</h3><p>最初の手札は5枚。場と同じマークか同じ数字のカードを出せます。同じ数字はまとめて複数枚出せます。Jとジョーカーはいつでも出せて、次のマークを指定できます。Aは1、ジョーカーは0として計算します。</p><h3>⚡ 特殊カード</h3><p><b>A：</b>次の人を1人飛ばします。複数枚ならその枚数分飛ばします。<br><b>2・8：</b>次の人は追加で2枚引きます。同じ数字を重ねて返せます。<br><b>ジョーカー：</b>次の人は追加で4枚引きます。ジョーカー同士で重ねられます。</p><h3>🔁 ターンとドロー</h3><p>出せるカードがなければ1枚引きます。1ターンに任意で引けるのは1枚まで。2・8などで追加のカードを引いた後も、出せるカードがなければさらに1枚引く必要があります。</p><h3>💰 ドンと得点</h3><p>通常ドンは、ドンした人以外の手札枚数合計×100点が基本。ドンした人の手札のジョーカー1枚ごとに獲得点数が2倍になります。ドンされた人も手札合計が一致すれば「ドン返し」が可能で、通常ドン返しは2倍です。</p><p>1枚引いて成立する「引きドン」は基本点が2倍、「引きドン返し」は4倍。自分の出した場札に引きドンする「オナニー引きドン」は2倍で、ほかの全員が均等に支払います。山札の再シャッフルで巡目が進むと得点倍率も上がります。</p><h3>🌟 スタドン（開始時ドン）</h3><p>ゲーム開始直後、最初の場札の数字と自分の手札5枚の数字の合計が一致すると、カードを出す前にスタドンで即勝利！ Aは1、Jは11、Qは12、Kは13、ジョーカーは0として計算します。複数人が同時に成立した場合は先手から順番に優先します。</p><p><b>得点：</b>自分以外の全員の手札枚数合計 × 100点 × 4倍。この点数を相手全員から<b>それぞれ</b>受け取ります（分担ではありません）。例：4人対戦で相手が各5枚なら15枚×100点×4＝6,000点。勝者は＋18,000点、相手3人はそれぞれ−6,000点。</p><h3>🏆 最終優勝</h3><p>各ゲームの得点を累積し、全ゲーム終了後に総合1位を発表。同点1位は同時優勝です。</p></div><button class="entry-primary" onclick="showHome()">ホームへ戻る</button></div>
+<div id="rankingScreen" class="entry-screen" hidden><div class="entry-overline">NATIONAL LEADERBOARD</div><h2 class="entry-heading">🏆 全国ランキング</h2><p class="entry-lead">ジョーカー2枚で遊んだCPU対戦の総合得点</p><div class="ranking-filters"><label>ゲーム数 <select id="rankingGames" onchange="loadRanking()"><option value="1">1ゲーム</option><option value="5">5ゲーム</option><option value="10" selected>10ゲーム</option><option value="20">20ゲーム</option></select></label><label>対戦人数 <select id="rankingPlayers" onchange="loadRanking()"><option value="all">すべて</option><option value="2">2人</option><option value="3">3人</option><option value="4">4人</option><option value="5">5人</option></select></label></div><div id="rankingStatus" class="entry-lead" role="status">ランキングを読み込み中…</div><div id="rankingRows" class="ranking-rows"></div><button class="entry-back" onclick="showHome()">← ホームへ戻る</button></div>
+<div id="settingsScreen" class="entry-screen" hidden><div class="entry-overline">GAME SETTINGS</div><h2 class="entry-heading">対戦条件を選択</h2><p class="entry-lead">人数・ジョーカー・ゲーム数を決めよう</p><div class="settings-fields"><label>対戦人数 <select id="count"><option>2</option><option>3</option><option selected>4</option><option>5</option></select></label><label>ジョーカー <select id="jokers"><option value="2" selected>2枚</option><option value="3">3枚</option><option value="4">4枚</option></select></label><label>ゲーム数 <select id="games"><option>1</option><option>5</option><option selected>10</option><option>20</option></select></label><label>CPUの強さ <select id="cpuDifficulty" onchange="updateCpuDifficultyDescription()"><option value="easy">よわい</option><option value="normal" selected>ふつう</option><option value="hard">つよい</option><option value="expert">もっとつよい</option></select><p id="cpuDifficultyDescription" class="cpu-difficulty-desc">複数枚出しや基本的な戦略を使う。</p></label></div><button class="entry-primary" onclick="startFromSettings()">この条件で開始 <span>▶</span></button><button class="entry-back" onclick="showHome()">← ホームへ戻る</button></div>
+<div id="championOverlay" class="champion-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="championTitle"><div class="champion-box"><div class="champion-confetti">✦ 🎊 ✨ 🎉 ✦</div><div class="champion-cup">🏆</div><div class="entry-overline">GABACHO CHAMPION</div><h2 id="championTitle">優勝おめでとう！</h2><div id="championName" class="champion-name"></div><div id="championScore" class="champion-score"></div><div id="championRanking" class="champion-ranking"></div><button class="entry-primary" onclick="closeChampion()">結果の詳細を見る</button><div id="rankingEntry" class="ranking-entry" hidden><p>🏆 ジョーカー2枚の記録を全国ランキングに登録できます</p><input id="rankingName" maxlength="20" placeholder="ランキング用の名前（20文字まで）" autocomplete="nickname"><button id="rankingSubmit" class="entry-back" onclick="submitRanking()">このスコアを登録</button><div id="rankingEntryStatus" role="status"></div></div><button class="entry-back" onclick="closeChampion();showRanking()">🏆 全国ランキングを見る</button><button class="entry-back" onclick="championHome()">ホームへ戻る</button></div></div><div id="gameScreen" hidden><div class="game-topbar"><button onclick="confirmHome()">⌂ ホーム</button><span>CPU対戦</span></div><section class="setup"><div id="matchInfo"></div><div id="players"></div></section>
+<section class="table-area"><div class="table-label">場・山札</div><div id="board"></div><p id="status"></p><div id="decision" hidden><div id="question"></div><div id="decisionButtons"></div></div><div id="settle"></div><button id="backToChampion" class="entry-back" hidden onclick="showChampion()">🏆 結果発表に戻る</button><button id="nextGame" hidden onclick="advanceGame()">次のゲームへ ▶</button><div id="reveal"></div><div id="standings"></div></section>
+<section class="hand-area"><h3>あなたの手札 <span id="sum"></span></h3><div id="hand" class="cards"></div><div id="suitChoice" class="cpu-suit-choice" hidden><div class="cpu-suit-title">次のマークを選択（J／ジョーカー）</div><div class="cpu-suit-options"><button onclick="chooseSuit('♠')">♠</button><button onclick="chooseSuit('♥')">♥</button><button onclick="chooseSuit('♦')">♦</button><button onclick="chooseSuit('♣')">♣</button></div></div><p id="handHint" class="muted">1回タップで選択・同じカードを素早く2回タップで出す（複数枚も可）</p><button id="play" onclick="play()">カードを出す</button><button id="draw" onclick="draw()">1枚引く</button><button id="penalty" onclick="acceptPenalty()">必要な枚数を引く</button><button id="pass" onclick="pass()">ターン終了</button><div id="topCardChoice" hidden class="top-card-choice"><strong>一番上にするカードを選んでください</strong><p>選んだカードのマークが次の場のマークになります</p><div id="topCardOptions"></div><button type="button" onclick="cancelTopCardChoice()">キャンセル</button></div></section>
+<section class="details"><b>対戦ログ</b><div id="log"></div></section></div>
+<script>
+
+// Animation is deliberately independent of turn state, scoring and input handling.
+let donFxTimeout=null;let donShakeTimeout=null;
+function showDonFx(type){
+ const el=document.getElementById('donFx');if(!el)return;
+ const names={don:'ドン！！',draw:'引きドン！！',reverse:'ドン返し！！',start:'スタドン！！'};
+ const key=names[type]?type:'don',duration=(key==='reverse'||key==='start')?3000:2000;
+ clearTimeout(donFxTimeout);clearTimeout(donShakeTimeout);document.body.classList.remove('don-screen-shake');el.className='';void el.offsetWidth;
+ el.querySelector('.don-fx-word').textContent=names[key];
+ const sparks=el.querySelector('.don-fx-sparks');sparks.replaceChildren();
+ for(let i=0;i<24;i++){const spark=document.createElement('i');spark.className='don-fx-spark';spark.style.setProperty('--angle',(i*15)+'deg');spark.style.setProperty('--delay',((i%4)*30)+'ms');sparks.appendChild(spark)}
+ const debris=el.querySelector('.don-fx-debris');debris.replaceChildren();
+ if(key==='reverse'||key==='start'){
+  const suits=['♠','♥','♦','♣'],ranks=['A','7','K','Q','8','J'];
+  for(let i=0;i<18;i++){
+   const card=document.createElement('i'),angle=(i/18)*Math.PI*2+(i%3)*.12;
+   const distance=35+(i%5)*13;
+   card.className='don-fx-flying-card'+(i%4===1||i%4===2?' red':'');
+   card.textContent=suits[i%4];card.dataset.rank=ranks[i%6];
+   card.style.setProperty('--mid-x',(Math.cos(angle)*distance).toFixed(1)+'px');
+   card.style.setProperty('--mid-y',(Math.sin(angle)*distance).toFixed(1)+'px');
+   card.style.setProperty('--end-x',(Math.cos(angle)*(window.innerWidth*.85+80)).toFixed(1)+'px');
+   card.style.setProperty('--end-y',(Math.sin(angle)*(window.innerHeight*.65+80)).toFixed(1)+'px');
+   card.style.setProperty('--mid-r',((i*47)%120-60)+'deg');
+   card.style.setProperty('--end-r',(i%2?-540:540)+'deg');
+   card.style.setProperty('--end-scale',(.55+(i%4)*.27).toFixed(2));
+   card.style.setProperty('--card-delay',(i%6*27)+'ms');debris.appendChild(card);
+  }
+ }
+ el.className='fx-show fx-'+key;
+ if(key==='reverse'||key==='start'){void document.body.offsetWidth;document.body.classList.add('don-screen-shake');donShakeTimeout=setTimeout(()=>document.body.classList.remove('don-screen-shake'),900)}
+ donFxTimeout=setTimeout(()=>{el.className='';sparks.replaceChildren();debris.replaceChildren()},duration);
+}
+
+function updateCpuDifficultyDescription(){const el=document.getElementById('cpuDifficultyDescription');const value=document.getElementById('cpuDifficulty').value;el.textContent={easy:'出せるカードをほぼランダムに選ぶ。複数枚出しやドン返しを狙う戦略は少なめ。',normal:'複数枚出しや基本的な戦略を使う。',hard:'ドンされる危険性を考えてカードを選ぶ。相手の手札枚数やジョーカーの使いどころも意識する。',expert:'ドンの危険性・次の手・得点を総合的に考え、より有利なカードを選ぶ。'}[value]}
+const suits=['♠','♥','♦','♣'];let g,timer;
+const num=c=>c.n==='joker'?0:c.n, total=h=>h.reduce((a,c)=>a+num(c),0), jokerCount=h=>h.filter(c=>c.n==='joker').length;
+const rank=c=>c.n==='joker'?'🃏':({1:'A',11:'J',12:'Q',13:'K'}[c.n]||c.n), label=c=>c.n==='joker'?'🃏':c.s+rank(c);
+const who=i=>i===0?'あなた':'CPU'+i;
+const order=(a,b)=>(a.n==='joker'?99:a.n)-(b.n==='joker'?99:b.n)||suits.indexOf(a.s)-suits.indexOf(b.s);
+const cash=n=>n.toLocaleString('ja-JP')+' pt';
+function say(s){g.logs.unshift(s);g.logs=g.logs.slice(0,45)}
+function shuffle(a){for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function start(){
+ clearTimeout(timer);
+ const count=+document.querySelector('#count').value,jokers=+document.querySelector('#jokers').value,games=+document.querySelector('#games').value;
+ g={matchId:crypto.randomUUID(),count,jokers,games,difficulty:document.querySelector("#cpuDifficulty").value,gameNo:0,scores:Array(count).fill(0),firstPlayer:0,history:[]};
+ startGame();
+}
+function startGame(){
+ clearTimeout(timer);
+ const {count,jokers}=g;let deck=[];
+ for(let s of suits)for(let n=1;n<=13;n++)deck.push({s,n,id:s+n});
+ for(let i=0;i<jokers;i++)deck.push({s:'',n:'joker',id:'joker'+i});
+ shuffle(deck);let hands=Array.from({length:count},()=>[]);
+ for(let k=0;k<5;k++)for(let h of hands)h.push(deck.pop());
+ hands.forEach(h=>h.sort(order));let first=deck.pop();
+ while(first.n==='joker'){deck.unshift(first);first=deck.pop()}
+ Object.assign(g,{gameNo:g.gameNo+1,round:1,deck,hands,discard:[],board:{cards:[first],suit:first.s,target:num(first),owner:-1},turn:g.firstPlayer,drawn:false,selected:[],phase:'turn',pending:null,logs:[],settle:'',resultHtml:'',suitCards:null,penalty:null,skipSteps:0,forcedDraw:false,awaitingAfterPlay:false,gameStartScores:[...g.scores]});
+ say(g.gameNo+' / '+g.games+'ゲーム開始。先手：'+who(g.turn));if(!checkStartDon()) {render();if(g.turn!==0)timer=setTimeout(cpu,700);}
+}
+// Opening-card Don: settle before anyone takes a turn. The first player has priority.
+function checkStartDon(){
+ const target=g.board.target;
+ let winner=-1;
+ for(let step=0;step<g.count;step++){
+  const i=(g.firstPlayer+step)%g.count;
+  if(total(g.hands[i])===target){winner=i;break}
+ }
+ if(winner<0)return false;
+ const cards=g.hands.reduce((n,h,i)=>n+(i===winner?0:h.length),0);
+ const base=cards*100,each=base*4;
+ for(let i=0;i<g.count;i++)if(i!==winner){g.scores[i]-=each;g.scores[winner]+=each}
+ const otherCount=g.count-1;
+ const escapeHtml=x=>String(x).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
+ g.resultHtml='<div class="result-kicker">'+g.gameNo+' / '+g.games+' ゲーム・結果発表</div>'+
+  '<div class="result-title">🌟 スタドン！</div>'+
+  '<div class="result-type">'+escapeHtml(who(winner))+'が開始時の場札にスタドン！</div>'+
+  '<span class="result-badge">スタドン ×4 ／ 相手全員がそれぞれ支払う</span>'+
+  '<div class="result-detail"><div class="result-payment">'+escapeHtml(who(winner))+' ← 他'+otherCount+'人：各'+cash(each)+
+  '<div class="result-breakdown">'+cash(base)+' ('+cards+'枚) × 4倍(スタドン) ＝ 各'+cash(each)+'</div></div></div>';
+ g.settle='スタドン！ '+who(winner)+'が他'+otherCount+'人から各'+cash(each)+'獲得';
+ showDonFx('start');say(g.settle);g.phase='over';g.pending=null;
+ const deltas=g.scores.map((v,i)=>v-g.gameStartScores[i]);
+ const min=Math.min(...deltas);
+ const losers=deltas.map((v,i)=>v===min?i:-1).filter(i=>i>=0);
+ losers.sort((a,b)=>(a-g.firstPlayer+g.count)%g.count-(b-g.firstPlayer+g.count)%g.count);
+ g.firstPlayer=losers[0];g.history.push({game:g.gameNo,type:'スタドン',deltas:[...deltas],starter:g.firstPlayer});
+ say('次の先手：'+who(g.firstPlayer));render();if(g.gameNo===g.games)showChampion();return true;
+}
+function advanceGame(){if(g.phase!=='over'||g.gameNo>=g.games)return;startGame()}
+function legal(cs){if(!cs.length)return false;if(g.penalty&&cs[0].n!==g.penalty.rank)return false;if(cs.length>1&&(cs[0].n==='joker'||!cs.every(c=>c.n===cs[0].n)))return false;let c=cs[0],top=g.board.cards.at(-1);return c.n==='joker'||c.n===11||c.s===g.board.suit||c.n===top.n}
+function backCards(count){
+ // Each back remains independently visible, with a true radial fan.
+ // Large hands compress the fan angle/spacing rather than being clipped.
+ const shown=Math.min(count,12), spread=Math.min(92,Math.max(0,(shown-1)*15));
+ const cards=Array.from({length:shown},(_,i)=>{
+   const t=shown===1?0:i/(shown-1)-.5;
+   const angle=t*spread;
+   const x=t*Math.min(112,Math.max(0,(shown-1)*17));
+   const y=Math.abs(t)*12;
+   const sideY=t*Math.min(104,Math.max(0,(shown-1)*22));
+   return `<span class="back-card" style="--fx:${x.toFixed(1)}px;--fy:${y.toFixed(1)}px;--fa:${angle.toFixed(1)}deg;--zi:${i+1};--side-x:0px;--side-y:${sideY.toFixed(1)}px;--side-a:${(angle*.18).toFixed(1)}deg" aria-hidden="true"></span>`
+ }).join('');
+ return `<div class="back-hand" aria-label="裏向きカード ${count}枚">${cards}${count>shown?`<span class="back-more">+${count-shown}</span>`:''}</div>`
+}
+function fitHand(){
+ const area=document.querySelector('#hand');if(!area)return;
+ const cards=[...area.querySelectorAll('.card')];if(!cards.length)return;
+ const available=area.clientWidth-4;
+ const cardWidth=cards[0].getBoundingClientRect().width;
+ const step=cards.length>1?Math.min(cardWidth+3,Math.max(9,(available-cardWidth)/(cards.length-1))):cardWidth;
+ cards.forEach((card,i)=>{card.style.marginLeft=i===0?'0':(step-cardWidth)+'px';card.style.zIndex=card.classList.contains('sel')?'50':String(i+1);});
+}
+window.addEventListener('resize',fitHand);
+// Double-tap a hand card to submit the currently selected legal set.
+// Keep the last tap across renders because render() rebuilds the card buttons.
+let lastHandTap={id:null,at:0};
+function tapHandCard(cardId){
+ if(!g||g.phase!=='turn'||g.turn!==0)return;
+ const index=g.hands[0].findIndex(c=>c.id===cardId);
+ if(index<0)return;
+ const now=Date.now();
+ const doubleTap=lastHandTap.id===cardId&&now-lastHandTap.at<=380;
+ lastHandTap={id:cardId,at:now};
+ if(doubleTap){
+  lastHandTap={id:null,at:0};
+  // The first tap selected this card; do not deselect it on the second tap.
+  if(g.selected.includes(index)&&legal(g.selected.map(i=>g.hands[0][i]))){const cs=g.selected.map(i=>g.hands[0][i]);if(cs[0].n!==11&&cs[0].n!=='joker')play();return;}
+ }
+ g.selected=g.selected.includes(index)?g.selected.filter(x=>x!==index):[...g.selected,index];
+ render();
+}
+function render(){document.querySelector('#matchInfo').textContent=g.gameNo+' / '+g.games+'ゲーム · 総合点数で勝敗';let active=g.turn===0&&g.phase==='turn';document.querySelector('#players').className='seats seats-'+g.count;document.querySelector('#players').innerHTML=g.hands.map((h,i)=>`<div class="player-box seat seat-${i} ${g.turn===i?'active':''}"><div class="player-heading">${i===0?'':`<span class="player-avatar" aria-label="CPUアイコン">${['','🐶','🐻‍❄️','🐱','🐰'][i]}</span>`}<span class="player-name">${who(i)}${g.turn===i?' ◀':''}</span><span class="player-count">${h.length}枚</span></div>${i===0?'<div class="back-hand" style="font-size:13px;color:#b7d3c9">手札は下に表示</div>':backCards(h.length)}<span class="player-score">${cash(g.scores[i])}</span></div>`).join('');document.querySelector('#board').innerHTML='<div class="board-piles"><div class="pile"><div class="board-cards" style="--stack-count:'+g.board.cards.length+'">'+g.board.cards.map((c,i)=>(c.n==='joker'?'<div class="board-card board-joker" style="--stack-index:'+i+'"><span class="board-joker-title">JOKER</span><span class="board-joker-art">🃏</span><span class="board-joker-foot">ジョーカー</span></div>':'<div class="board-card '+(['♥','♦'].includes(c.s)?'red':'')+'" style="--stack-index:'+i+'"><span>'+rank(c)+'</span><span class="pip">'+c.s+'</span></div>')).join('')+'</div><span class="pile-label">場のカード</span></div><div class="pile"><div class="deck-card '+(g.deck.length?'':'empty')+'"></div><span class="pile-label">山札 '+g.deck.length+'枚</span></div><div class="current-suit" aria-label="現在のマーク"><span class="current-suit-label">現在のマーク</span><strong class="current-suit-symbol '+(["♥","♦"].includes(g.board.suit)?"red":"")+'">'+g.board.suit+'</strong></div></div><div class="round-chip">'+g.round+'巡目 · 点数 ×'+(2**(g.round-1))+'</div>';
+document.querySelector('#status').textContent=g.phase==='over'?'ゲーム終了':g.phase==='decision'?'ドン判定中':g.phase==='suit'?'J／ジョーカーの次のマークを選択':active?'あなたの番':who(g.turn)+'の番';document.querySelector('#sum').textContent=g.hands[0].length+'枚 · 手札合計 '+total(g.hands[0])+' · 総合 '+cash(g.scores[0]);document.querySelector('#settle').innerHTML=g.resultHtml||'';document.querySelector('#settle').classList.toggle('result-panel',!!g.resultHtml);document.querySelector('#backToChampion').hidden=!(g.phase==='over'&&g.gameNo===g.games);document.querySelector('#nextGame').hidden=g.phase!=='over'||g.gameNo>=g.games;document.querySelector('#standings').innerHTML=g.phase==='over'?'<h3>'+(g.gameNo===g.games?'最終順位':'現在の総合順位')+'</h3>'+g.scores.map((score,i)=>({i,score,delta:score-g.gameStartScores[i]})).sort((a,b)=>b.score-a.score).map((x,idx)=>'<div class="standing">'+(idx+1)+'位 '+who(x.i)+'：'+cash(x.score)+'（今回 '+(x.delta>=0?'+':'')+cash(x.delta)+'）</div>').join('')+(g.gameNo===g.games?'<strong>全'+g.games+'ゲーム終了！</strong>':'<p>次の先手：'+who(g.firstPlayer)+'</p>'):'';document.querySelector('#reveal').innerHTML=g.phase==='over'?'<h3>終了時の手札（CPUも公開）</h3>'+g.hands.map((h,i)=>'<p>'+who(i)+'：'+h.map(label).join(' ・ ')+' （合計 '+total(h)+' / '+h.length+'枚）</p>').join(''):'';let area=document.querySelector('#hand');area.replaceChildren();g.hands[0].forEach((c,i)=>{let b=document.createElement('button');b.innerHTML=c.n==='joker'?'<span class="joker-face"><span class="joker-art">🃏</span><span class="joker-word">JOKER</span></span>':label(c);b.className='card '+(c.n==='joker'?'joker-card ':'')+(['♥','♦'].includes(c.s)?'red ':'')+(g.selected.includes(i)?'sel ':'')+(active&&g.selected.length&&g.hands[0][g.selected[0]]?.n===11&&c.n===11&&!g.selected.includes(i)&&legal([...g.selected.map(j=>g.hands[0][j]),c])?'j-addable ':'')+(active?(g.selected.includes(i)||legal(g.selected.length?[...g.selected.map(j=>g.hands[0][j]),c]:[c])?'playable':'unplayable'):'');b.disabled=!active;b.onclick=()=>tapHandCard(c.id);area.append(b)});fitHand();const chosenCards=g.selected.map(i=>g.hands[0][i]);const playButton=document.querySelector('#play');playButton.hidden=active&&chosenCards.length>=1&&(chosenCards[0].n===11||chosenCards[0].n==='joker')&&legal(chosenCards);playButton.disabled=!active||!legal(chosenCards);playButton.textContent=chosenCards.length===2&&legal(chosenCards)&&chosenCards[0].n!==11&&chosenCards[0].n!=='joker'?chosenCards[1].s+'を上にしてカードを出す':'カードを出す';document.querySelector('#draw').disabled=!active||g.drawn||!!g.penalty;const penaltyButton=document.querySelector('#penalty');penaltyButton.hidden=!g.penalty||g.phase!=='turn';penaltyButton.textContent=g.penalty?g.penalty.count+'枚引く':'';penaltyButton.disabled=!active||!g.penalty;document.querySelector('#pass').disabled=!active||!g.drawn;const noPlayable=active&&!g.hands[0].some(c=>legal([c]));document.querySelector('#draw').classList.toggle('action-glow',noPlayable&&!document.querySelector('#draw').disabled);document.querySelector('#pass').classList.toggle('action-glow',noPlayable&&!document.querySelector('#pass').disabled);document.querySelector('#suitChoice').hidden=!(g.phase==='suit'||(active&&legal(chosenCards)&&chosenCards.length>=1&&(chosenCards[0].n===11||chosenCards[0].n==='joker')));document.querySelector('#decision').hidden=g.phase!=='decision';document.querySelector('#log').innerHTML=g.logs.map(s=>'<div>'+s.replaceAll('&','&amp;').replaceAll('<','&lt;')+'</div>').join('');if(g.phase==='decision')renderDecision()}
+function take(p){if(!g.deck.length){let old=g.discard.splice(0);if(old.length){g.deck=shuffle(old);g.round++;say('★ '+g.round+'巡目に突入！ 点数×'+(2**(g.round-1))+'：捨て札をシャッフルして山札を補充')}}if(!g.deck.length){say('山札がなく引けません');return false}g.hands[p].push(g.deck.pop());g.hands[p].sort(order);say(who(p)+'が1枚引いた');return true}
+function next(steps=1){cancelTopCardChoice();g.phase='turn';g.pending=null;g.drawn=false;g.forcedDraw=false;g.selected=[];g.turn=(g.turn+steps)%g.count;render();if(g.turn!==0)timer=setTimeout(cpu,650)}
+function finish(p,cs,suit){
+ // For CPU multi-card plays, the first card must match the current board.
+ // It stays underneath, and only a later card can become the top card.
+ if(p!==0&&cs.length>1){const first=cs.find(c=>legal([c]));if(!first)return;cs=[first,...cs.filter(c=>c.id!==first.id)]}
+ let previous=g.board.cards.slice();for(let c of cs){let i=g.hands[p].findIndex(x=>x.id===c.id);if(i!==-1)g.hands[p].splice(i,1)}g.discard.push(...previous);g.board={cards:cs,suit:suit||cs.at(-1).s,target:cs.reduce((s,c)=>s+num(c),0),owner:p};g.selected=[];g.skipSteps=cs[0].n===1?2*cs.length:1;
+if(cs[0].n===2||cs[0].n===8||cs[0].n==='joker'){let rank=cs[0].n,add=rank==='joker'?4*cs.length:2*cs.length;g.penalty={rank,count:(g.penalty&&g.penalty.rank===rank?g.penalty.count:0)+add}}else g.penalty=null;
+say(who(p)+'が'+cs.map(label).join('・')+'を出した');startDecision('play',p)}
+let cpuTopCardPending=null;
+function cancelTopCardChoice(){cpuTopCardPending=null;document.getElementById('topCardChoice').hidden=true}
+function selectTopCard(id){const cs=cpuTopCardPending;if(!cs||!g||g.phase!=='turn'||g.turn!==0)return;const chosen=cs.find(c=>String(c.id)===String(id));if(!chosen||chosen.id===cs[0].id)return;cancelTopCardChoice();finish(0,[cs[0],...cs.slice(1).filter(c=>c.id!==chosen.id),chosen])}
+function play(){if(g.phase!=='turn'||g.turn!==0)return;let cs=g.selected.map(i=>g.hands[0][i]);if(!legal(cs))return;if(cs[0].n==='joker'||cs[0].n===11){render()}else if(cs.length===2){finish(0,cs)}else if(cs.length>2){cpuTopCardPending=cs;const opts=document.getElementById('topCardOptions');opts.replaceChildren();for(const c of cs.slice(1)){const b=document.createElement('button');b.textContent=label(c);b.onclick=()=>selectTopCard(c.id);opts.append(b)}document.getElementById('topCardChoice').hidden=false}else finish(0,cs)}
+function chooseSuit(s){if(g.phase==='suit'){finish(0,g.suitCards,s);return;}if(g.phase!=='turn'||g.turn!==0)return;const cs=g.selected.map(i=>g.hands[0][i]);if(cs.length>=1&&legal(cs)&&(cs[0].n===11||cs[0].n==='joker'))finish(0,cs,s)}
+function draw(){if(g.phase!=='turn'||g.turn!==0||g.drawn||g.penalty)return;if(!take(0)){if(!g.deck.length){g.drawn=true;render()}return;}g.drawn=true;if(total(g.hands[0])===g.board.target)startDecision('draw',g.board.owner,0);else render()}
+function pass(){if(g.phase==='turn'&&g.turn===0&&g.drawn)next()}
+// Play: every other player may declare. Draw: only drawing player may declare.
+function startDecision(kind,owner,drawer=null){
+ // A Joker on the board never allows Don, including after a draw.
+ if(g.board.cards.at(-1)?.n==='joker'){if(kind==='play')next(g.skipSteps);else render();return}
+ let forcedNext=g.penalty&&g.penalty.rank===8?(owner+g.skipSteps)%g.count:-1;let candidates=kind==='play'?g.hands.map((_,i)=>i).filter(i=>i!==owner&&i!==forcedNext&&total(g.hands[i])===g.board.target):[drawer].filter(i=>i!==null&&total(g.hands[i])===g.board.target);if(!candidates.length){if(kind==='play')next(g.skipSteps);else render();return}g.pending={kind,owner,drawer,candidates,callers:[],index:0,stage:'call'};g.phase='decision';advanceDecision()}
+function advanceDecision(){let p=g.pending;if(!p)return;if(p.stage==='call'){while(p.index<p.candidates.length&&p.candidates[p.index]!==0){let cpu=p.candidates[p.index++];if(Math.random()<(g.difficulty==='easy'?.40:(g.difficulty==='hard'||g.difficulty==='expert')?.98:.82)){p.callers.push(cpu);showDonFx(p.kind==='draw'?'draw':'don');say(who(cpu)+'が'+(p.kind==='draw'?'引きドン':'ドン')+'！')}else { /* CPUがドンを見送った事実は手札情報を漏らすため非表示 */ }}if(p.index<p.candidates.length){render();return}if(!p.callers.length){closeDecision();return}if(p.kind==='draw'&&p.owner===p.drawer){settle();return}if(p.owner>=0&&total(g.hands[p.owner])===g.board.target){p.stage='reverse';if(p.owner!==0){timer=setTimeout(()=>{if(g.pending===p){p.reverse=(g.difficulty==='easy'?Math.random()<.35:true);if(p.reverse)showDonFx('reverse');settle()}},450)}render();return}settle();return}}
+function renderDecision(){let p=g.pending;if(!p)return;let q=document.querySelector('#question'),b=document.querySelector('#decisionButtons');b.replaceChildren();let make=(s,fn,cls)=>{let x=document.createElement('button');x.textContent=s;x.onclick=fn;if(cls)x.className=cls;b.append(x)};if(p.stage==='call'&&p.candidates[p.index]===0){let self=p.kind==='draw'&&p.owner===0;q.textContent=p.kind==='draw'&&!self?'引きドンできます！':(self?'オナニー引きドンのチャンス！（返し不可）':'ドンのチャンス！')+' '+(self?'自分の場札に対してドンできます！':who(p.owner)+'に対してドンできます！');make(p.kind==='draw'?'引きドン！':'ドン！',()=>{showDonFx(p.kind==='draw'?'draw':'don');p.callers.push(0);p.index++;advanceDecision()},'danger');make('見送る',()=>{say('あなたはドンを見送った');p.index++;advanceDecision()},'secondary')}else if(p.stage==='reverse'&&p.owner===0){q.textContent='ドン返し可能！ 手札合計が場札のカード合計と一致';make('ドン返し！',()=>{showDonFx('reverse');p.reverse=true;settle()},'danger');make('返さない',()=>{p.reverse=false;settle()},'secondary')}else q.textContent='CPUのドン判定中…'}
+function closeDecision(){let p=g.pending;g.pending=null;g.phase='turn';if(p.kind==='play')next(g.skipSteps);else render()}
+function settle(){
+ let p=g.pending;if(!p)return;
+ // A Don on an 8 is confirmed before the next player can stack an 8.
+ // Complete the mandatory draw first, then count the actual hand cards.
+ if(p.kind==='play'&&g.penalty&&g.penalty.rank===8){
+  const forced=(p.owner+g.skipSteps)%g.count, n=g.penalty.count;
+  g.penalty=null;let drawn=0;for(let i=0;i<n;i++){if(take(forced))drawn++;else break}
+  say(who(forced)+'がドン成立後に追加で'+drawn+'枚引いた');
+ }
+
+ const reverse=!!p.reverse,owner=p.owner,callers=p.callers;
+ const selfDraw=p.kind==='draw'&&owner===p.drawer;
+ // A forced penalty draw counts as an ordinary Don, not a draw-Don.
+ const isDraw=p.kind==='draw';
+ const title=reverse?(isDraw?'引きドン返し':'ドン返し'):(selfDraw?'オナニー引きドン':isDraw?'引きドン':'通常ドン');
+ const roundMultiplier=2**(g.round-1);
+ const typeMultiplier=selfDraw?2:isDraw?(reverse?4:2):(reverse?2:1);
+ const breakdown=(baseCards,base,jokerPower,actual,payers)=>{
+  let parts=[cash(base)+' ('+baseCards+'枚)'];
+  if(typeMultiplier>1)parts.push(typeMultiplier+'倍('+title+')');
+  if(jokerPower>0)parts.push((2**jokerPower)+'倍(ジョーカー'+jokerPower+'枚)');
+  if(roundMultiplier>1)parts.push(roundMultiplier+'倍('+g.round+'巡目)');
+  if(payers)parts.push(payers+'人で均等割り（端数切り上げ）＝各'+cash(Math.ceil(actual/payers)));
+  return parts.join(' × ');
+ };
+ const payments=[];let changes=[];
+ for(const c of callers){
+  const winner=reverse?owner:c,loser=reverse?c:owner;
+  const baseCards=g.hands.reduce((n,h,i)=>n+(i===winner?0:h.length),0);
+  const base=baseCards*100;
+  const jokerPower=reverse?jokerCount(g.hands[winner])+jokerCount(g.hands[loser]):jokerCount(g.hands[winner]);
+  const jokerMultiplier=2**jokerPower;
+  const amount=base*typeMultiplier*jokerMultiplier*roundMultiplier;
+  if(winner===loser){
+   const payers=g.hands.map((_,i)=>i).filter(i=>i!==winner);
+   const each=Math.ceil(amount/payers.length);
+   for(const i of payers){g.scores[i]-=each;g.scores[winner]+=each}
+   const actual=each*payers.length;
+   changes.push(who(winner)+'が各'+cash(each)+'を'+payers.length+'人から獲得');
+   payments.push({line:who(winner)+' ← その他'+payers.length+'人：各'+cash(each),detail:breakdown(baseCards,base,jokerPower,amount,payers.length)});
+  }else if(winner>=0&&loser>=0){
+   g.scores[loser]-=amount;g.scores[winner]+=amount;
+   changes.push(who(loser)+' → '+who(winner)+'：'+cash(amount));
+   payments.push({line:who(loser)+' → '+who(winner)+'：'+cash(amount),detail:breakdown(baseCards,base,jokerPower,amount,0)});
+  }
+ }
+ const callerNames=callers.map(who).join('・');
+ const actionText=reverse?who(owner)+'が'+callerNames+'のドンを返した！':selfDraw?who(owner)+'が自分の場札に引きドン！':callerNames+'が'+(owner<0?'場札':who(owner)+'の場札')+'にドン！';
+ const escapeHtml=x=>String(x).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
+ g.resultHtml='<div class="result-kicker">'+g.gameNo+' / '+g.games+' ゲーム・結果発表</div>'+
+  '<div class="result-title">🎉 '+escapeHtml(title)+'！</div>'+
+  '<div class="result-type">'+escapeHtml(actionText)+'</div>'+
+  '<span class="result-badge">'+g.round+'巡目 ×'+roundMultiplier+' ／ '+title+' ×'+typeMultiplier+'</span>'+
+  '<div class="result-detail">'+payments.map(x=>'<div class="result-payment">'+escapeHtml(x.line)+'<div class="result-breakdown">'+escapeHtml(x.detail)+'</div></div>').join('')+'</div>';
+ g.settle=title+'！ '+changes.join(' / ');
+ say(g.settle);g.phase='over';g.pending=null;
+ const deltas=g.scores.map((v,i)=>v-g.gameStartScores[i]);
+ const min=Math.min(...deltas);
+ const losers=deltas.map((v,i)=>v===min?i:-1).filter(i=>i>=0);
+ losers.sort((a,b)=>(a-g.firstPlayer+g.count)%g.count-(b-g.firstPlayer+g.count)%g.count);
+ g.firstPlayer=losers[0];g.history.push({game:g.gameNo,type:title,deltas:[...deltas],starter:g.firstPlayer});
+ say('次の先手：'+who(g.firstPlayer)+'（今回 '+cash(min)+'）');render();if(g.gameNo===g.games)showChampion();
+}
+function bestSuit(p){let counts=suits.map(s=>g.hands[p].filter(c=>c.s===s).length);return suits[counts.indexOf(Math.max(...counts))]}
+// CPU strategy: jokers are valuable for the final payout, so save them.
+// Play a normal card whenever possible; even with no normal play, draw first
+// rather than spending a joker. Joker use is a rare, deliberate exception.
+// Expert estimates risk only from public information (hand counts), not hidden opponent cards.
+function expertDonRisk(target, opponentCardCount){
+ if(opponentCardCount<=0)return 0;
+ // Sum of n roughly uniform 0..13; a smooth normal approximation for multi-card hands.
+ const mean=6.7*opponentCardCount, sd=Math.max(3.5,3.8*Math.sqrt(opponentCardCount));
+ const z=(target-mean)/sd;
+ return Math.exp(-.5*z*z)/Math.max(1,sd)*3.8;
+}
+function expertPick(p, ordinary, groups){
+ const hand=g.hands[p], others=g.hands.map((h,i)=>i===p?null:h.length).filter(n=>n!==null);
+ const candidates=[...ordinary.map(c=>[c]),...groups];
+ const seen=new Set();
+ const unique=candidates.filter(cards=>{const key=cards.map(c=>c.id).sort().join('|');if(seen.has(key))return false;seen.add(key);return true});
+ const scoreCards=cards=>{
+  const after=hand.filter(c=>!cards.some(x=>x.id===c.id));
+  const target=cards.reduce((s,c)=>s+num(c),0);
+  const remainTotal=total(after);
+  const n=cards[0].n;
+  // Risk is a probability estimate from the visible number of cards held by rivals.
+  const risk=others.reduce((sum,count)=>sum+expertDonRisk(target,count),0);
+  const riskCost=risk*(others.reduce((a,b)=>a+b,0)+after.length)*2.1;
+  const followSuit=cards[0].s;
+  const sameSuit=after.filter(c=>c.s===followSuit).length;
+  const nextOptions=after.filter(c=>c.n===11||c.n==='joker'||c.s===followSuit||c.n===n).length;
+  const jokerKeep=after.filter(c=>c.n==='joker').length;
+  const shortOpponent=others.some(n=>n<=2);
+  let score=cards.length*12+nextOptions*2.2+sameSuit*.7+riskCost*-1;
+  if(n===1)score+=shortOpponent?10:3;
+  if(n===2||n===8)score+=shortOpponent?11:4;
+  if(n===11)score+=3;
+  if(remainTotal===target)score+=8; // can reverse a Don
+  if(after.length===0)score-=8; // empty hand alone does not win
+  if(after.length===1&&after[0].n==='joker')score-=3;
+  score+=jokerKeep*.4;
+  return score;
+ };
+ unique.sort((a,b)=>scoreCards(b)-scoreCards(a));
+ return unique[0]||null;
+}
+function cpuPick(p){
+ const options=g.hands[p].filter(c=>legal([c]));
+ const ordinary=options.filter(c=>c.n!=='joker');
+ if(!ordinary.length)return null;
+ const difficulty=g.difficulty||'normal';
+ const groups=[];
+ for(const card of ordinary){const cards=g.hands[p].filter(c=>c.n===card.n);if(cards.length>1&&legal(cards)&&!groups.some(x=>x[0].n===card.n))groups.push(cards)}
+ if(difficulty==='easy'){
+  if(groups.length&&Math.random()<.12)return groups[Math.floor(Math.random()*groups.length)];
+  return [ordinary[Math.floor(Math.random()*ordinary.length)]];
+ }
+ if(difficulty==='expert')return expertPick(p,ordinary,groups);
+ if(difficulty==='hard'){
+  const candidates=[...ordinary.map(c=>[c]),...groups];
+  const boardTotalBefore=total(g.hands[p]);
+  const scored=candidates.map(cards=>{
+   const remaining=boardTotalBefore-cards.reduce((s,c)=>s+num(c),0);
+   const target=cards.reduce((s,c)=>s+num(c),0);
+   // Opponents' card counts are public; exact hidden hand totals are not used.
+   const opponents=g.hands.map((h,i)=>i===p?null:h.length).filter(x=>x!==null);
+   const plausible=opponents.reduce((sum,n)=>sum+(target>=0&&target<=13*n?1:0),0);
+   const danger=plausible/Math.max(1,opponents.length);
+   const opponentLow=Math.min(...opponents);
+   let score=cards.length*7+(cards[0].n===1?2:0);
+   score-=danger*(opponentLow<=2?7:3);
+   score-=target>0&&target<=13&&opponentLow<=2?3:0;
+   score+=remaining===target?3:0;
+   score+=Math.random()*1.2;
+   return {cards,score};
+  });
+  scored.sort((a,b)=>b.score-a.score);
+  return scored[0].cards;
+ }
+ if(groups.length&&Math.random()<.85){groups.sort((a,b)=>b.length-a.length);return groups[0]}
+ return [ordinary[Math.floor(Math.random()*ordinary.length)]];
+}
+function resolvePenalty(p){
+ if(!g.penalty)return false;
+ let rank=g.penalty.rank;
+ let cards=g.hands[p].filter(c=>c.n===rank);
+ // 2/8 may be stacked normally. Joker stacking is rare: it costs the CPU
+ // a potentially valuable scoring multiplier.
+ const stackChance=g.difficulty==='easy'?.25:g.difficulty==='expert'?(rank==='joker'?.10:.98):g.difficulty==='hard'?(rank==='joker'?.2:.95):(rank==='joker'?.12:.75);
+ if(p>0&&cards.length&&Math.random()<stackChance){
+   let cs=rank==='joker'?[cards[0]]:cards.slice();
+   finish(p,cs,(rank==='joker'?bestSuit(p):null));return true;
+ }
+ let count=g.penalty.count;g.penalty=null;let drawn=0;
+ for(let i=0;i<count;i++){if(take(p))drawn++;else break}
+ g.forcedDraw=true;say(who(p)+'が追加で'+drawn+'枚引いた');
+ if(g.board.cards.at(-1)?.n!=='joker'&&total(g.hands[p])===g.board.target){startDecision('forced',g.board.owner,p);return true}
+ render();return false;
+}
+function cpu(){
+ if(g.phase!=='turn'||g.turn===0)return;
+ let p=g.turn;
+ if(g.penalty){if(resolvePenalty(p))return}
+ let c=cpuPick(p);
+ if(c){finish(p,c,c[0].n===11?bestSuit(p):null);return}
+ if(!g.drawn&&take(p)){
+   g.drawn=true;
+   if(g.board.cards.at(-1)?.n!=='joker'&&total(g.hands[p])===g.board.target){startDecision('draw',g.board.owner,p);return}
+   c=cpuPick(p);
+   if(c){finish(p,c,c[0].n===11?bestSuit(p):null);return}
+ }
+ // Only consider a joker when there is no ordinary card, the CPU has
+ // already drawn, and holding it is less useful.
+ const jokers=g.hands[p].filter(x=>x.n==='joker'&&legal([x]));
+ const rareUse=jokers.length&&(g.difficulty==='easy'?Math.random()<.38:g.difficulty==='expert'?(g.hands[p].length>=6&&Math.random()<.32):g.difficulty==='hard'?(g.hands[p].length>=7&&Math.random()<.25):(g.hands[p].length>=9&&Math.random()<.10));
+ if(rareUse){finish(p,[jokers[0]],bestSuit(p));return}
+ // Additional draws do not count as the voluntary one-card draw.
+ // The CPU must play a card or make its ordinary draw before ending the turn.
+ if(g.forcedDraw&&!g.drawn){
+   if(take(p)){
+     g.drawn=true;
+     say(who(p)+'が通常の1枚を引いた');
+     if(g.board.cards.at(-1)?.n!=='joker'&&total(g.hands[p])===g.board.target){startDecision('draw',g.board.owner,p);return}
+     const afterDraw=cpuPick(p);
+     if(afterDraw){finish(p,afterDraw,afterDraw[0].n===11?bestSuit(p):null);return}
+   }else{g.drawn=true; say('山札がないため通常ドローを省略した')}
+ }
+ next();
+}
+function acceptPenalty(){if(g.phase!=='turn'||g.turn!==0||!g.penalty)return;resolvePenalty(0)}
+function showScreen(id){['homeScreen','settingsScreen','rulesScreen','gameScreen','onlineScreen','rankingScreen'].forEach(name=>document.getElementById(name).hidden=name!==id);window.scrollTo(0,0)}
+function showSettings(){showScreen('settingsScreen')}
+function showRules(){showScreen('rulesScreen')}
+function showHome(){document.getElementById('championOverlay').hidden=true;showScreen('homeScreen')}
+function startFromSettings(){document.getElementById('championOverlay').hidden=true;start();showScreen('gameScreen')}
+function closeChampion(){document.getElementById('championOverlay').hidden=true}
+function championHome(){closeChampion();showHome()}
+function showChampion(){if(!g||g.gameNo!==g.games||g.phase!=='over')return;const sorted=g.scores.map((score,i)=>({i,score})).sort((a,b)=>b.score-a.score);const winners=sorted.filter(x=>x.score===sorted[0].score);document.getElementById('championTitle').textContent=winners.length>1?'同点優勝おめでとう！':'優勝おめでとう！';document.getElementById('championName').textContent=winners.map(x=>who(x.i)).join(' ＆ ');document.getElementById('championScore').textContent='総合 '+cash(sorted[0].score);document.getElementById('championRanking').innerHTML=sorted.map((x,i)=>'<div>'+(x.score===sorted[0].score?'🏆':(i+1)+'位')+' '+who(x.i)+'　'+cash(x.score)+'</div>').join('');document.getElementById('championOverlay').hidden=false;prepareRankingEntry()}
+
+// v0.69: Public leaderboard. Database setup is required (see leaderboard_setup.sql).
+let rankingSubmitting=false;
+function showRanking(){document.getElementById('championOverlay').hidden=true;showScreen('rankingScreen');loadRanking()}
+function prepareRankingEntry(){
+ const panel=document.getElementById('rankingEntry');const eligible=!!g&&g.jokers===2&&[1,5,10,20].includes(g.games)&&g.gameNo===g.games&&g.phase==='over';
+ panel.hidden=!eligible;if(!eligible)return;
+ const key='gabacho-ranking-saved-'+g.matchId;
+ document.getElementById('rankingName').value=localStorage.getItem('gabacho_ranking_name')||'';
+ const saved=!!localStorage.getItem(key);document.getElementById('rankingSubmit').disabled=saved;
+ document.getElementById('rankingEntryStatus').textContent=saved?'この対戦の記録は登録済みです。':'';
+}
+async function submitRanking(){
+ if(rankingSubmitting||!g||g.jokers!==2||g.phase!=='over'||g.gameNo!==g.games)return;
+ const name=document.getElementById('rankingName').value.trim();const status=document.getElementById('rankingEntryStatus');
+ if(!name||name.length>20){status.textContent='名前を1〜20文字で入力してください。';return}
+ const key='gabacho-ranking-saved-'+g.matchId;
+ if(localStorage.getItem(key)){status.textContent='この対戦は登録済みです。';return}
+ rankingSubmitting=true;document.getElementById('rankingSubmit').disabled=true;status.textContent='全国ランキングに送信中…';
+ try{
+  await ensureOnlineAuth();
+  const submit=()=>sbRequest('/rest/v1/gabacho_leaderboard',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({player_name:name,game_count:g.games,player_count:g.count,joker_count:g.jokers,score:g.scores[0],match_id:g.matchId,user_id:onlineSession.user.id})});
+  try{await submit()}catch(e){if(!/jwt expired|invalid jwt|token.*expired/i.test(e.message))throw e;await refreshOnlineAuth(true);await submit()}
+  localStorage.setItem(key,'1');localStorage.setItem('gabacho_ranking_name',name);status.textContent='登録できました！ 全国ランキングで確認できます。';
+ }catch(e){status.textContent='登録できませんでした：'+e.message;document.getElementById('rankingSubmit').disabled=false}
+ finally{rankingSubmitting=false}
+}
+async function loadRanking(){
+ const status=document.getElementById('rankingStatus'),rows=document.getElementById('rankingRows');rows.replaceChildren();status.textContent='ランキングを読み込み中…';
+ const games=document.getElementById('rankingGames').value,players=document.getElementById('rankingPlayers').value;
+ try{
+  const filter=players==='all'?'':'&player_count=eq.'+players;
+  await ensureOnlineAuth();const data=await sbRequest('/rest/v1/gabacho_leaderboard?select=player_name,score,player_count,created_at&joker_count=eq.2&game_count=eq.'+games+filter+'&order=score.desc,created_at.asc&limit=100');
+  status.textContent=data.length?'上位'+data.length+'件（ジョーカー2枚限定）':'まだ記録がありません。最初の記録を目指そう！';
+  data.forEach((item,i)=>{const row=document.createElement('div');row.className='ranking-row';const place=document.createElement('span');place.textContent=i===0?'🥇':i===1?'🥈':i===2?'🥉':String(i+1);const person=document.createElement('div');person.textContent=item.player_name;const detail=document.createElement('small');detail.textContent=item.player_count+'人対戦 · '+new Date(item.created_at).toLocaleDateString('ja-JP');person.appendChild(detail);const score=document.createElement('strong');score.textContent=Number(item.score).toLocaleString('ja-JP')+' pt';row.append(place,person,score);rows.appendChild(row)});
+ }catch(e){status.textContent='ランキングを取得できません：'+e.message+'（Supabaseのランキング用SQL設定が必要です）'}
+}
+
+function confirmHome(){if(confirm('対戦を終了してホームに戻りますか？ 現在の対戦結果は失われます。')){clearTimeout(timer);if(g)g.phase='over';showHome()}}
+
+// v0.43: Supabase lobby. Only the public publishable key is embedded.
+const SB_URL='https://jfslhublwjimjkafmdis.supabase.co';
+const SB_KEY='sb_publishable_4gJpilhMg3A_K9F4CNZR1w_dowZ2ZRq';
+let onlineSession=null,onlineRoom=null,onlinePlayer=null,onlinePoll=null;let onlineMembers=[];let ogChatMessages=[],ogChatUnread=0,ogChatOpen=false;
+const onlineMsg=message=>document.getElementById('onlineMessage').textContent=message;
+function showOnline(){showScreen('onlineScreen');onlineMsg('名前を入力して部屋を作成、または参加してください。')}
+async function sbRequest(path,options={}){const headers={'apikey':SB_KEY,'Content-Type':'application/json',...options.headers};if(onlineSession?.access_token)headers.Authorization='Bearer '+onlineSession.access_token;const r=await fetch(SB_URL+path,{...options,headers});const raw=await r.text();let data;try{data=raw?JSON.parse(raw):null}catch{data=raw}if(!r.ok)throw Error((data?.message||data?.msg||data?.error_description||data?.error||'HTTP '+r.status));return data}
+let onlineAuthRefreshing=null;
+async function refreshOnlineAuth(force=false){
+ if(onlineAuthRefreshing)return onlineAuthRefreshing;
+ onlineAuthRefreshing=(async()=>{
+  let saved=null;try{saved=JSON.parse(localStorage.getItem('gabacho_sb_session')||'null')}catch{}
+  const current=onlineSession||saved;
+  if(!force&&current?.access_token&&current.expires_at>Date.now()/1000+90){onlineSession=current;return current}
+  if(current?.refresh_token){
+   try{
+    const r=await fetch(SB_URL+'/auth/v1/token?grant_type=refresh_token',{method:'POST',headers:{apikey:SB_KEY,'Content-Type':'application/json'},body:JSON.stringify({refresh_token:current.refresh_token})});
+    const x=await r.json();if(!r.ok||!x.access_token)throw Error(x.msg||x.message||'認証の更新に失敗');
+    onlineSession={...x,expires_at:Math.floor(Date.now()/1000)+x.expires_in};localStorage.setItem('gabacho_sb_session',JSON.stringify(onlineSession));return onlineSession;
+   }catch(e){if(!force)throw e}
+  }
+  if(!current?.refresh_token||force){
+   const r=await fetch(SB_URL+'/auth/v1/signup',{method:'POST',headers:{apikey:SB_KEY,'Content-Type':'application/json'},body:JSON.stringify({})});const x=await r.json();
+   if(!r.ok||!x.access_token)throw Error('認証を再取得できません：'+(x.msg||x.message||'匿名認証を確認してください'));
+   onlineSession={...x,expires_at:Math.floor(Date.now()/1000)+x.expires_in};localStorage.setItem('gabacho_sb_session',JSON.stringify(onlineSession));return onlineSession;
+  }
+ })();try{return await onlineAuthRefreshing}finally{onlineAuthRefreshing=null}
+}
+async function ensureOnlineAuth(){return refreshOnlineAuth(false)}
+function onlineNickname(){const n=document.getElementById('onlineName').value.trim();if(!n)throw Error('ニックネームを入力してください');return n}
+function newRoomCode(){const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';return Array.from({length:6},()=>chars[Math.floor(Math.random()*chars.length)]).join('')}
+async function createOnlineRoom(){try{onlineMsg('部屋を作成中…');const name=onlineNickname();await ensureOnlineAuth();const code=newRoomCode();const rooms=await sbRequest('/rest/v1/gabacho_rooms?select=*',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify({room_code:code,host_id:onlineSession.user.id,status:'waiting',max_players:5})});onlineRoom=rooms[0];await addOnlinePlayer(name);openOnlineLobby();}catch(e){onlineMsg('作成できません：'+e.message)}}
+async function joinOnlineRoom(){try{onlineMsg('部屋を検索中…');const name=onlineNickname(),code=document.getElementById('onlineCode').value.trim().toUpperCase();if(!code)throw Error('部屋コードを入力してください');await ensureOnlineAuth();const rooms=await sbRequest('/rest/v1/gabacho_rooms?room_code=eq.'+encodeURIComponent(code)+'&select=*');if(!rooms.length)throw Error('部屋が見つかりません');onlineRoom=rooms[0];if(onlineRoom.status!=='waiting')throw Error('この部屋は参加受付を終了しています');const members=await getOnlineMembers();if(members.length>=Number(onlineRoom.max_players||5))throw Error('満員です');await addOnlinePlayer(name);openOnlineLobby()}catch(e){onlineMsg('参加できません：'+e.message)}}
+async function getOnlineMembers(){return sbRequest('/rest/v1/gabacho_players?room_id=eq.'+encodeURIComponent(onlineRoom.id)+'&select=*&order=seat_number.asc')}
+async function addOnlinePlayer(name){
+  // The SELECT RLS policy may hide other players. Never assume an empty query means seat 1 is free.
+  const members=await getOnlineMembers();
+  const mine=members.find(x=>x.user_id===onlineSession.user.id);
+  if(mine){onlinePlayer=mine;return}
+  const isHost=onlineRoom.host_id===onlineSession.user.id;
+  const max=Math.min(5,Number(onlineRoom.max_players||5));
+  const taken=new Set(members.map(x=>Number(x.seat_number)));
+  const candidates=isHost?[1]:Array.from({length:Math.max(0,max-1)},(_,i)=>i+2);
+  for(const seat of candidates){
+    if(taken.has(seat))continue;
+    try{
+      const created=await sbRequest('/rest/v1/gabacho_players?select=*',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify({room_id:onlineRoom.id,user_id:onlineSession.user.id,nickname:name,seat_number:seat,is_ready:true})});
+      onlinePlayer=created[0];return;
+    }catch(e){
+      // Unique seat conflict: another user already took the seat; try the next one.
+      if(/gabacho_players_room_id_seat_number_key|duplicate key value|23505/i.test(e.message))continue;
+      throw e;
+    }
+  }
+  throw Error('空き座席がありません。部屋が満員か、以前の参加データが残っています');
+}
+function openOnlineLobby(){document.getElementById('onlineLobby').hidden=false;document.getElementById('onlineRoomCode').textContent=onlineRoom.room_code;document.getElementById('onlineCode').value=onlineRoom.room_code;onlineMsg('入室しました');clearInterval(onlinePoll);refreshOnlineLobby();onlinePoll=setInterval(refreshOnlineLobby,3000);onlineConnect()}
+async function refreshOnlineLobby(){if(!onlineRoom)return;try{const members=await getOnlineMembers();document.getElementById('onlineMembers').replaceChildren(...members.map(m=>{const div=document.createElement('div');div.textContent=(m.user_id===onlineRoom.host_id?'👑 ':'🃏 ')+m.nickname+'　🟢 入室中';return div}));const me=members.find(x=>x.user_id===onlineSession.user.id);if(me){onlinePlayer=me}onlineMembers=members;const startButton=document.getElementById('onlineStart');startButton.hidden=onlineSession.user.id!==onlineRoom.host_id||members.length<2||members.length>3||!!og;startButton.textContent=members.length+'人でゲーム開始';onlineConnect();const rooms=await sbRequest('/rest/v1/gabacho_rooms?id=eq.'+encodeURIComponent(onlineRoom.id)+'&select=status');if(rooms[0]?.status==='playing'&&!og){onlineMsg('対戦中です。ホストからゲームデータを受信中…');onlineSend('hello',{})}}catch(e){onlineMsg('同期エラー：'+e.message)}}
+async function toggleOnlineReady(){if(!onlinePlayer)return;try{await sbRequest('/rest/v1/gabacho_players?id=eq.'+encodeURIComponent(onlinePlayer.id),{method:'PATCH',body:JSON.stringify({is_ready:!onlinePlayer.is_ready})});await refreshOnlineLobby()}catch(e){onlineMsg('準備状態の更新に失敗：'+e.message)}}
+async function startOnlineMatch(){await onlineBegin()}
+function copyOnlineCode(){if(onlineRoom)navigator.clipboard?.writeText(onlineRoom.room_code).then(()=>onlineMsg('部屋コードをコピーしました')).catch(()=>onlineMsg('部屋コード：'+onlineRoom.room_code))}
+async function leaveOnlineRoom(){onlineDisconnect();clearInterval(onlinePoll);onlinePoll=null;const player=onlinePlayer;onlineRoom=null;onlinePlayer=null;document.getElementById('onlineLobby').hidden=true;if(player){try{await sbRequest('/rest/v1/gabacho_players?id=eq.'+encodeURIComponent(player.id),{method:'DELETE'})}catch(e){onlineMsg('退出処理に失敗：'+e.message)}}}
+
+showHome();
+</script><script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));}</script><script>
+// v0.43 two-person online beta. Host is the authority for game actions.
+// Supabase Realtime broadcast is ephemeral; games are not persisted and require host online.
+let og=null,ogSocket=null,ogReady=false,ogQueue=[],ogSelected=[],ogSeq=0,ogReconnect=null,ogConnecting=false,ogHeartbeat=null,ogSuitChoosing=false,ogTopChoosing=false;
+const ogHost=()=>onlineRoom&&onlineSession?.user?.id===onlineRoom.host_id;
+function onlineConnect(){
+ if(!onlineRoom||!onlineSession||ogSocket&&[0,1].includes(ogSocket.readyState)||ogConnecting)return;
+ ogConnecting=true;
+ const ws=new WebSocket(SB_URL.replace(/^http/,'ws')+'/realtime/v1/websocket?apikey='+encodeURIComponent(SB_KEY)+'&vsn=1.0.0');ogSocket=ws;ogReady=false;
+ ws.onopen=()=>{ogConnecting=false;clearInterval(ogHeartbeat);ogHeartbeat=setInterval(()=>{if(ws.readyState===1)ws.send(JSON.stringify({topic:'phoenix',event:'heartbeat',payload:{},ref:String(++ogSeq)}))},20000);ws.send(JSON.stringify({topic:'realtime:gabacho-'+onlineRoom.id,event:'phx_join',payload:{config:{broadcast:{self:false,ack:false},presence:{key:onlineSession.user.id}},access_token:onlineSession.access_token},ref:String(++ogSeq)}))};
+ ws.onmessage=e=>{try{let x=JSON.parse(e.data);if(x.event==='phx_reply'&&x.payload?.status==='ok'){ogReady=true;while(ogQueue.length)onlineSend(...ogQueue.shift());if(!ogHost())onlineSend('hello',{})}if(x.event==='broadcast'){let m=x.payload?.payload;if(m)onlineReceive(m)}if(x.event==='phx_error'||x.event==='phx_close'){ogReady=false}}catch(err){console.warn(err)}};
+ ws.onclose=()=>{clearInterval(ogHeartbeat);ogReady=false;ogConnecting=false;if(onlineRoom){clearTimeout(ogReconnect);ogReconnect=setTimeout(onlineConnect,2200)}};
+ ws.onerror=()=>{ogConnecting=false};
+}
+function onlineDisconnect(){ogChatMessages=[];ogChatUnread=0;ogChatOpen=false;clearInterval(ogHeartbeat);clearTimeout(ogReconnect);og=null;ogQueue=[];ogSuitChoosing=false;ogTopChoosing=false;ogReady=false;ogSocket?.close();ogSocket=null;document.getElementById('onlineGame').hidden=true}
+function onlineSend(type,data){if(!onlineRoom)return;if(!ogReady||ogSocket?.readyState!==1){if(ogQueue.length<15)ogQueue.push([type,data]);return}ogSocket.send(JSON.stringify({topic:'realtime:gabacho-'+onlineRoom.id,event:'broadcast',payload:{event:'game',payload:{type,data,from:onlineSession.user.id}},ref:String(++ogSeq)}))}
+function onlineReceive(m){if(!onlineRoom)return;
+ if(m.type==='chat'&&og?.ids?.includes(m.from)){ogAddChat(m.from,m.data?.text);return}
+ if(m.type==='hello'&&ogHost()&&og){ogSendState();return}
+ if(m.type==='state'&&m.data?.to===onlineSession.user.id){og=m.data.state;ogSelected=[];ogSuitChoosing=false;ogTopChoosing=false;ogRender();return}
+ if(m.type==='action'&&ogHost()&&og&&og.ids.includes(m.from)){ogApply(m.data,m.from)}
+}
+function ogAddChat(from,txt){
+ if(typeof txt!=='string'||!txt.trim()||txt.length>200)return;
+ const i=og?.ids?.indexOf(from);if(i<0)return;
+ ogChatMessages.push({name:og.names[i],text:txt.trim()});ogChatMessages=ogChatMessages.slice(-60);
+ const details=document.getElementById('ogChat');if(!details?.open)ogChatUnread++;
+ ogRender();
+}
+function ogSendChat(txt){
+ if(!og||typeof txt!=='string'||!txt.trim())return;
+ txt=txt.trim().slice(0,200);
+ ogAddChat(onlineSession.user.id,txt);
+ onlineSend('chat',{text:txt});
+}
+function ogDeck(){let a=[];for(let s of ['♠','♥','♦','♣'])for(let n=1;n<=13;n++)a.push({s,n,id:s+n});for(let j=0;j<3;j++)a.push({s:'★',n:0,id:'j'+j});for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function ogVal(c){return c.n}
+function ogSum(h){return h.reduce((a,c)=>a+ogVal(c),0)}
+function ogWho(i){return og.names[i]}
+function ogCan(cards){if(!cards.length)return false;if(cards.length>1&&(cards[0].n===0||cards.some(c=>c.n!==cards[0].n)))return false;if(og.penalty&&cards[0].n!==og.penalty.rank)return false;return cards[0].n===0||cards[0].n===11||cards[0].s===og.suit||cards[0].n===og.top.n}
+async function onlineBegin(nextRound=false){if(!ogHost())return;const participants=nextRound&&og?.over?og.ids.map(id=>onlineMembers.find(m=>m.user_id===id)):onlineMembers.slice();if(participants.length<2||participants.length>3||participants.some(m=>!m)){onlineMsg('開始には同じ対戦メンバー2〜3人の入室が必要です');return}try{
+ const d=ogDeck(),hands=participants.map(()=>[]);for(let i=0;i<5;i++)for(let h of hands)h.push(d.pop());let top=d.pop();while(top.n===0){d.unshift(top);top=d.pop()}
+ const prior=nextRound&&og?.over?og:null;const starter=prior?.lastLoser??0;og={pileCards:[top],ids:participants.map(m=>m.user_id),names:participants.map(m=>m.nickname),hands,deck:d,discard:[],top,suit:top.s,turn:starter,drawn:false,forcedDraw:false,penalty:null,round:1,gameNo:(prior?.gameNo||0)+1,scores:prior?[...prior.scores]:participants.map(()=>0),message:'第'+((prior?.gameNo||0)+1)+'ゲーム開始！ '+participants[starter].nickname+'の番',over:false,seq:0,pending:null};
+ ogCheckStartDon();await sbRequest('/rest/v1/gabacho_rooms?id=eq.'+encodeURIComponent(onlineRoom.id),{method:'PATCH',body:JSON.stringify({status:'playing'})});ogSendState();onlineMsg('対戦開始！');
+ }catch(e){onlineMsg('開始エラー：'+e.message)}}
+// Online opening Don is decided by the host before publishing the first state.
+function ogCheckStartDon(){
+ const target=og.top.n;
+ let winner=-1;
+ for(let step=0;step<og.hands.length;step++){
+  const i=(og.turn+step)%og.hands.length;
+  if(ogSum(og.hands[i])===target){winner=i;break}
+ }
+ if(winner<0)return false;
+ const cards=og.hands.reduce((n,h,i)=>n+(i===winner?0:h.length),0);
+ const base=cards*100,each=base*4,others=og.hands.length-1;
+ for(let i=0;i<og.hands.length;i++)if(i!==winner){og.scores[i]-=each;og.scores[winner]+=each}
+ og.over=true;og.pending=null;og.lastLoser=(winner+1)%og.hands.length;
+ og.message='スタドン！ '+ogWho(winner)+' ← 他'+others+'人：各'+each.toLocaleString('ja-JP')+' pt';
+ og.breakdown=base.toLocaleString('ja-JP')+' pt ('+cards+'枚) × 4倍(スタドン) ＝ 各'+each.toLocaleString('ja-JP')+' pt';
+ og.result={type:'スタドン',winner,loser:null,amount:each,parts:og.breakdown};
+ return true;
+}
+function ogPublic(i){return {...og,deck:undefined,discard:undefined,hands:og.hands.map((h,j)=>j===i||og.over?h:[]),counts:og.hands.map(h=>h.length),my:i}}
+function ogSendState(){if(!ogHost()||!og)return;for(let i=0;i<og.ids.length;i++){let state=ogPublic(i);if(i===og.ids.indexOf(onlineSession.user.id)){ogRender()}else onlineSend('state',{to:og.ids[i],state})}}
+function ogTake(p){if(!og.deck.length&&og.discard.length){og.deck=og.discard.splice(0);for(let i=og.deck.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[og.deck[i],og.deck[j]]=[og.deck[j],og.deck[i]]}og.round++}if(!og.deck.length)return false;og.hands[p].push(og.deck.pop());return true}
+function ogAdvance(steps=1){og.turn=(og.turn+steps)%og.hands.length;og.drawn=false;og.forcedDraw=false;og.message=ogWho(og.turn)+'の番'}
+function ogEnd(type,winner,loser,extra=1){
+ const count=og.hands.reduce((sum,h,i)=>sum+(i===winner?0:h.length),0);
+ const jokers=og.hands[winner].filter(c=>c.n===0).length;
+ const callerJ=type.includes('返し')?og.hands[loser].filter(c=>c.n===0).length:0;
+ const roundPower=2**(og.round-1), typePower=type==='ドン返し'?2:type==='引きドン返し'?4:type==='引きドン'||type==='オナニー引きドン'?2:1;
+ const amount=count*100*typePower*(2**(jokers+callerJ))*roundPower;
+ let parts=[(count*100).toLocaleString('ja-JP')+' pt ('+count+'枚)'];
+ if(typePower>1)parts.push(typePower+'倍('+type+')');
+ if(jokers+callerJ)parts.push((2**(jokers+callerJ))+'倍(ジョーカー'+(jokers+callerJ)+'枚)');
+ if(roundPower>1)parts.push(roundPower+'倍('+og.round+'巡目)');
+ if(winner===loser){const others=og.hands.map((_,i)=>i).filter(i=>i!==winner),each=Math.ceil(amount/others.length);for(const i of others){og.scores[i]-=each;og.scores[winner]+=each}og.message=type+'！ '+ogWho(winner)+' ← 他'+others.length+'人：各'+each.toLocaleString('ja-JP')+' pt';parts.push(others.length+'人で均等割り（端数切り上げ）');}
+ else{og.scores[winner]+=amount;og.scores[loser]-=amount;og.message=type+'！ '+ogWho(loser)+' → '+ogWho(winner)+'：'+amount.toLocaleString('ja-JP')+' pt';}
+ og.breakdown=parts.join(' × ');og.over=true;og.pending=null;og.lastLoser=loser===winner?(winner+1)%og.hands.length:loser;og.result={type,winner,loser,amount,parts:parts.join(' × ')};
+}
+function ogAfterPlay(p,cs){
+ const target=cs.reduce((a,c)=>a+c.n,0),steps=cs[0].n===1?2*cs.length:1;
+ const forcedNext=og.penalty&&og.penalty.rank===8?(p+steps)%og.hands.length:-1;
+ const callers=cs[0].n===0?[]:og.hands.map((h,i)=>i).filter(i=>i!==p&&i!==forcedNext&&ogSum(og.hands[i])===target);
+ if(callers.length){og.pending={stage:'don',caller:callers[0],callers,accepted:[],owner:p,target,kind:'normal',steps};og.message=ogWho(callers[0])+'：ドンを宣言しますか？';return}
+ ogAdvance(steps);
+}
+function ogResolveDecision(p,yes){
+ const d=og.pending;if(!d)return;
+ if(d.stage==='don'&&p===d.caller){
+   if(yes)d.accepted.push(p);
+   d.callers=d.callers.filter(i=>i!==p);
+   if(d.callers.length){d.caller=d.callers[0];og.message=ogWho(d.caller)+'：ドンを宣言しますか？';return}
+   if(!d.accepted.length){og.pending=null;if(d.kind==='normal')ogAdvance(d.steps);else og.message='ドンを見送った';return}
+   if(d.owner!==d.accepted[0]&&ogSum(og.hands[d.owner])===d.target){d.stage='reverse';og.message=ogWho(d.owner)+'：ドン返ししますか？';return}
+   og.pending=null;ogEndMultiple(d,false);return;
+ }
+ if(d.stage==='reverse'&&p===d.owner){og.pending=null;ogEndMultiple(d,yes);}
+}
+function ogEndMultiple(d,reversed){
+ // The Don is already decided: settle the 8's mandatory draw before scoring.
+ if(d.kind==='normal'&&og.penalty&&og.penalty.rank===8){
+  const forced=(d.owner+d.steps)%og.hands.length,n=og.penalty.count;
+  og.penalty=null;let drawn=0;for(let i=0;i<n;i++){if(ogTake(forced))drawn++;else break}
+  og.message=ogWho(forced)+'が追加で'+drawn+'枚引いた';
+ }
+ if(d.accepted.length===1){
+   const type=reversed?(d.kind==='draw'?'引きドン返し':'ドン返し'):(d.owner===d.accepted[0]?'オナニー引きドン':d.kind==='draw'?'引きドン':'ドン');
+   ogEnd(type,reversed?d.owner:d.accepted[0],reversed?d.accepted[0]:d.owner);return;
+ }
+ const type=reversed?(d.kind==='draw'?'引きドン返し':'ドン返し'):(d.kind==='draw'?'引きドン':'ドン');
+ const winners=reversed?[d.owner]:d.accepted, losers=reversed?d.accepted:[d.owner];
+ const count=og.hands.reduce((sum,h,i)=>sum+(winners.includes(i)?0:h.length),0),base=count*100;
+ const typePower=reversed?(d.kind==='draw'?4:2):(d.kind==='draw'?2:1),roundPower=2**(og.round-1);
+ let lines=[];
+ for(const caller of d.accepted){
+   const winner=reversed?d.owner:caller,loser=reversed?caller:d.owner;
+   const jokerCount=og.hands[winner].filter(c=>c.n===0).length+(reversed?og.hands[caller].filter(c=>c.n===0).length:0);
+   const amount=base*typePower*(2**jokerCount)*roundPower;
+   og.scores[winner]+=amount;og.scores[loser]-=amount;
+   lines.push(ogWho(loser)+' → '+ogWho(winner)+'：'+amount.toLocaleString('ja-JP')+' pt');
+ }
+ og.message=type+'！ '+lines.join(' ／ ');
+ og.breakdown=base.toLocaleString('ja-JP')+' pt ('+count+'枚)'+(typePower>1?' × '+typePower+'倍('+type+')':'')+(roundPower>1?' × '+roundPower+'倍('+og.round+'巡目)':'')+'（ジョーカー倍率は各宣言者ごと）';
+ og.over=true;og.pending=null;og.lastLoser=losers[0];og.result={type,lines};
+}
+function ogApply(action,from){if(!ogHost()||!og||og.over)return;let p=og.ids.indexOf(from);if(p<0)return;try{
+ if(action.type==='decision'){if(!og.pending)return;const expected=og.pending.stage==='don'?og.pending.caller:og.pending.owner;if(p!==expected)return;ogResolveDecision(p,action.yes===true);ogSendState();return}
+ if(og.pending||p!==og.turn)return;
+ if(action.type==='draw'){
+ if(og.penalty){let n=og.penalty.count;og.penalty=null;for(let i=0;i<n;i++)ogTake(p);og.forcedDraw=true;og.message=ogWho(p)+'が追加で'+n+'枚引いた';if(og.top.n!==0&&ogSum(og.hands[p])===og.top.target&&og.top.target!==undefined){og.pending={stage:'don',caller:p,owner:og.top.owner,target:og.top.target,kind:'normal',steps:1};og.message=ogWho(p)+'：ドンを宣言しますか？'}}
+ else {if(og.drawn)return;if(!ogTake(p)){if(!og.deck.length){og.drawn=true;og.message='山札がないため通常ドローを省略した'}return;}og.drawn=true;og.message=ogWho(p)+'が1枚引いた';if(og.top.n!==0&&ogSum(og.hands[p])===og.top.target&&og.top.target!==undefined){og.pending={stage:'don',caller:p,owner:og.top.owner,target:og.top.target,kind:'draw',steps:1};og.message=ogWho(p)+'：引きドンを宣言しますか？'}}
+ }else if(action.type==='pass'){
+ if(!og.drawn)return;ogAdvance();
+ }else if(action.type==='play'){
+ let ids=action.ids;if(!Array.isArray(ids)||!ids.length)return;let cs=ids.map(id=>og.hands[p].find(c=>c.id===id));if(cs.some(c=>!c)||new Set(ids).size!==ids.length||!ogCan(cs))return;if((cs[0].n===11||cs[0].n===0)&&!['♠','♥','♦','♣'].includes(action.suit))return;if(cs.length>1&&(!action.topId||!cs.slice(1).some(c=>c.id===action.topId)))return;if(cs.length>1){const top=cs.find(c=>c.id===action.topId);cs=[cs[0],...cs.slice(1).filter(c=>c.id!==action.topId),top]}
+ for(let c of cs)og.hands[p].splice(og.hands[p].findIndex(x=>x.id===c.id),1);
+ og.discard.push(og.top);og.pileCards=cs.map(c=>({...c}));og.top={...cs.at(-1),target:cs.reduce((a,c)=>a+c.n,0),owner:p};og.suit=(cs[0].n===11||cs[0].n===0)?( ['♠','♥','♦','♣'].includes(action.suit)?action.suit:cs[0].s):cs.at(-1).s;
+ if([2,8,0].includes(cs[0].n))og.penalty={rank:cs[0].n,count:(cs[0].n===0?4:2)*cs.length};else og.penalty=null;
+ og.message=ogWho(p)+'が'+cs.map(c=>c.n===0?'JOKER':c.s+(c.n===1?'A':c.n===11?'J':c.n===12?'Q':c.n===13?'K':c.n)).join('・')+'を出した';ogAfterPlay(p,cs);
+ }
+ ogSendState();
+ }catch(e){console.error(e);onlineMsg('操作エラー：'+e.message)}}
+function ogAction(type){if(!og||og.over)return;let me=og.ids?og.ids.indexOf(onlineSession.user.id):og.my;if(type!=='decision'&&(me!==og.turn||og.pending))return;
+ let data={type};if(type==='play'){let hand=og.hands[me],cs=ogSelected.map(id=>hand.find(c=>c.id===id)).filter(Boolean);if(!cs.length)return;data.ids=cs.map(c=>c.id);if(cs[0].n===0||cs[0].n===11){ogSuitChoosing=true;ogRender();return}if(cs.length===2){data.topId=cs[1].id}else if(cs.length>2){ogTopChoosing=true;ogRender();return}}
+ if(ogHost())ogApply(data,onlineSession.user.id);else onlineSend('action',data);ogSelected=[];ogRender()}
+function ogChooseTopCard(id){
+ if(!ogTopChoosing||!og)return;
+ const me=og.ids?og.ids.indexOf(onlineSession.user.id):og.my;
+ const cs=ogSelected.map(id=>(og.hands[me]||[]).find(c=>c.id===id)).filter(Boolean);
+ if(cs.length<2||!cs.slice(1).some(c=>String(c.id)===String(id)))return;
+ const data={type:'play',ids:cs.map(c=>c.id),topId:cs.find(c=>String(c.id)===String(id)).id};
+ ogTopChoosing=false;ogSelected=[];
+ if(ogHost())ogApply(data,onlineSession.user.id);else onlineSend('action',data);
+ ogRender();
+}
+function ogChooseSuit(s){
+ if(!ogSuitChoosing||!['♠','♥','♦','♣'].includes(s)||!og)return;
+ let me=og.ids?og.ids.indexOf(onlineSession.user.id):og.my;
+ let cs=ogSelected.map(id=>(og.hands[me]||[]).find(c=>c.id===id)).filter(Boolean);
+ if(!cs.length||!(cs[0].n===0||cs[0].n===11)){ogSuitChoosing=false;ogRender();return}
+ const data={type:'play',ids:cs.map(c=>c.id),suit:s};if(cs.length>1)data.topId=cs[cs.length-1].id;
+ ogSuitChoosing=false;ogSelected=[];
+ if(ogHost())ogApply(data,onlineSession.user.id);else onlineSend('action',data);
+ ogRender();
+}
+function ogActionDecision(yes){if(!og?.pending)return;const data={type:'decision',yes};if(ogHost())ogApply(data,onlineSession.user.id);else onlineSend('action',data)}
+
+let ogFxSeenGame='',ogFxSeenAccept='',ogFxSeenResult='';
+function ogObserveFx(){
+ if(!og)return;
+ const game=String(og.gameNo||1);
+ if(ogFxSeenGame!==game){ogFxSeenGame=game;ogFxSeenAccept='';ogFxSeenResult='';}
+ const d=og.pending;
+ if(d&&d.accepted?.length){
+  const key=game+':'+d.owner+':'+d.target+':'+d.accepted.join(',');
+  if(key!==ogFxSeenAccept){ogFxSeenAccept=key;showDonFx(d.kind==='draw'?'draw':'don')}
+ }
+ if(og.over&&og.result){
+  const key=game+':'+og.result.type+':'+(og.result.winner??'')+':'+(og.result.amount??'');
+  if(key!==ogFxSeenResult){ogFxSeenResult=key;
+   if(og.result.type==='スタドン')showDonFx('start');
+   else if(og.result.type?.includes('返し'))showDonFx('reverse');
+   else if(!ogFxSeenAccept)showDonFx(og.result.type?.includes('引き')?'draw':'don');
+  }
+ }
+}
+
+function ogRender(){ogObserveFx();let box=document.getElementById('onlineGame');if(!og){box.hidden=true;return}box.hidden=false;let me=og.ids?og.ids.indexOf(onlineSession.user.id):og.my;let hand=og.hands[me]||[],their=(me+1)%og.names.length,turn=og.turn===me&&!og.over&&!og.pending;let deciding=og.pending&&(og.pending.stage==='don'?og.pending.caller:og.pending.owner)===me;
+ const safe=t=>String(t).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');const card=c=>c.n===0?'🃏':c.s+(c.n===1?'A':c.n===11?'J':c.n===12?'Q':c.n===13?'K':c.n);
+ const red=x=>x==='♥'||x==='♦';
+ const selected=ogSelected.map(id=>hand.find(c=>c.id===id)).filter(Boolean);
+ ogSuitChoosing=!!(turn&&selected.length>=1&&(selected[0].n===0||selected[0].n===11)&&ogCan(selected));
+ const canPlay=c=>{if(!turn)return false;if(selected.length)return selected[0].n!==0&&c.n===selected[0].n;if(og.penalty)return c.n===og.penalty.rank;return c.n===0||c.n===11||c.s===og.suit||c.n===og.top.n};
+ const opponents=og.names.map((name,i)=>({name,i})).filter(x=>x.i!==me);
+ const opponentHtml=opponents.map(({name,i})=>{const count=og.counts?.[i]??og.hands[i]?.length??0;return '<div class="og-opponent '+(og.turn===i&&!og.over?'og-active':'')+'"><div class="og-avatar">🧑</div><div class="og-name">'+safe(name)+'</div><div class="og-score">'+count+'枚 · '+Number(og.scores[i]||0).toLocaleString('ja-JP')+' pt</div><div class="og-back-row">'+Array.from({length:Math.min(count,12)},()=>'<span class="og-back"></span>').join('')+(count>12?'<span class="og-back-more">+'+(count-12)+'</span>':'')+'</div></div>'}).join('');
+ const face=(c,i=0)=>{let wild=c.n===0||c.n===11;let shownSuit=wild?og.suit:c.s;return '<div class="og-face '+(red(shownSuit)?'og-red':'')+'" style="--stack-index:'+i+'"><span>'+safe(c.n===0?'JOKER':(c.n===11?'J':card(c)))+'</span><span class="og-bigpip">'+safe(shownSuit)+'</span></div>'};
+ box.classList.add('og-felt');
+ box.innerHTML='<div class="og-heading">GABACHO · ONLINE</div>'+opponentHtml+
+ '<div class="og-board"><div class="og-board-title">場・山札</div><div class="og-piles"><div class="og-pile">'+'<div class="og-board-stack" style="--stack-count:'+((og.pileCards?.length)||1)+'">'+((og.pileCards?.length?og.pileCards:[og.top]).map((c,i)=>face(c,i)).join(''))+'</div><span class="og-pile-label">場のカード</span></div><div class="og-pile"><div class="og-deck"></div><span class="og-pile-label">山札</span></div><div class="og-pile"><div class="og-suit-tile '+(red(og.suit)?'og-red':'')+'">'+safe(og.suit)+'</div><span class="og-pile-label">現在のマーク</span></div></div></div>'+
+ '<div class="og-msg" role="status">'+safe(og.message)+'</div>'+
+ (ogTopChoosing?'<div class="og-top-choice"><strong>一番上にするカードを選んでください</strong><p>選んだカードのマークが次の場のマークになります</p>'+selected.slice(1).map(c=>'<button data-top-card="'+safe(c.id)+'">'+safe(card(c))+'</button>').join('')+'<button id="ogTopCancel">キャンセル</button></div>':'')+
+ (deciding?'<div class="og-decision"><p>✨ '+(og.pending.stage==='don'&&og.pending.kind==='draw'&&og.pending.owner!==og.pending.caller?'引きドンできます！':(og.pending.stage==='reverse'?(og.pending.kind==='draw'?'引きドン返し':'ドン返し'):(og.pending.owner===og.pending.caller?'オナニー引きドン':og.pending.kind==='draw'?'引きドン':'ドン'))+'できます！ '+(og.pending.stage==='reverse'?'':og.pending.owner===me?'自分の場札に対してドンできます！':safe(ogWho(og.pending.owner))+'に対してドンできます！')+' 宣言しますか？')+'</p><button id="ogYes">'+(og.pending.stage==='don'&&og.pending.kind==='draw'?'引きドン！':'宣言する！')+'</button><button id="ogNo">見送る</button></div>':'')+
+ '<div class="og-hand-area"><div class="og-hand-title">あなたの手札 <span class="og-me-score">'+Number(og.scores[me]||0).toLocaleString('ja-JP')+' pt</span></div>'+
++'<div class="og-cards og-hand">'+hand.map(c=>'<button class="og-card '+(red(c.s)?'og-red ':'')+(ogSelected.includes(c.id)?'sel ':'')+(turn&&selected.length&&selected[0].n===11&&c.n===11&&!ogSelected.includes(c.id)&&canPlay(c)?'j-addable ':'')+(canPlay(c)?'og-playable':'og-unplayable')+'" '+(!turn?'disabled':'')+' data-card="'+safe(c.id)+'">'+safe(card(c))+'</button>').join('')+'</div>'+
+ (ogSuitChoosing?'<div class="og-suit-choice"><div class="og-suit-title">次のマークを選択（J／ジョーカー）</div><div class="og-suit-options"><button data-suit="♠">♠</button><button data-suit="♥">♥</button><button data-suit="♦">♦</button><button data-suit="♣">♣</button></div><button class="og-suit-cancel" id="ogSuitCancel">キャンセル</button></div>':'')
++'</div>'+
+ '<div class="og-actions"><button id="ogPlay" '+(!turn?'disabled':'')+(ogSuitChoosing?' hidden':'')+'>'+(selected.length===2&&selected[0].n!==0&&selected[0].n!==11?safe(selected[1].s)+'を上にしてカードを出す':'カードを出す')+'</button><button id="ogDraw" '+(!turn||og.drawn?'disabled':'')+'>'+(og.penalty?'追加で'+og.penalty.count+'枚引く':'1枚引く')+'</button><button id="ogPass" '+(!turn||!og.drawn?'disabled':'')+'>ターン終了</button></div>'+
+ (og.over?'<div class="og-decision"><p>🏆 第'+(og.gameNo||1)+'ゲーム終了</p><p><strong>'+safe(og.message)+'</strong></p><p>'+safe(og.breakdown||'')+'</p><p>相手の手札：'+opponents.map(({name,i})=>safe(name)+' '+(og.hands[i]||[]).map(card).map(safe).join('・')).join(' ／ ')+'</p><p>累計：'+og.names.map((name,i)=>safe(name)+' '+Number(og.scores[i]).toLocaleString('ja-JP')+' pt').join(' ／ ')+'</p>'+(ogHost()?'<button id="ogNext">次のゲームへ ▶</button>':'<p>ホストが次のゲームを開始するのを待っています。</p>')+'</div>':'')+
+ '<details class="og-chat" id="ogChat" '+(ogChatOpen?'open':'')+'><summary>💬 チャット <span id="ogUnread">'+(ogChatUnread?'（新着'+ogChatUnread+'件）':'')+'</span></summary><div class="og-chat-log" id="ogChatLog">'+ogChatMessages.map(m=>'<div><strong>'+safe(m.name)+'</strong>：'+safe(m.text)+'</div>').join('')+'</div><form id="ogChatForm"><input id="ogChatInput" maxlength="200" placeholder="メッセージ（200文字まで）" autocomplete="off"><button type="submit">送信</button></form><small>この部屋で接続中の人にだけ届きます。退出・再読み込み後の履歴は保存されません。</small></details>' ;
+ box.querySelector('#ogChat')?.addEventListener('toggle',e=>{ogChatOpen=e.target.open;if(ogChatOpen){ogChatUnread=0;const u=box.querySelector('#ogUnread');if(u)u.textContent=''}});box.querySelector('#ogChatForm')?.addEventListener('submit',e=>{e.preventDefault();const input=box.querySelector('#ogChatInput');ogSendChat(input?.value||'')});
+ box.querySelectorAll('[data-top-card]').forEach(el=>el.onclick=()=>ogChooseTopCard(el.dataset.topCard));box.querySelector('#ogTopCancel')?.addEventListener('click',()=>{ogTopChoosing=false;ogRender()});box.querySelectorAll('[data-suit]').forEach(el=>el.onclick=()=>ogChooseSuit(el.dataset.suit));if(ogSuitChoosing)box.querySelector('#ogSuitCancel').onclick=()=>{ogSuitChoosing=false;ogRender()};
+ box.querySelectorAll('[data-card]').forEach(el=>el.onclick=()=>{let id=el.dataset.card;if(ogSelected.includes(id))ogSelected=ogSelected.filter(x=>x!==id);else if(canPlay(hand.find(c=>c.id===id)))ogSelected.push(id);ogRender()});box.querySelector('#ogPlay').onclick=()=>ogAction('play');box.querySelector('#ogDraw').onclick=()=>ogAction('draw');box.querySelector('#ogPass').onclick=()=>ogAction('pass');if(og.over&&ogHost()){box.querySelector('#ogNext')?.addEventListener('click',()=>onlineBegin(true))}if(deciding){box.querySelector('#ogYes').onclick=()=>ogActionDecision(true);box.querySelector('#ogNo').onclick=()=>ogActionDecision(false)}
+}
+</script></body></html>
