@@ -702,6 +702,13 @@ section.details{margin-top:5px!important}
 #gameScreen .board-target{width:100%!important;min-height:40px!important;height:40px!important;box-sizing:border-box!important;justify-content:center!important;white-space:nowrap!important;flex-shrink:0!important}
 #gameScreen .board-target strong{display:inline-block!important;min-width:2.5ch!important;text-align:center!important;font-variant-numeric:tabular-nums!important;font-feature-settings:"tnum"!important}
 @media(max-width:390px){#gameScreen .board-target{height:37px!important;min-height:37px!important}}
+</style><style id="v036-online-hand-fit">
+#onlineGame .og-hand-area{min-width:0;max-width:100%}
+#onlineGame .og-cards.og-hand{display:flex;flex-wrap:nowrap;justify-content:center;align-items:flex-start;gap:0;max-width:100%;width:100%;min-width:0;box-sizing:border-box;overflow:visible;padding:19px 0 14px}
+#onlineGame .og-cards.og-hand>button.og-card{flex:0 0 52px;box-sizing:border-box;width:52px;min-width:52px;max-width:52px;height:81px;margin:0}
+#onlineGame .og-cards.og-hand>button.og-card:not(:first-child){margin-left:var(--og-overlap,0px)}
+#onlineGame .og-cards.og-hand>button.og-card{isolation:isolate}
+#onlineGame .og-cards.og-hand>button.og-card.sel{z-index:30}
 </style></head><body>
 <style id="v005-j-glow">.card.j-addable,#onlineGame .og-card.j-addable{box-shadow:0 0 0 2px #ffdb69,0 0 14px 4px #ffe47b9c!important;animation:jAddGlow 1.3s ease-in-out infinite alternate;position:relative}@keyframes jAddGlow{from{filter:brightness(1)}to{filter:brightness(1.22)}}</style><style id="don-fx-style">
 /* v0.0.12: lightning impact overlay; game state and scoring unchanged. */
@@ -794,7 +801,7 @@ body.don-screen-shake{animation:donScreenShake 850ms cubic-bezier(.35,.05,.6,.95
 .rematch-actions{display:flex;flex-direction:column;gap:9px;margin:12px auto;max-width:390px}
 .rematch-actions[hidden]{display:none!important}
 .rematch-actions .entry-primary,.rematch-actions .entry-back{margin:0;width:100%}
-</style><div id="donFx" aria-hidden="true"><div class="don-fx-dark"></div><div class="don-fx-wash"></div><div class="don-fx-burst"></div><div class="don-fx-ring"></div><div class="don-fx-ring ring-two"></div><div class="don-fx-inferno"></div><div class="don-fx-sparks"></div><div class="don-fx-debris"></div><svg class="don-fx-lightning" viewBox="0 0 360 720" preserveAspectRatio="none" aria-hidden="true"><path class="bolt-halo" d="M18 0 L74 99 L54 155 L143 236 L119 302 L180 360"/><path class="bolt-core" d="M18 0 L74 99 L54 155 L143 236 L119 302 L180 360"/><path class="bolt-halo" d="M350 0 L289 91 L314 160 L225 231 L247 294 L180 360"/><path class="bolt-core" d="M350 0 L289 91 L314 160 L225 231 L247 294 L180 360"/><path class="bolt-small" d="M0 440 L78 412 L105 362 L160 351 M360 468 L280 426 L250 384 L192 365 M90 720 L133 586 L116 510 L179 379"/></svg><div class="don-fx-impact"></div><div class="don-fx-flash"></div><div class="don-fx-word">ドン！</div></div><div id="lossCrackScreen" aria-hidden="true"></div><header class="brand"><h1>がばちょ <small>v0.0.35</small></h1><span class="brand-sub">GABACHO CARD GAME</span></header><p class="muted">相手の裏向きトランプと枚数を表示／CPU対戦／2〜5人／ジョーカー2〜4枚／A・2・8対応／終了時にCPU手札公開</p>
+</style><div id="donFx" aria-hidden="true"><div class="don-fx-dark"></div><div class="don-fx-wash"></div><div class="don-fx-burst"></div><div class="don-fx-ring"></div><div class="don-fx-ring ring-two"></div><div class="don-fx-inferno"></div><div class="don-fx-sparks"></div><div class="don-fx-debris"></div><svg class="don-fx-lightning" viewBox="0 0 360 720" preserveAspectRatio="none" aria-hidden="true"><path class="bolt-halo" d="M18 0 L74 99 L54 155 L143 236 L119 302 L180 360"/><path class="bolt-core" d="M18 0 L74 99 L54 155 L143 236 L119 302 L180 360"/><path class="bolt-halo" d="M350 0 L289 91 L314 160 L225 231 L247 294 L180 360"/><path class="bolt-core" d="M350 0 L289 91 L314 160 L225 231 L247 294 L180 360"/><path class="bolt-small" d="M0 440 L78 412 L105 362 L160 351 M360 468 L280 426 L250 384 L192 365 M90 720 L133 586 L116 510 L179 379"/></svg><div class="don-fx-impact"></div><div class="don-fx-flash"></div><div class="don-fx-word">ドン！</div></div><div id="lossCrackScreen" aria-hidden="true"></div><header class="brand"><h1>がばちょ <small>v0.0.36</small></h1><span class="brand-sub">GABACHO CARD GAME</span></header><p class="muted">相手の裏向きトランプと枚数を表示／CPU対戦／2〜5人／ジョーカー2〜4枚／A・2・8対応／終了時にCPU手札公開</p>
 <div id="homeScreen" class="entry-screen"><div class="entry-emblem">🃏</div><div class="entry-overline">THE CARD GAME</div><h2 class="entry-title">がばちょ</h2><p class="entry-lead">ドンを狙え。ジョーカーで逆転。</p><button class="entry-primary" onclick="showSettings()">ゲームスタート <span>▶</span></button><button class="entry-primary" onclick="showOnline()">🌐 オンラインで遊ぶ</button><button class="entry-back" onclick="showRanking()">🏆 全国ランキング</button><button class="entry-back rules-open" onclick="showRules()">📖 ルール説明</button><p class="entry-note">CPU対戦 · 2〜5人 · オフライン対応</p></div>
 <div id="onlineScreen" class="entry-screen" hidden><div class="entry-overline">ONLINE LOBBY · BETA</div><h2 class="entry-heading">🌐 オンライン対戦ロビー</h2><p class="entry-lead">部屋コードを共有して友達と集合</p><div class="online-fields"><label>ニックネーム<input id="onlineName" maxlength="20" placeholder="名前を入力" autocomplete="nickname"></label><label>部屋コード<input id="onlineCode" maxlength="8" placeholder="例：AB12CD" autocapitalize="characters"></label></div><button class="entry-primary" onclick="createOnlineRoom()">部屋を作る</button><button class="entry-primary" onclick="joinOnlineRoom()">コードで参加</button><p id="onlineMessage" role="status"></p><div id="onlineLobby" hidden><h3>部屋コード：<span id="onlineRoomCode"></span></h3><button onclick="copyOnlineCode()">コードをコピー</button><div id="onlineMembers"></div><button id="onlineStart" onclick="startOnlineMatch()" hidden>ゲーム開始</button><p class="muted">2〜3人対戦β版。参加人数に合わせて開始します。ホストが接続中の間、ゲームが同期されます。通信が一時的に切れた場合は自動で再接続を試みます。ホストの退出には未対応です。</p><p id="onlineConnectionStatus" role="status" style="font-size:13px;color:#ffe3a1;margin:8px 0">通信：接続待ち</p><div id="onlineGame" hidden></div><button class="entry-back" onclick="leaveOnlineRoom()">部屋から退出</button></div><button class="entry-back" onclick="leaveOnlineRoom();showHome()">← ホームへ戻る</button></div>
 <div id="rulesScreen" class="entry-screen rules-screen" hidden><div class="entry-overline">HOW TO PLAY</div><h2 class="entry-heading">📖 がばちょのルール</h2><div class="rules-body"><h3>🎯 勝利条件</h3><p>相手が場に出したカードの数字の合計と、自分の手札の数字の合計が一致したら「ドン！」。ドンが成立するとそのゲームは終了し、得点を精算します。設定したゲーム数が終わった時点の総合得点が最も高い人が優勝！</p><h3>🃏 基本の出し方</h3><p>最初の手札は5枚。場と同じマークか同じ数字のカードを出せます。同じ数字はまとめて複数枚出せます。Jはいつでも出せて、次のマークを指定できます。ジョーカーは場に出せず、手札に残してドンの得点倍率を高めるカードです。Aは1、ジョーカーは0として計算します。</p><h3>⚡ 特殊カード</h3><p><b>A：</b>次の人を1人飛ばします。複数枚ならその枚数分飛ばします。<br><b>2・8：</b>次の人は追加で2枚引きます。同じ数字を重ねて返せます。<br><b>ジョーカー：</b>場には出せません。手札に持っているとドンの得点倍率が上がります。</p><h3>🔁 ターンとドロー</h3><p>出せるカードがなければ1枚引きます。1ターンに任意で引けるのは1枚まで。2・8などで追加のカードを引いた後も、出せるカードがなければさらに1枚引く必要があります。</p><h3>💰 ドンと得点</h3><p>通常ドンは、ドンした人以外の手札枚数合計×100点が基本。ドンした人の手札のジョーカー1枚ごとに獲得点数が2倍になります。ドンされた人も手札合計が一致すれば「ドン返し」が可能で、通常ドン返しは2倍です。</p><p>1枚引いて成立する「引きドン」は基本点が2倍、「引きドン返し」は4倍。自分の出した場札に引きドンする「オナニー引きドン」は2倍で、ほかの全員が均等に支払います。山札の再シャッフルで巡目が進むと得点倍率も上がります。</p><h3>🌟 スタドン（開始時ドン）</h3><p>ゲーム開始直後、最初の場札の数字と自分の手札5枚の数字の合計が一致すると、カードを出す前にスタドンで即勝利！ Aは1、Jは11、Qは12、Kは13、ジョーカーは0として計算します。複数人が同時に成立した場合は先手から順番に優先します。</p><p><b>得点：</b>自分以外の全員の手札枚数合計 × 100点 × 4倍 × 2<sup>スタドン成功者の手札のジョーカー枚数</sup>。この点数を相手全員から<b>それぞれ</b>受け取ります（分担ではありません）。例：4人対戦で相手が各5枚、成功者の手札にジョーカーが2枚なら15枚×100点×4×4＝24,000点。勝者は＋72,000点、相手3人はそれぞれ−24,000点。</p><h3>🏆 最終優勝</h3><p>各ゲームの得点を累積し、全ゲーム終了後に総合1位を発表。同点1位は同時優勝です。</p></div><button class="entry-primary" onclick="showHome()">ホームへ戻る</button></div>
@@ -1425,7 +1432,7 @@ showHome();
 // v0.43 two-person online beta. Host is the authority for game actions.
 // Supabase Realtime broadcast is ephemeral; games are not persisted and require host online.
 let og=null,ogSocket=null,ogReady=false,ogQueue=[],ogSelected=[],ogSeq=0,ogReconnect=null,ogConnecting=false,ogHeartbeat=null,ogSuitChoosing=false,ogTopChoosing=false;
-// v0.0.35: host-authoritative revisions and single in-flight client action.
+// v0.0.36: host-authoritative revisions and single in-flight client action.
 let ogActionPending=null,ogActionTimer=null,ogStateRevision=-1,ogSyncTimer=null,ogLastStateAt=0,ogConnectionStatus='接続待ち',ogReceivedActions=new Set();
 function ogStatus(status){ogConnectionStatus=status;const el=document.getElementById('onlineConnectionStatus');if(el)el.textContent='通信：'+status}
 function ogClearPending(){ogActionPending=null;clearTimeout(ogActionTimer);ogActionTimer=null}
@@ -1514,7 +1521,19 @@ function ogCheckStartDon(){
  og.result={type:'スタドン',winner,loser:null,amount:each,parts:og.breakdown};
  return true;
 }
-function ogPublic(i){return {...og,deck:undefined,discard:undefined,hands:og.hands.map((h,j)=>j===i||og.over?h:[]),counts:og.hands.map(h=>h.length),my:i}}
+function ogPublic(i){
+ const decisionOwner=og.pending&&(og.pending.stage==='don'?og.pending.caller:og.pending.owner);
+ const myDecision=decisionOwner===i;
+ const pending=og.pending?(myDecision?{
+  stage:og.pending.stage,kind:og.pending.kind,owner:og.pending.owner,caller:og.pending.caller,
+  target:og.pending.target
+ }:{stage:'wait'}):null;
+ // A pending Don is private until declared; even the status text must not reveal it.
+ const message=og.pending?'相手の操作を待っています…':og.message;
+ return {...og,deck:undefined,discard:undefined,
+  hands:og.hands.map((h,j)=>j===i||og.over?h:[]),counts:og.hands.map(h=>h.length),
+  pending,message,my:i};
+}
 function ogSendState(onlyId=null){if(!ogHost()||!og)return;
  if(!onlyId)og.seq=(Number(og.seq)||0)+1;
  for(let i=0;i<og.ids.length;i++){
@@ -1542,7 +1561,7 @@ function ogAfterPlay(p,cs){
  const target=cs.reduce((a,c)=>a+c.n,0),steps=cs[0].n===1?2*cs.length:1;
  const forcedNext=og.penalty&&og.penalty.rank===8?(p+steps)%og.hands.length:-1;
  const callers=cs[0].n===0?[]:og.hands.map((h,i)=>i).filter(i=>i!==p&&i!==forcedNext&&ogSum(og.hands[i])===target);
- if(callers.length){og.pending={stage:'don',caller:callers[0],callers,accepted:[],owner:p,target,kind:'normal',steps};og.message=ogWho(callers[0])+'：ドンを宣言しますか？';return}
+ if(callers.length){og.pending={stage:'don',caller:callers[0],callers,accepted:[],owner:p,target,kind:'normal',steps};og.message='相手の操作を待っています…';return}
  ogAdvance(steps);
 }
 function ogResolveDecision(p,yes){
@@ -1550,9 +1569,9 @@ function ogResolveDecision(p,yes){
  if(d.stage==='don'&&p===d.caller){
    if(yes)d.accepted.push(p);
    d.callers=d.callers.filter(i=>i!==p);
-   if(d.callers.length){d.caller=d.callers[0];og.message=ogWho(d.caller)+'：ドンを宣言しますか？';return}
-   if(!d.accepted.length){og.pending=null;if(d.kind==='normal')ogAdvance(d.steps);else og.message='ドンを見送った';return}
-   if(d.owner!==d.accepted[0]&&ogSum(og.hands[d.owner])===d.target){d.stage='reverse';og.message=ogWho(d.owner)+'：ドン返ししますか？';return}
+   if(d.callers.length){d.caller=d.callers[0];og.message='相手の操作を待っています…';return}
+   if(!d.accepted.length){og.pending=null;if(d.kind==='normal')ogAdvance(d.steps);else og.message=ogWho(og.turn)+'の番';return}
+   if(d.owner!==d.accepted[0]&&ogSum(og.hands[d.owner])===d.target){d.stage='reverse';og.message='相手の操作を待っています…';return}
    og.pending=null;ogEndMultiple(d,false);return;
  }
  if(d.stage==='reverse'&&p===d.owner){og.pending=null;ogEndMultiple(d,yes);}
@@ -1588,8 +1607,8 @@ function ogApply(action,from){if(!ogHost()||!og||og.over)return;let p=og.ids.ind
  if(action.type==='decision'){if(!og.pending)return;const expected=og.pending.stage==='don'?og.pending.caller:og.pending.owner;if(p!==expected)return;ogResolveDecision(p,action.yes===true);ogSendState();return}
  if(og.pending||p!==og.turn)return;
  if(action.type==='draw'){
- if(og.penalty){let n=og.penalty.count;og.penalty=null;for(let i=0;i<n;i++)ogTake(p);og.forcedDraw=true;og.message=ogWho(p)+'が追加で'+n+'枚引いた';if(og.top.n!==0&&ogSum(og.hands[p])===og.top.target&&og.top.target!==undefined){og.pending={stage:'don',caller:p,owner:og.top.owner,target:og.top.target,kind:'normal',steps:1};og.message=ogWho(p)+'：ドンを宣言しますか？'}}
- else {if(og.drawn)return;if(!ogTake(p)){if(!og.deck.length){og.drawn=true;og.message='山札がないため通常ドローを省略した'}return;}og.drawn=true;og.message=ogWho(p)+'が1枚引いた';if(og.top.n!==0&&ogSum(og.hands[p])===og.top.target&&og.top.target!==undefined){og.pending={stage:'don',caller:p,owner:og.top.owner,target:og.top.target,kind:'draw',steps:1};og.message=ogWho(p)+'：引きドンを宣言しますか？'}}
+ if(og.penalty){let n=og.penalty.count;og.penalty=null;for(let i=0;i<n;i++)ogTake(p);og.forcedDraw=true;og.message=ogWho(p)+'が追加で'+n+'枚引いた';if(og.top.n!==0&&ogSum(og.hands[p])===og.top.target&&og.top.target!==undefined){og.pending={stage:'don',caller:p,owner:og.top.owner,target:og.top.target,kind:'normal',steps:1};og.message='相手の操作を待っています…'}}
+ else {if(og.drawn)return;if(!ogTake(p)){if(!og.deck.length){og.drawn=true;og.message='山札がないため通常ドローを省略した'}return;}og.drawn=true;og.message=ogWho(p)+'が1枚引いた';if(og.top.n!==0&&ogSum(og.hands[p])===og.top.target&&og.top.target!==undefined){og.pending={stage:'don',caller:p,owner:og.top.owner,target:og.top.target,kind:'draw',steps:1};og.message='相手の操作を待っています…'}}
  }else if(action.type==='pass'){
  if(!og.drawn)return;ogAdvance();
  }else if(action.type==='play'){
@@ -1624,7 +1643,14 @@ function ogChooseSuit(s){
  if(ogHost())ogApply(data,onlineSession.user.id);else ogClientAction(data);
  ogRender();
 }
-function ogActionDecision(yes){if(!og?.pending)return;const data={type:'decision',yes};if(ogHost())ogApply(data,onlineSession.user.id);else ogClientAction(data)}
+function ogActionDecision(yes){
+ if(!og?.pending||og.pending.stage==='wait')return;
+ const me=og.ids?.indexOf(onlineSession.user.id);
+ const expected=og.pending.stage==='don'?og.pending.caller:og.pending.owner;
+ if(me!==expected)return;
+ const data={type:'decision',yes};
+ if(ogHost())ogApply(data,onlineSession.user.id);else ogClientAction(data);
+}
 
 let ogFxSeenGame='',ogFxSeenAccept='',ogFxSeenResult='';
 function ogObserveFx(){
@@ -1646,7 +1672,20 @@ function ogObserveFx(){
  }
 }
 
-function ogRender(){ogObserveFx();let box=document.getElementById('onlineGame');if(!og){box.hidden=true;return}box.hidden=false;let me=og.ids?og.ids.indexOf(onlineSession.user.id):og.my;let hand=og.hands[me]||[],their=(me+1)%og.names.length,turn=og.turn===me&&!og.over&&!og.pending;let deciding=og.pending&&(og.pending.stage==='don'?og.pending.caller:og.pending.owner)===me;
+function ogFitHand(){
+ const row=document.querySelector('#onlineGame .og-cards.og-hand');if(!row)return;
+ const cards=[...row.querySelectorAll('button.og-card')],n=cards.length;
+ if(n<2){row.style.setProperty('--og-overlap','0px');return}
+ const width=row.clientWidth;
+ if(!width)return;
+ const cardWidth=52;
+ const overlap=Math.max(0,(width-n*cardWidth)/(n-1));
+ // Negative margin compresses the entire hand without clipping the last card.
+ row.style.setProperty('--og-overlap',Math.min(0,overlap)+'px');
+ cards.forEach((c,i)=>{c.style.zIndex=c.classList.contains('sel')?'30':String(i+1)});
+}
+window.addEventListener('resize',()=>{if(og)ogFitHand()});
+function ogRender(){ogObserveFx();let box=document.getElementById('onlineGame');if(!og){box.hidden=true;return}box.hidden=false;let me=og.ids?og.ids.indexOf(onlineSession.user.id):og.my;let hand=og.hands[me]||[],their=(me+1)%og.names.length,turn=og.turn===me&&!og.over&&!og.pending;let deciding=og.pending&&og.pending.stage!=='wait'&&(og.pending.stage==='don'?og.pending.caller:og.pending.owner)===me;
  const safe=t=>String(t).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');const card=c=>c.n===0?'🃏':c.s+(c.n===1?'A':c.n===11?'J':c.n===12?'Q':c.n===13?'K':c.n);
  const red=x=>x==='♥'||x==='♦';
  const selected=ogSelected.map(id=>hand.find(c=>c.id===id)).filter(Boolean);
@@ -1658,7 +1697,7 @@ function ogRender(){ogObserveFx();let box=document.getElementById('onlineGame');
  box.classList.add('og-felt');
  box.innerHTML='<div class="og-heading">GABACHO · ONLINE</div>'+opponentHtml+
  '<div class="og-board"><div class="og-board-title">場・山札</div><div class="og-piles"><div class="og-pile">'+'<div class="og-board-stack" style="--stack-count:'+((og.pileCards?.length)||1)+'">'+((og.pileCards?.length?og.pileCards:[og.top]).map((c,i)=>face(c,i)).join(''))+'</div><div class="og-board-target" aria-label="場の合計">場の合計 <strong>'+((og.pileCards?.length?og.pileCards.reduce((sum,c)=>sum+Number(c.n||0),0):Number(og.top?.target??og.top?.n??0)))+'</strong></div></div><div class="og-pile"><div class="og-deck"></div><span class="og-pile-label">山札</span></div><div class="og-pile"><div class="og-suit-tile '+(red(og.suit)?'og-red':'')+'">'+safe(og.suit)+'</div><span class="og-pile-label">現在のマーク</span></div></div></div>'+
- '<div class="og-msg" role="status">'+safe(og.message)+'</div>'+
+ '<div class="og-msg" role="status">'+safe(og.pending?'相手の操作を待っています…':og.message)+'</div>'+
  (ogTopChoosing?'<div class="og-top-choice"><strong>一番上にするカードを選んでください</strong><p>選んだカードのマークが次の場のマークになります</p>'+selected.slice(1).map(c=>'<button data-top-card="'+safe(c.id)+'">'+safe(card(c))+'</button>').join('')+'<button id="ogTopCancel">キャンセル</button></div>':'')+
  (deciding?'<div class="og-decision"><p>✨ '+(og.pending.stage==='don'&&og.pending.kind==='draw'&&og.pending.owner!==og.pending.caller?'引きドンできます！':(og.pending.stage==='reverse'?(og.pending.kind==='draw'?'引きドン返し':'ドン返し'):(og.pending.owner===og.pending.caller?'オナニー引きドン':og.pending.kind==='draw'?'引きドン':'ドン'))+'できます！ '+(og.pending.stage==='reverse'?'':og.pending.owner===me?'自分の場札に対してドンできます！':safe(ogWho(og.pending.owner))+'に対してドンできます！')+' 宣言しますか？')+'</p><button id="ogYes">'+(og.pending.stage==='don'&&og.pending.kind==='draw'?'引きドン！':'宣言する！')+'</button><button id="ogNo">見送る</button></div>':'')+
  '<div class="og-hand-area"><div class="og-hand-title">あなたの手札 <span class="og-me-score">'+hand.length+'枚 · 手札合計 '+hand.reduce((sum,c)=>sum+Number(c.n||0),0)+'</span></div>'+
@@ -1668,7 +1707,7 @@ function ogRender(){ogObserveFx();let box=document.getElementById('onlineGame');
  '<div class="og-actions"><button id="ogPlay" '+(!turn?'disabled':'')+(ogSuitChoosing?' hidden':'')+'>'+(selected.length===2&&selected[0].n!==0&&selected[0].n!==11?safe(selected[1].s)+'を上にしてカードを出す':'カードを出す')+'</button><button id="ogDraw" '+(!turn||og.drawn?'disabled':'')+'>'+(og.penalty?'追加で'+og.penalty.count+'枚引く':'1枚引く')+'</button><button id="ogPass" '+(!turn||!og.drawn?'disabled':'')+'>ターン終了</button></div>'+
  (og.over?'<div class="og-decision"><p>🏆 第'+(og.gameNo||1)+'ゲーム終了</p><p><strong>'+safe(og.message)+'</strong></p><p>'+safe(og.breakdown||'')+'</p><p>相手の手札：'+opponents.map(({name,i})=>safe(name)+' '+(og.hands[i]||[]).map(card).map(safe).join('・')).join(' ／ ')+'</p><p>累計：'+og.names.map((name,i)=>safe(name)+' '+Number(og.scores[i]).toLocaleString('ja-JP')+' pt').join(' ／ ')+'</p>'+(ogHost()?'<button id="ogNext">次のゲームへ ▶</button>':'<p>ホストが次のゲームを開始するのを待っています。</p>')+'</div>':'')+
  '<details class="og-chat" id="ogChat" '+(ogChatOpen?'open':'')+'><summary>💬 チャット <span id="ogUnread">'+(ogChatUnread?'（新着'+ogChatUnread+'件）':'')+'</span></summary><div class="og-chat-log" id="ogChatLog">'+ogChatMessages.map(m=>'<div><strong>'+safe(m.name)+'</strong>：'+safe(m.text)+'</div>').join('')+'</div><form id="ogChatForm"><input id="ogChatInput" maxlength="200" placeholder="メッセージ（200文字まで）" autocomplete="off"><button type="submit">送信</button></form><small>この部屋で接続中の人にだけ届きます。退出・再読み込み後の履歴は保存されません。</small></details><section class="og-live-ranking">'+rankingMarkup(og.names.map((name,i)=>({name,score:Number(og.scores[i]||0),me:i===me})))+'</section>' ;
- box.querySelector('#ogChat')?.addEventListener('toggle',e=>{ogChatOpen=e.target.open;if(ogChatOpen){ogChatUnread=0;const u=box.querySelector('#ogUnread');if(u)u.textContent=''}});box.querySelector('#ogChatForm')?.addEventListener('submit',e=>{e.preventDefault();const input=box.querySelector('#ogChatInput');ogSendChat(input?.value||'')});
+ ogFitHand();box.querySelector('#ogChat')?.addEventListener('toggle',e=>{ogChatOpen=e.target.open;if(ogChatOpen){ogChatUnread=0;const u=box.querySelector('#ogUnread');if(u)u.textContent=''}});box.querySelector('#ogChatForm')?.addEventListener('submit',e=>{e.preventDefault();const input=box.querySelector('#ogChatInput');ogSendChat(input?.value||'')});
  box.querySelectorAll('[data-top-card]').forEach(el=>el.onclick=()=>ogChooseTopCard(el.dataset.topCard));box.querySelector('#ogTopCancel')?.addEventListener('click',()=>{ogTopChoosing=false;ogRender()});box.querySelectorAll('[data-suit]').forEach(el=>el.onclick=()=>ogChooseSuit(el.dataset.suit));if(ogSuitChoosing)box.querySelector('#ogSuitCancel').onclick=()=>{ogSuitChoosing=false;ogRender()};
  box.querySelectorAll('[data-card]').forEach(el=>el.onclick=()=>{let id=el.dataset.card;if(ogSelected.includes(id))ogSelected=ogSelected.filter(x=>x!==id);else if(canPlay(hand.find(c=>c.id===id)))ogSelected.push(id);ogRender()});if(!ogHost()&&(!ogReady||ogActionPending)){box.querySelectorAll('#ogPlay,#ogDraw,#ogPass,#ogYes,#ogNo').forEach(b=>{if(b)b.disabled=true})}box.querySelector('#ogPlay').onclick=()=>ogAction('play');box.querySelector('#ogDraw').onclick=()=>ogAction('draw');box.querySelector('#ogPass').onclick=()=>ogAction('pass');if(og.over&&ogHost()){box.querySelector('#ogNext')?.addEventListener('click',()=>onlineBegin(true))}if(deciding){box.querySelector('#ogYes').onclick=()=>ogActionDecision(true);box.querySelector('#ogNo').onclick=()=>ogActionDecision(false)}
 }
