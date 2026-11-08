@@ -794,9 +794,9 @@ body.don-screen-shake{animation:donScreenShake 850ms cubic-bezier(.35,.05,.6,.95
 .rematch-actions{display:flex;flex-direction:column;gap:9px;margin:12px auto;max-width:390px}
 .rematch-actions[hidden]{display:none!important}
 .rematch-actions .entry-primary,.rematch-actions .entry-back{margin:0;width:100%}
-</style><div id="donFx" aria-hidden="true"><div class="don-fx-dark"></div><div class="don-fx-wash"></div><div class="don-fx-burst"></div><div class="don-fx-ring"></div><div class="don-fx-ring ring-two"></div><div class="don-fx-inferno"></div><div class="don-fx-sparks"></div><div class="don-fx-debris"></div><svg class="don-fx-lightning" viewBox="0 0 360 720" preserveAspectRatio="none" aria-hidden="true"><path class="bolt-halo" d="M18 0 L74 99 L54 155 L143 236 L119 302 L180 360"/><path class="bolt-core" d="M18 0 L74 99 L54 155 L143 236 L119 302 L180 360"/><path class="bolt-halo" d="M350 0 L289 91 L314 160 L225 231 L247 294 L180 360"/><path class="bolt-core" d="M350 0 L289 91 L314 160 L225 231 L247 294 L180 360"/><path class="bolt-small" d="M0 440 L78 412 L105 362 L160 351 M360 468 L280 426 L250 384 L192 365 M90 720 L133 586 L116 510 L179 379"/></svg><div class="don-fx-impact"></div><div class="don-fx-flash"></div><div class="don-fx-word">ドン！</div></div><div id="lossCrackScreen" aria-hidden="true"></div><header class="brand"><h1>がばちょ <small>v0.0.33</small></h1><span class="brand-sub">GABACHO CARD GAME</span></header><p class="muted">相手の裏向きトランプと枚数を表示／CPU対戦／2〜5人／ジョーカー2〜4枚／A・2・8対応／終了時にCPU手札公開</p>
+</style><div id="donFx" aria-hidden="true"><div class="don-fx-dark"></div><div class="don-fx-wash"></div><div class="don-fx-burst"></div><div class="don-fx-ring"></div><div class="don-fx-ring ring-two"></div><div class="don-fx-inferno"></div><div class="don-fx-sparks"></div><div class="don-fx-debris"></div><svg class="don-fx-lightning" viewBox="0 0 360 720" preserveAspectRatio="none" aria-hidden="true"><path class="bolt-halo" d="M18 0 L74 99 L54 155 L143 236 L119 302 L180 360"/><path class="bolt-core" d="M18 0 L74 99 L54 155 L143 236 L119 302 L180 360"/><path class="bolt-halo" d="M350 0 L289 91 L314 160 L225 231 L247 294 L180 360"/><path class="bolt-core" d="M350 0 L289 91 L314 160 L225 231 L247 294 L180 360"/><path class="bolt-small" d="M0 440 L78 412 L105 362 L160 351 M360 468 L280 426 L250 384 L192 365 M90 720 L133 586 L116 510 L179 379"/></svg><div class="don-fx-impact"></div><div class="don-fx-flash"></div><div class="don-fx-word">ドン！</div></div><div id="lossCrackScreen" aria-hidden="true"></div><header class="brand"><h1>がばちょ <small>v0.0.34</small></h1><span class="brand-sub">GABACHO CARD GAME</span></header><p class="muted">相手の裏向きトランプと枚数を表示／CPU対戦／2〜5人／ジョーカー2〜4枚／A・2・8対応／終了時にCPU手札公開</p>
 <div id="homeScreen" class="entry-screen"><div class="entry-emblem">🃏</div><div class="entry-overline">THE CARD GAME</div><h2 class="entry-title">がばちょ</h2><p class="entry-lead">ドンを狙え。ジョーカーで逆転。</p><button class="entry-primary" onclick="showSettings()">ゲームスタート <span>▶</span></button><button class="entry-primary" onclick="showOnline()">🌐 オンラインで遊ぶ</button><button class="entry-back" onclick="showRanking()">🏆 全国ランキング</button><button class="entry-back rules-open" onclick="showRules()">📖 ルール説明</button><p class="entry-note">CPU対戦 · 2〜5人 · オフライン対応</p></div>
-<div id="onlineScreen" class="entry-screen" hidden><div class="entry-overline">ONLINE LOBBY · BETA</div><h2 class="entry-heading">🌐 オンライン対戦ロビー</h2><p class="entry-lead">部屋コードを共有して友達と集合</p><div class="online-fields"><label>ニックネーム<input id="onlineName" maxlength="20" placeholder="名前を入力" autocomplete="nickname"></label><label>部屋コード<input id="onlineCode" maxlength="8" placeholder="例：AB12CD" autocapitalize="characters"></label></div><button class="entry-primary" onclick="createOnlineRoom()">部屋を作る</button><button class="entry-primary" onclick="joinOnlineRoom()">コードで参加</button><p id="onlineMessage" role="status"></p><div id="onlineLobby" hidden><h3>部屋コード：<span id="onlineRoomCode"></span></h3><button onclick="copyOnlineCode()">コードをコピー</button><div id="onlineMembers"></div><button id="onlineStart" onclick="startOnlineMatch()" hidden>ゲーム開始</button><p class="muted">2〜3人対戦β版。参加人数に合わせて開始します。ホストが接続中の間、ゲームが同期されます。通信が切れたら新しい部屋でやり直してください。</p><div id="onlineGame" hidden></div><button class="entry-back" onclick="leaveOnlineRoom()">部屋から退出</button></div><button class="entry-back" onclick="leaveOnlineRoom();showHome()">← ホームへ戻る</button></div>
+<div id="onlineScreen" class="entry-screen" hidden><div class="entry-overline">ONLINE LOBBY · BETA</div><h2 class="entry-heading">🌐 オンライン対戦ロビー</h2><p class="entry-lead">部屋コードを共有して友達と集合</p><div class="online-fields"><label>ニックネーム<input id="onlineName" maxlength="20" placeholder="名前を入力" autocomplete="nickname"></label><label>部屋コード<input id="onlineCode" maxlength="8" placeholder="例：AB12CD" autocapitalize="characters"></label></div><button class="entry-primary" onclick="createOnlineRoom()">部屋を作る</button><button class="entry-primary" onclick="joinOnlineRoom()">コードで参加</button><p id="onlineMessage" role="status"></p><div id="onlineLobby" hidden><h3>部屋コード：<span id="onlineRoomCode"></span></h3><button onclick="copyOnlineCode()">コードをコピー</button><div id="onlineMembers"></div><button id="onlineStart" onclick="startOnlineMatch()" hidden>ゲーム開始</button><p class="muted">2〜3人対戦β版。参加人数に合わせて開始します。ホストが接続中の間、ゲームが同期されます。通信が一時的に切れた場合は自動で再接続を試みます。ホストの退出には未対応です。</p><p id="onlineConnectionStatus" role="status" style="font-size:13px;color:#ffe3a1;margin:8px 0">通信：接続待ち</p><div id="onlineGame" hidden></div><button class="entry-back" onclick="leaveOnlineRoom()">部屋から退出</button></div><button class="entry-back" onclick="leaveOnlineRoom();showHome()">← ホームへ戻る</button></div>
 <div id="rulesScreen" class="entry-screen rules-screen" hidden><div class="entry-overline">HOW TO PLAY</div><h2 class="entry-heading">📖 がばちょのルール</h2><div class="rules-body"><h3>🎯 勝利条件</h3><p>相手が場に出したカードの数字の合計と、自分の手札の数字の合計が一致したら「ドン！」。ドンが成立するとそのゲームは終了し、得点を精算します。設定したゲーム数が終わった時点の総合得点が最も高い人が優勝！</p><h3>🃏 基本の出し方</h3><p>最初の手札は5枚。場と同じマークか同じ数字のカードを出せます。同じ数字はまとめて複数枚出せます。Jはいつでも出せて、次のマークを指定できます。ジョーカーは場に出せず、手札に残してドンの得点倍率を高めるカードです。Aは1、ジョーカーは0として計算します。</p><h3>⚡ 特殊カード</h3><p><b>A：</b>次の人を1人飛ばします。複数枚ならその枚数分飛ばします。<br><b>2・8：</b>次の人は追加で2枚引きます。同じ数字を重ねて返せます。<br><b>ジョーカー：</b>場には出せません。手札に持っているとドンの得点倍率が上がります。</p><h3>🔁 ターンとドロー</h3><p>出せるカードがなければ1枚引きます。1ターンに任意で引けるのは1枚まで。2・8などで追加のカードを引いた後も、出せるカードがなければさらに1枚引く必要があります。</p><h3>💰 ドンと得点</h3><p>通常ドンは、ドンした人以外の手札枚数合計×100点が基本。ドンした人の手札のジョーカー1枚ごとに獲得点数が2倍になります。ドンされた人も手札合計が一致すれば「ドン返し」が可能で、通常ドン返しは2倍です。</p><p>1枚引いて成立する「引きドン」は基本点が2倍、「引きドン返し」は4倍。自分の出した場札に引きドンする「オナニー引きドン」は2倍で、ほかの全員が均等に支払います。山札の再シャッフルで巡目が進むと得点倍率も上がります。</p><h3>🌟 スタドン（開始時ドン）</h3><p>ゲーム開始直後、最初の場札の数字と自分の手札5枚の数字の合計が一致すると、カードを出す前にスタドンで即勝利！ Aは1、Jは11、Qは12、Kは13、ジョーカーは0として計算します。複数人が同時に成立した場合は先手から順番に優先します。</p><p><b>得点：</b>自分以外の全員の手札枚数合計 × 100点 × 4倍 × 2<sup>スタドン成功者の手札のジョーカー枚数</sup>。この点数を相手全員から<b>それぞれ</b>受け取ります（分担ではありません）。例：4人対戦で相手が各5枚、成功者の手札にジョーカーが2枚なら15枚×100点×4×4＝24,000点。勝者は＋72,000点、相手3人はそれぞれ−24,000点。</p><h3>🏆 最終優勝</h3><p>各ゲームの得点を累積し、全ゲーム終了後に総合1位を発表。同点1位は同時優勝です。</p></div><button class="entry-primary" onclick="showHome()">ホームへ戻る</button></div>
 <div id="rankingScreen" class="entry-screen" hidden><div class="entry-overline">NATIONAL LEADERBOARD</div><h2 class="entry-heading">🏆 全国ランキング</h2><p class="entry-lead">ジョーカー2枚で遊んだCPU対戦の総合得点</p><div class="ranking-filters"><label>ゲーム数 <select id="rankingGames" onchange="loadRanking()"><option value="1">1ゲーム</option><option value="5">5ゲーム</option><option value="10" selected>10ゲーム</option><option value="20">20ゲーム</option></select></label><label>対戦人数 <select id="rankingPlayers" onchange="loadRanking()"><option value="all">すべて</option><option value="2">2人</option><option value="3">3人</option><option value="4">4人</option><option value="5">5人</option></select></label></div><div id="rankingStatus" class="entry-lead" role="status">ランキングを読み込み中…</div><div id="rankingRows" class="ranking-rows"></div><button class="entry-back" onclick="showHome()">← ホームへ戻る</button></div>
 <div id="settingsScreen" class="entry-screen" hidden><div class="entry-overline">GAME SETTINGS</div><h2 class="entry-heading">対戦条件を選択</h2><p class="entry-lead">人数・ジョーカー・ゲーム数を決めよう</p><div class="settings-fields"><label>対戦人数 <select id="count"><option>2</option><option>3</option><option selected>4</option><option>5</option></select></label><label>ジョーカー <select id="jokers"><option value="2" selected>2枚</option><option value="3">3枚</option><option value="4">4枚</option></select></label><label>ゲーム数 <select id="games"><option>1</option><option>5</option><option selected>10</option><option>20</option></select></label><label>CPUの強さ <select id="cpuDifficulty" onchange="updateCpuDifficultyDescription()"><option value="easy">よわい</option><option value="normal" selected>ふつう</option><option value="hard">つよい</option><option value="expert">もっとつよい</option></select><p id="cpuDifficultyDescription" class="cpu-difficulty-desc">複数枚出しや基本的な戦略を使う。</p></label></div><button class="entry-primary" onclick="startFromSettings()">この条件で開始 <span>▶</span></button><button class="entry-back" onclick="showHome()">← ホームへ戻る</button></div>
@@ -1425,23 +1425,51 @@ showHome();
 // v0.43 two-person online beta. Host is the authority for game actions.
 // Supabase Realtime broadcast is ephemeral; games are not persisted and require host online.
 let og=null,ogSocket=null,ogReady=false,ogQueue=[],ogSelected=[],ogSeq=0,ogReconnect=null,ogConnecting=false,ogHeartbeat=null,ogSuitChoosing=false,ogTopChoosing=false;
+// v0.0.34: host-authoritative revisions and single in-flight client action.
+let ogActionPending=null,ogActionTimer=null,ogStateRevision=-1,ogSyncTimer=null,ogLastStateAt=0,ogConnectionStatus='接続待ち',ogReceivedActions=new Set();
+function ogStatus(status){ogConnectionStatus=status;const el=document.getElementById('onlineConnectionStatus');if(el)el.textContent='通信：'+status}
+function ogClearPending(){ogActionPending=null;clearTimeout(ogActionTimer);ogActionTimer=null}
+function ogRequestSync(){if(ogHost()||!ogReady)return;onlineSend('hello',{knownSeq:ogStateRevision})}
+function ogClientAction(data){
+ if(!ogReady||ogSocket?.readyState!==1){ogStatus('通信待ち（操作不可）');return false}
+ if(ogActionPending)return false;
+ const id=onlineSession.user.id+':'+Date.now()+':'+(++ogSeq);
+ ogActionPending={id,at:Date.now()};
+ onlineSend('action',{...data,actionId:id,baseSeq:ogStateRevision});
+ ogActionTimer=setTimeout(()=>{if(ogActionPending?.id!==id)return;ogClearPending();ogStatus('応答待ち・再同期中');ogRequestSync();ogRender()},6500);
+ ogRender();return true;
+}
+function ogSyncMonitor(){clearInterval(ogSyncTimer);ogSyncTimer=setInterval(()=>{if(!onlineRoom||!og||ogHost()||!ogReady)return;if(Date.now()-ogLastStateAt>12000)ogRequestSync()},12000)}
 const ogHost=()=>onlineRoom&&onlineSession?.user?.id===onlineRoom.host_id;
 function onlineConnect(){
  if(!onlineRoom||!onlineSession||ogSocket&&[0,1].includes(ogSocket.readyState)||ogConnecting)return;
  ogConnecting=true;
  const ws=new WebSocket(SB_URL.replace(/^http/,'ws')+'/realtime/v1/websocket?apikey='+encodeURIComponent(SB_KEY)+'&vsn=1.0.0');ogSocket=ws;ogReady=false;
- ws.onopen=()=>{ogConnecting=false;clearInterval(ogHeartbeat);ogHeartbeat=setInterval(()=>{if(ws.readyState===1)ws.send(JSON.stringify({topic:'phoenix',event:'heartbeat',payload:{},ref:String(++ogSeq)}))},20000);ws.send(JSON.stringify({topic:'realtime:gabacho-'+onlineRoom.id,event:'phx_join',payload:{config:{broadcast:{self:false,ack:false},presence:{key:onlineSession.user.id}},access_token:onlineSession.access_token},ref:String(++ogSeq)}))};
- ws.onmessage=e=>{try{let x=JSON.parse(e.data);if(x.event==='phx_reply'&&x.payload?.status==='ok'){ogReady=true;while(ogQueue.length)onlineSend(...ogQueue.shift());if(!ogHost())onlineSend('hello',{})}if(x.event==='broadcast'){let m=x.payload?.payload;if(m)onlineReceive(m)}if(x.event==='phx_error'||x.event==='phx_close'){ogReady=false}}catch(err){console.warn(err)}};
- ws.onclose=()=>{clearInterval(ogHeartbeat);ogReady=false;ogConnecting=false;if(onlineRoom){clearTimeout(ogReconnect);ogReconnect=setTimeout(onlineConnect,2200)}};
- ws.onerror=()=>{ogConnecting=false};
+ ws.onopen=()=>{ogConnecting=false;ogStatus('参加処理中');clearInterval(ogHeartbeat);ogHeartbeat=setInterval(()=>{if(ws.readyState===1)ws.send(JSON.stringify({topic:'phoenix',event:'heartbeat',payload:{},ref:String(++ogSeq)}))},20000);ws.send(JSON.stringify({topic:'realtime:gabacho-'+onlineRoom.id,event:'phx_join',payload:{config:{broadcast:{self:false,ack:false},presence:{key:onlineSession.user.id}},access_token:onlineSession.access_token},ref:String(++ogSeq)}))};
+ ws.onmessage=e=>{try{let x=JSON.parse(e.data);if(x.event==='phx_reply'&&x.payload?.status==='ok'&&x.payload?.response){ogReady=true;ogStatus('接続中');while(ogQueue.length)onlineSend(...ogQueue.shift());if(!ogHost())ogRequestSync();ogSyncMonitor();ogRender()}if(x.event==='broadcast'){let m=x.payload?.payload;if(m)onlineReceive(m)}if(x.event==='phx_error'||x.event==='phx_close'){ogReady=false;ogClearPending();ogStatus('再接続中');ogRender()}}catch(err){console.warn(err)}};
+ ws.onclose=()=>{clearInterval(ogHeartbeat);ogReady=false;ogConnecting=false;ogClearPending();ogStatus('再接続中');ogRender();if(onlineRoom){clearTimeout(ogReconnect);ogReconnect=setTimeout(onlineConnect,2200)}};
+ ws.onerror=()=>{ogConnecting=false;ogStatus('通信エラー')};
 }
-function onlineDisconnect(){ogChatMessages=[];ogChatUnread=0;ogChatOpen=false;clearInterval(ogHeartbeat);clearTimeout(ogReconnect);og=null;ogQueue=[];ogSuitChoosing=false;ogTopChoosing=false;ogReady=false;ogSocket?.close();ogSocket=null;document.getElementById('onlineGame').hidden=true}
-function onlineSend(type,data){if(!onlineRoom)return;if(!ogReady||ogSocket?.readyState!==1){if(ogQueue.length<15)ogQueue.push([type,data]);return}ogSocket.send(JSON.stringify({topic:'realtime:gabacho-'+onlineRoom.id,event:'broadcast',payload:{event:'game',payload:{type,data,from:onlineSession.user.id}},ref:String(++ogSeq)}))}
+function onlineDisconnect(){ogChatMessages=[];ogChatUnread=0;ogChatOpen=false;clearInterval(ogHeartbeat);clearTimeout(ogReconnect);og=null;ogQueue=[];ogClearPending();clearInterval(ogSyncTimer);ogStateRevision=-1;ogReceivedActions.clear();ogStatus('切断');ogSuitChoosing=false;ogTopChoosing=false;ogReady=false;ogSocket?.close();ogSocket=null;document.getElementById('onlineGame').hidden=true}
+function onlineSend(type,data){if(!onlineRoom)return;if(!ogReady||ogSocket?.readyState!==1){if(type==='chat'&&ogQueue.length<5)ogQueue.push([type,data]);return}ogSocket.send(JSON.stringify({topic:'realtime:gabacho-'+onlineRoom.id,event:'broadcast',payload:{event:'game',payload:{type,data,from:onlineSession.user.id}},ref:String(++ogSeq)}))}
 function onlineReceive(m){if(!onlineRoom)return;
  if(m.type==='chat'&&og?.ids?.includes(m.from)){ogAddChat(m.from,m.data?.text);return}
- if(m.type==='hello'&&ogHost()&&og){ogSendState();return}
- if(m.type==='state'&&m.data?.to===onlineSession.user.id){og=m.data.state;ogSelected=[];ogSuitChoosing=false;ogTopChoosing=false;ogRender();return}
- if(m.type==='action'&&ogHost()&&og&&og.ids.includes(m.from)){ogApply(m.data,m.from)}
+ if(m.type==='hello'&&ogHost()&&og&&og.ids.includes(m.from)){ogSendState(m.from);return}
+ if(m.type==='state'&&m.from===onlineRoom.host_id&&m.data?.to===onlineSession.user.id){
+  const next=m.data.state,rev=Number(next?.seq);
+  if(!Number.isSafeInteger(rev)||rev<ogStateRevision)return;
+  if(rev===ogStateRevision&&og)return;
+  ogStateRevision=rev;ogLastStateAt=Date.now();og=next;ogClearPending();ogStatus('接続中');ogSelected=[];ogSuitChoosing=false;ogTopChoosing=false;ogRender();return}
+ if(m.type==='actionAck'&&m.from===onlineRoom.host_id&&m.data?.to===onlineSession.user.id){
+  if(ogActionPending?.id===m.data.actionId){ogClearPending();if(!m.data.ok){ogStatus('操作を再確認中');ogRequestSync()}ogRender()}return}
+
+ if(m.type==='action'&&ogHost()&&og&&og.ids.includes(m.from)){
+  const a=m.data||{};if(typeof a.actionId!=='string'||a.actionId.length>160)return;
+  if(ogReceivedActions.has(a.actionId)){onlineSend('actionAck',{to:m.from,actionId:a.actionId,ok:true});ogSendState(m.from);return}
+  if(a.baseSeq!==og.seq){onlineSend('actionAck',{to:m.from,actionId:a.actionId,ok:false});ogSendState(m.from);return}
+  ogReceivedActions.add(a.actionId);if(ogReceivedActions.size>300)ogReceivedActions.clear();
+  ogApply(a,m.from);onlineSend('actionAck',{to:m.from,actionId:a.actionId,ok:true});return}
+
 }
 function ogAddChat(from,txt){
  if(typeof txt!=='string'||!txt.trim()||txt.length>200)return;
@@ -1485,7 +1513,13 @@ function ogCheckStartDon(){
  return true;
 }
 function ogPublic(i){return {...og,deck:undefined,discard:undefined,hands:og.hands.map((h,j)=>j===i||og.over?h:[]),counts:og.hands.map(h=>h.length),my:i}}
-function ogSendState(){if(!ogHost()||!og)return;for(let i=0;i<og.ids.length;i++){let state=ogPublic(i);if(i===og.ids.indexOf(onlineSession.user.id)){ogRender()}else onlineSend('state',{to:og.ids[i],state})}}
+function ogSendState(onlyId=null){if(!ogHost()||!og)return;
+ if(!onlyId)og.seq=(Number(og.seq)||0)+1;
+ for(let i=0;i<og.ids.length;i++){
+  if(onlyId&&og.ids[i]!==onlyId)continue;
+  const state=ogPublic(i);
+  if(og.ids[i]===onlineSession.user.id){ogRender()}else onlineSend('state',{to:og.ids[i],state});
+ }}
 function ogTake(p){if(!og.deck.length&&og.discard.length){og.deck=og.discard.splice(0);for(let i=og.deck.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[og.deck[i],og.deck[j]]=[og.deck[j],og.deck[i]]}og.round++}if(!og.deck.length)return false;og.hands[p].push(og.deck.pop());return true}
 function ogAdvance(steps=1){og.turn=(og.turn+steps)%og.hands.length;og.drawn=false;og.forcedDraw=false;og.message=ogWho(og.turn)+'の番'}
 function ogEnd(type,winner,loser,extra=1){
@@ -1567,7 +1601,7 @@ function ogApply(action,from){if(!ogHost()||!og||og.over)return;let p=og.ids.ind
  }catch(e){console.error(e);onlineMsg('操作エラー：'+e.message)}}
 function ogAction(type){if(!og||og.over)return;let me=og.ids?og.ids.indexOf(onlineSession.user.id):og.my;if(type!=='decision'&&(me!==og.turn||og.pending))return;
  let data={type};if(type==='play'){let hand=og.hands[me],cs=ogSelected.map(id=>hand.find(c=>c.id===id)).filter(Boolean);if(!cs.length)return;data.ids=cs.map(c=>c.id);if(cs[0].n===0||cs[0].n===11){ogSuitChoosing=true;ogRender();return}if(cs.length===2){data.topId=cs[1].id}else if(cs.length>2){ogTopChoosing=true;ogRender();return}}
- if(ogHost())ogApply(data,onlineSession.user.id);else onlineSend('action',data);ogSelected=[];ogRender()}
+ if(ogHost())ogApply(data,onlineSession.user.id);else ogClientAction(data);ogSelected=[];ogRender()}
 function ogChooseTopCard(id){
  if(!ogTopChoosing||!og)return;
  const me=og.ids?og.ids.indexOf(onlineSession.user.id):og.my;
@@ -1575,7 +1609,7 @@ function ogChooseTopCard(id){
  if(cs.length<2||!cs.slice(1).some(c=>String(c.id)===String(id)))return;
  const data={type:'play',ids:cs.map(c=>c.id),topId:cs.find(c=>String(c.id)===String(id)).id};
  ogTopChoosing=false;ogSelected=[];
- if(ogHost())ogApply(data,onlineSession.user.id);else onlineSend('action',data);
+ if(ogHost())ogApply(data,onlineSession.user.id);else ogClientAction(data);
  ogRender();
 }
 function ogChooseSuit(s){
@@ -1585,10 +1619,10 @@ function ogChooseSuit(s){
  if(!cs.length||!(cs[0].n===0||cs[0].n===11)){ogSuitChoosing=false;ogRender();return}
  const data={type:'play',ids:cs.map(c=>c.id),suit:s};if(cs.length>1)data.topId=cs[cs.length-1].id;
  ogSuitChoosing=false;ogSelected=[];
- if(ogHost())ogApply(data,onlineSession.user.id);else onlineSend('action',data);
+ if(ogHost())ogApply(data,onlineSession.user.id);else ogClientAction(data);
  ogRender();
 }
-function ogActionDecision(yes){if(!og?.pending)return;const data={type:'decision',yes};if(ogHost())ogApply(data,onlineSession.user.id);else onlineSend('action',data)}
+function ogActionDecision(yes){if(!og?.pending)return;const data={type:'decision',yes};if(ogHost())ogApply(data,onlineSession.user.id);else ogClientAction(data)}
 
 let ogFxSeenGame='',ogFxSeenAccept='',ogFxSeenResult='';
 function ogObserveFx(){
@@ -1634,6 +1668,6 @@ function ogRender(){ogObserveFx();let box=document.getElementById('onlineGame');
  '<details class="og-chat" id="ogChat" '+(ogChatOpen?'open':'')+'><summary>💬 チャット <span id="ogUnread">'+(ogChatUnread?'（新着'+ogChatUnread+'件）':'')+'</span></summary><div class="og-chat-log" id="ogChatLog">'+ogChatMessages.map(m=>'<div><strong>'+safe(m.name)+'</strong>：'+safe(m.text)+'</div>').join('')+'</div><form id="ogChatForm"><input id="ogChatInput" maxlength="200" placeholder="メッセージ（200文字まで）" autocomplete="off"><button type="submit">送信</button></form><small>この部屋で接続中の人にだけ届きます。退出・再読み込み後の履歴は保存されません。</small></details><section class="og-live-ranking">'+rankingMarkup(og.names.map((name,i)=>({name,score:Number(og.scores[i]||0),me:i===me})))+'</section>' ;
  box.querySelector('#ogChat')?.addEventListener('toggle',e=>{ogChatOpen=e.target.open;if(ogChatOpen){ogChatUnread=0;const u=box.querySelector('#ogUnread');if(u)u.textContent=''}});box.querySelector('#ogChatForm')?.addEventListener('submit',e=>{e.preventDefault();const input=box.querySelector('#ogChatInput');ogSendChat(input?.value||'')});
  box.querySelectorAll('[data-top-card]').forEach(el=>el.onclick=()=>ogChooseTopCard(el.dataset.topCard));box.querySelector('#ogTopCancel')?.addEventListener('click',()=>{ogTopChoosing=false;ogRender()});box.querySelectorAll('[data-suit]').forEach(el=>el.onclick=()=>ogChooseSuit(el.dataset.suit));if(ogSuitChoosing)box.querySelector('#ogSuitCancel').onclick=()=>{ogSuitChoosing=false;ogRender()};
- box.querySelectorAll('[data-card]').forEach(el=>el.onclick=()=>{let id=el.dataset.card;if(ogSelected.includes(id))ogSelected=ogSelected.filter(x=>x!==id);else if(canPlay(hand.find(c=>c.id===id)))ogSelected.push(id);ogRender()});box.querySelector('#ogPlay').onclick=()=>ogAction('play');box.querySelector('#ogDraw').onclick=()=>ogAction('draw');box.querySelector('#ogPass').onclick=()=>ogAction('pass');if(og.over&&ogHost()){box.querySelector('#ogNext')?.addEventListener('click',()=>onlineBegin(true))}if(deciding){box.querySelector('#ogYes').onclick=()=>ogActionDecision(true);box.querySelector('#ogNo').onclick=()=>ogActionDecision(false)}
+ box.querySelectorAll('[data-card]').forEach(el=>el.onclick=()=>{let id=el.dataset.card;if(ogSelected.includes(id))ogSelected=ogSelected.filter(x=>x!==id);else if(canPlay(hand.find(c=>c.id===id)))ogSelected.push(id);ogRender()});if(!ogHost()&&(!ogReady||ogActionPending)){box.querySelectorAll('#ogPlay,#ogDraw,#ogPass,#ogYes,#ogNo').forEach(b=>{if(b)b.disabled=true})}box.querySelector('#ogPlay').onclick=()=>ogAction('play');box.querySelector('#ogDraw').onclick=()=>ogAction('draw');box.querySelector('#ogPass').onclick=()=>ogAction('pass');if(og.over&&ogHost()){box.querySelector('#ogNext')?.addEventListener('click',()=>onlineBegin(true))}if(deciding){box.querySelector('#ogYes').onclick=()=>ogActionDecision(true);box.querySelector('#ogNo').onclick=()=>ogActionDecision(false)}
 }
 </script></body></html>
