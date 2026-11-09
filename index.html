@@ -560,12 +560,12 @@ section.details{margin-top:5px!important}
 #drawDonHint.draw-don-hint{margin:7px 2px 6px;padding:9px 12px;border:1px solid #e5bd65;border-radius:11px;background:#233d2d;color:#fff0c1;font-size:13px;font-weight:700;line-height:1.45;text-align:center}
 #drawDonHint[hidden]{display:none!important}
 
-/* v0.0.46: highlight the precise next action during a real 4-player tutorial */
+/* v0.0.48: highlight the precise next action during a real 4-player tutorial */
 @keyframes tutorialPulse{0%,100%{box-shadow:0 0 0 3px #ffda66,0 0 14px 5px #f6c453aa;transform:translateY(0)}50%{box-shadow:0 0 0 5px #fff3b4,0 0 25px 10px #f6c453dd;transform:translateY(-4px)}}
 .tutorial-spotlight{animation:tutorialPulse 1.15s ease-in-out infinite!important;position:relative;z-index:8;outline:3px solid #fbd16c!important;outline-offset:2px}
 #tutorialRealBanner{position:sticky!important;top:4px;z-index:20!important;box-shadow:0 4px 14px #0006}
 
-/* v0.0.46 fixed four-player guided tutorial */
+/* v0.0.48 fixed four-player guided tutorial */
 #gameScreen.tutorial-fixed > :not(#fixedTutorial){display:none!important}
 #fixedTutorial{max-width:700px;margin:auto;padding:12px;color:#f7f5e8;font-family:inherit}
 .ft-top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}.ft-top button,.ft-next{border:0;border-radius:9px;background:#f1ca73;color:#20352d;padding:10px 13px;font-weight:800}
@@ -573,6 +573,13 @@ section.details{margin-top:5px!important}
 .ft-seat{text-align:center;background:#0c3028b8;border-radius:12px;padding:7px;font-size:12px}.ft-seat b{font-size:14px}.ft-seat .ft-backs{color:#d9e9fa;letter-spacing:2px;margin:5px 0}.ft-middle{display:grid;grid-template-columns:1fr 1.2fr 1fr;gap:6px;align-items:center}.ft-center{text-align:center;display:flex;flex-direction:column;align-items:center;gap:5px}.ft-card{min-width:47px;height:67px;border-radius:7px;background:#fff;color:#182c25;border:2px solid #ddd;display:inline-flex;flex-direction:column;justify-content:center;align-items:center;font-size:18px;font-weight:900;line-height:1.2;padding:2px;box-shadow:0 3px 6px #0005}.ft-card.red{color:#d43c49}.ft-card.back{background:#285e96;color:white}.ft-card:disabled{opacity:.72}.ft-card.ft-glow,.ft-next.ft-glow{animation:tutorialPulse 1.1s infinite!important;border-color:#f8cf5e;cursor:pointer;z-index:2}
 .ft-hand{display:flex;justify-content:center;gap:3px;flex-wrap:wrap;margin-top:8px}.ft-hand .ft-card{min-width:43px;width:50px;height:70px}.ft-hand .ft-card.ft-selected{border:3px solid #6ce5c6;box-shadow:0 0 0 3px #0c8c75,0 0 14px #6ce5c6;transform:translateY(-9px)}
 .ft-message{background:#fff3c6;color:#273b30;border-radius:12px;padding:13px;margin:12px 0;line-height:1.6;font-weight:700}.ft-progress{font-size:12px;color:#e8d9a8}.ft-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}.ft-actions button{padding:11px 16px;border-radius:10px;border:2px solid #f3ca65;background:#f3ca65;color:#20352d;font-weight:800}.ft-actions button:disabled{opacity:.45}.ft-scores{background:#0c3028b8;border-radius:10px;padding:7px;font-size:12px;text-align:center}.ft-scores span{display:inline-block;margin:2px 5px}
+
+/* v0.0.48: reuse production opponent card-back styling in guided tutorial. */
+#fixedTutorial .ft-backs.back-hand{display:flex;position:relative;align-items:center;justify-content:center;width:min(100%,136px);height:64px;min-height:64px;margin:5px auto 4px;overflow:visible;letter-spacing:normal;color:inherit}
+#fixedTutorial .ft-backs .back-card{display:block;flex:0 0 auto;width:34px;height:51px;margin-left:-24px;border:2px solid #e9f4ff;border-radius:5px;background:repeating-linear-gradient(45deg,#164d8e 0 4px,#2769ae 4px 7px,#164d8e 7px 11px);box-shadow:0 2px 5px #0007;position:relative;transform:rotate(var(--angle));}
+#fixedTutorial .ft-backs .back-card:first-child{margin-left:0}
+#fixedTutorial .ft-backs .back-card::after{content:'◆';position:absolute;inset:5px 4px;border:1px solid #c5defc;color:#c5defc;font-size:13px;text-align:center;line-height:34px;background:#ffffff14}
+@media(max-width:390px){#fixedTutorial .ft-backs.back-hand{height:54px;min-height:54px;width:100%}#fixedTutorial .ft-backs .back-card{width:29px;height:44px;margin-left:-21px}#fixedTutorial .ft-backs .back-card::after{inset:4px 3px;line-height:29px;font-size:11px}}
 </style><style id="online-style">#onlineScreen .online-fields{display:grid;gap:12px;margin:15px auto;max-width:330px}#onlineScreen label{display:grid;gap:5px;text-align:left;color:#f5e1ac;font-weight:700}#onlineScreen input{width:100%;padding:13px;border-radius:10px;border:1px solid #d6b967;background:#fffdf6;color:#17382c;font-size:17px}#onlineMessage{min-height:2em;color:#ffe18d;white-space:pre-wrap}#onlineLobby{margin:16px auto;padding:14px;border:1px solid #d7b66b;border-radius:15px;background:#08382d}#onlineMembers{margin:12px 0;text-align:left;line-height:2}#onlineRoomCode{letter-spacing:3px;color:#ffe18d}#onlineScreen .entry-primary{margin:5px}#onlineGame .og-decision{border:2px solid #f7d47a;border-radius:14px;padding:10px;margin:10px 0;background:#174b39}#onlineGame .og-decision button{margin:5px;background:#ffe19a;color:#17382d;font-weight:800}
 
 /* v0.67: online match uses the CPU felt-table visual language. */
@@ -835,7 +842,7 @@ body.don-screen-shake{animation:donScreenShake 850ms cubic-bezier(.35,.05,.6,.95
 #onlineGame .og-chat-log{overscroll-behavior:contain}
 </style><style>
 #tutorialScreen{max-width:680px;margin:0 auto;padding:18px 12px 50px;color:#f5f5ee}.tut-head{text-align:center}.tut-head h2{font-size:25px;margin:6px}.tut-progress{display:flex;gap:5px;margin:15px 0}.tut-progress i{height:6px;flex:1;background:#4a615a;border-radius:8px}.tut-progress i.on{background:#f4c96c}.tut-panel{background:#16332e;border:1px solid #6d8d78;border-radius:17px;padding:17px;margin:12px 0}.tut-hint{font-size:15px;line-height:1.7;min-height:54px}.tut-table{display:grid;gap:14px;justify-items:center;padding:15px 0}.tut-cpu{font-size:15px}.tut-board{display:flex;gap:22px;align-items:center}.tut-card{width:65px;height:93px;border:2px solid #d4d7d2;border-radius:9px;background:#fff;color:#17251f;font-size:26px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-direction:column;box-shadow:0 4px 10px #0005}.tut-card.red{color:#c62940}.tut-card.can{border:3px solid #f4ca58;box-shadow:0 0 14px #f2ca5caa;cursor:pointer}.tut-card:disabled{opacity:.48;cursor:default}.tut-hand{display:flex;flex-wrap:wrap;justify-content:center;gap:7px;min-height:99px}.tut-btns{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin-top:14px}.tut-btns button{border:0;border-radius:10px;padding:12px 17px;background:#f2c96b;color:#17251f;font-weight:800}.tut-btns button.secondary{background:#3b6256;color:white}.tut-status{text-align:center;font-weight:700;color:#f7d27a;min-height:26px}.tut-label{font-size:12px;opacity:.8}
-</style><div id="donFx" aria-hidden="true"><div class="don-fx-dark"></div><div class="don-fx-wash"></div><div class="don-fx-burst"></div><div class="don-fx-ring"></div><div class="don-fx-ring ring-two"></div><div class="don-fx-inferno"></div><div class="don-fx-sparks"></div><div class="don-fx-debris"></div><svg class="don-fx-lightning" viewBox="0 0 360 720" preserveAspectRatio="none" aria-hidden="true"><path class="bolt-halo" d="M18 0 L74 99 L54 155 L143 236 L119 302 L180 360"/><path class="bolt-core" d="M18 0 L74 99 L54 155 L143 236 L119 302 L180 360"/><path class="bolt-halo" d="M350 0 L289 91 L314 160 L225 231 L247 294 L180 360"/><path class="bolt-core" d="M350 0 L289 91 L314 160 L225 231 L247 294 L180 360"/><path class="bolt-small" d="M0 440 L78 412 L105 362 L160 351 M360 468 L280 426 L250 384 L192 365 M90 720 L133 586 L116 510 L179 379"/></svg><div class="don-fx-impact"></div><div class="don-fx-flash"></div><div class="don-fx-word">ドン！</div></div><div id="lossCrackScreen" aria-hidden="true"></div><header class="brand"><h1>がばちょ <small>v0.0.43</small></h1><span class="brand-sub">GABACHO CARD GAME</span></header><p class="muted">相手の裏向きトランプと枚数を表示／CPU対戦／2〜5人／ジョーカー2〜4枚／A・2・8対応／終了時にCPU手札公開</p>
+</style><div id="donFx" aria-hidden="true"><div class="don-fx-dark"></div><div class="don-fx-wash"></div><div class="don-fx-burst"></div><div class="don-fx-ring"></div><div class="don-fx-ring ring-two"></div><div class="don-fx-inferno"></div><div class="don-fx-sparks"></div><div class="don-fx-debris"></div><svg class="don-fx-lightning" viewBox="0 0 360 720" preserveAspectRatio="none" aria-hidden="true"><path class="bolt-halo" d="M18 0 L74 99 L54 155 L143 236 L119 302 L180 360"/><path class="bolt-core" d="M18 0 L74 99 L54 155 L143 236 L119 302 L180 360"/><path class="bolt-halo" d="M350 0 L289 91 L314 160 L225 231 L247 294 L180 360"/><path class="bolt-core" d="M350 0 L289 91 L314 160 L225 231 L247 294 L180 360"/><path class="bolt-small" d="M0 440 L78 412 L105 362 L160 351 M360 468 L280 426 L250 384 L192 365 M90 720 L133 586 L116 510 L179 379"/></svg><div class="don-fx-impact"></div><div class="don-fx-flash"></div><div class="don-fx-word">ドン！</div></div><div id="lossCrackScreen" aria-hidden="true"></div><header class="brand"><h1>がばちょ <small>v0.0.48</small></h1><span class="brand-sub">GABACHO CARD GAME</span></header><p class="muted">相手の裏向きトランプと枚数を表示／CPU対戦／2〜5人／ジョーカー2〜4枚／A・2・8対応／終了時にCPU手札公開</p>
 <div id="homeScreen" class="entry-screen"><div class="entry-emblem">🃏</div><div class="entry-overline">THE CARD GAME</div><h2 class="entry-title">がばちょ</h2><p class="entry-lead">ドンを狙え。ジョーカーで逆転。</p><button class="entry-primary" onclick="showSettings()">ゲームスタート <span>▶</span></button><button class="entry-primary" onclick="showOnline()">🌐 オンラインで遊ぶ</button><button class="entry-back" onclick="showRanking()">🏆 全国ランキング</button><button class="entry-primary" onclick="startTutorial()">🎓 チュートリアル</button><button class="entry-back rules-open" onclick="showRules()">📖 ルール説明</button><p class="entry-note">CPU対戦 · 2〜5人 · オフライン対応</p></div>
 <div id="onlineScreen" class="entry-screen" hidden><div class="entry-overline">ONLINE LOBBY · BETA</div><h2 class="entry-heading">🌐 オンライン対戦ロビー</h2><p class="entry-lead">部屋コードを共有して友達と集合</p><div class="online-fields"><label>ニックネーム<input id="onlineName" maxlength="20" placeholder="名前を入力" autocomplete="nickname"></label><label>部屋コード<input id="onlineCode" maxlength="8" placeholder="例：AB12CD" autocapitalize="characters"></label></div><button class="entry-primary" onclick="createOnlineRoom()">部屋を作る</button><button class="entry-primary" onclick="joinOnlineRoom()">コードで参加</button><p id="onlineMessage" role="status"></p><div id="onlineLobby" hidden><h3>部屋コード：<span id="onlineRoomCode"></span></h3><button onclick="copyOnlineCode()">コードをコピー</button><div id="onlineMembers"></div><div id="onlineJokerSettings" style="margin:12px 0;padding:12px;border:1px solid #d7b66b;border-radius:10px;text-align:left"><label for="onlineJokers" style="display:block;color:#f5e1ac;font-weight:700;margin-bottom:6px">🃏 ジョーカーの枚数（ホストが選択）</label><select id="onlineJokers" onchange="onlineJokersChanged()" style="width:100%;padding:11px;border-radius:8px;background:#fffdf6;color:#17382c;font-size:16px"><option value="2">2枚</option><option value="3" selected>3枚</option><option value="4">4枚</option></select><p id="onlineJokersNote" style="font-size:12px;color:#ffe3a1;margin:6px 0 0">対戦開始前に選べます。次のゲームも同じ枚数です。</p></div><button id="onlineStart" onclick="startOnlineMatch()" hidden>ゲーム開始</button><p class="muted">2〜5人対戦β版。参加人数に合わせて開始します。ホストが接続中の間、ゲームが同期されます。通信が一時的に切れた場合は自動で再接続を試みます。ホストの退出には未対応です。</p><p id="onlineConnectionStatus" role="status" style="font-size:13px;color:#ffe3a1;margin:8px 0">通信：接続待ち</p><button class="entry-back" onclick="leaveOnlineRoom()">部屋から退出</button></div><button class="entry-back" onclick="leaveOnlineRoom();showHome()">← ホームへ戻る</button></div>
 <div id="onlinePlayScreen" hidden>
@@ -1404,15 +1411,17 @@ const fixedScenes=[
  {title:'結果・順位',tip:'ここまでの獲得点と順位を見よう。ジョーカーは場に出せず、持っているだけでドンの得点倍率が上がるよ。',board:'♥5',hand:['♣2','♦3','🃏'],cpu:[2,4,5],action:'finish',target:'チュートリアルを終了',after:'🎉 チュートリアル完了！'}
 ];
 let fixedStep=0,fixedSub=0,fixedScores=[0,0,0,0],fixedHand=[],fixedCpu=[],fixedBoard='';
+let fixedFxTimer=null;
+function fixedClearFxTimer(){if(fixedFxTimer!==null){clearTimeout(fixedFxTimer);fixedFxTimer=null}}
 function startFixedTutorial(){
- tutorialRealMatch=false;clearOpeningTimers();clearTimeout(timer);
+ fixedClearFxTimer();tutorialRealMatch=false;clearOpeningTimers();clearTimeout(timer);
  document.getElementById('championOverlay').hidden=true;
  document.getElementById('tutorialRealBanner').hidden=true;
  document.getElementById('gameScreen').classList.add('tutorial-fixed');
  document.getElementById('fixedTutorial').hidden=false;
  fixedStep=0;fixedScores=[0,0,0,0];fixedLoad();showScreen('gameScreen');
 }
-function endFixedTutorial(){document.getElementById('gameScreen').classList.remove('tutorial-fixed');document.getElementById('fixedTutorial').hidden=true;showHome()}
+function endFixedTutorial(){fixedClearFxTimer();document.getElementById('gameScreen').classList.remove('tutorial-fixed');document.getElementById('fixedTutorial').hidden=true;showHome()}
 function fixedLoad(){let s=fixedScenes[fixedStep];fixedSub=0;fixedSelected=[];fixedSuit='';fixedHand=[...s.hand];fixedCpu=[...s.cpu];fixedBoard=s.board;fixedRender()}
 function fixedCardMarkup(c,clickable=false,glow=false){let red=c.includes('♥')||c.includes('♦');return '<span class="ft-card '+(red?'red ':'')+(glow?'ft-glow':'')+'">'+(c==='🃏'?'🃏<small>JOKER</small>':c)+'</span>'}
 function fixedScoreDon(kind){
@@ -1428,7 +1437,7 @@ function fixedRender(note){
  const s=fixedScenes[fixedStep];
  const isMulti=s.action==='multi',isJ=s.title.startsWith('J（');
  const target=isMulti?s.targets[fixedSelected.length]:s.target;
- const seats=(i,emoji,name)=>'<div class="ft-seat"><b>'+emoji+' '+name+'</b><div class="ft-backs">'+('🂠 '.repeat(Math.min(7,fixedCpu[i-1])))+(fixedCpu[i-1]>7?'+'+(fixedCpu[i-1]-7):'')+'</div>'+fixedCpu[i-1]+'枚 · '+fixedScores[i].toLocaleString()+'pt</div>';
+ const seats=(i,emoji,name)=>'<div class="ft-seat"><b>'+emoji+' '+name+'</b><div class="ft-backs back-hand" aria-label="裏向きカード'+fixedCpu[i-1]+'枚">'+Array.from({length:fixedCpu[i-1]},(_,k)=>'<span class="back-card" style="--angle:'+((k-(fixedCpu[i-1]-1)/2)*3)+'deg" aria-hidden="true"></span>').join('')+'</div>'+fixedCpu[i-1]+'枚 · '+fixedScores[i].toLocaleString()+'pt</div>';
  const canDraw=s.action==='draw'&&fixedSub===0;
  const center='<div class="ft-center"><small>場のカード</small>'+fixedCardMarkup(fixedBoard)+(fixedSuit?'<small>指定マーク：'+fixedSuit+'</small>':'')+'<small>山札（練習用）</small><button class="ft-card back '+(canDraw?'ft-glow':'')+'" '+(canDraw?'onclick="fixedAct(\'draw\')"':'disabled')+'>🂠</button></div>';
  let hand=fixedHand.map((c,i)=>{
@@ -1448,11 +1457,27 @@ function fixedRender(note){
  document.getElementById('ftActions').innerHTML=buttons;
 }
 function fixedComplete(s){
+ fixedClearFxTimer();
  if(s.delta)s.delta.forEach((n,i)=>fixedCpu[i]+=n);
  let note=s.after;
  if(s.score){const result=fixedScoreDon(s.score);note+=' 今回の獲得：+'+result.gain.toLocaleString()+'pt（ドンした人以外の手札合計'+result.count+'枚×100×倍率'+result.mult+'）。場にカードを出したCPU1が支払い、あなたが受け取る。'}
  fixedSub=2;fixedRender(note);
- document.getElementById('ftActions').innerHTML='<button class="ft-glow" onclick="fixedNext()">次へ進む ▶</button>';
+ // Use exactly the same production Don/Draw-Don/Reverse FX as CPU matches.
+ // Keep the tutorial on this scene until the full effect has finished.
+ const actions=document.getElementById('ftActions');
+ if(s.score){
+  const fxType=s.score==='draw'?'draw':s.score==='reverse'?'reverse':'don';
+  actions.innerHTML='<button disabled>演出中…</button>';
+  showDonFx(fxType);
+  fixedFxTimer=setTimeout(()=>{
+   fixedFxTimer=null;
+   if(!document.getElementById('fixedTutorial').hidden && fixedSub===2 && fixedScenes[fixedStep]===s){
+    actions.innerHTML='<button class="ft-glow" onclick="fixedNext()">次へ進む ▶</button>';
+   }
+  },fxType==='reverse'?6100:2100);
+ }else{
+  actions.innerHTML='<button class="ft-glow" onclick="fixedNext()">次へ進む ▶</button>';
+ }
 }
 function fixedAct(type,index){
  const s=fixedScenes[fixedStep],isMulti=s.action==='multi',isJ=s.title.startsWith('J（');
