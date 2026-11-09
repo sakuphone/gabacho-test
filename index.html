@@ -559,6 +559,20 @@ section.details{margin-top:5px!important}
 /* v0.0.33: draw-don learning hint; informational only, never changes game logic. */
 #drawDonHint.draw-don-hint{margin:7px 2px 6px;padding:9px 12px;border:1px solid #e5bd65;border-radius:11px;background:#233d2d;color:#fff0c1;font-size:13px;font-weight:700;line-height:1.45;text-align:center}
 #drawDonHint[hidden]{display:none!important}
+
+/* v0.0.46: highlight the precise next action during a real 4-player tutorial */
+@keyframes tutorialPulse{0%,100%{box-shadow:0 0 0 3px #ffda66,0 0 14px 5px #f6c453aa;transform:translateY(0)}50%{box-shadow:0 0 0 5px #fff3b4,0 0 25px 10px #f6c453dd;transform:translateY(-4px)}}
+.tutorial-spotlight{animation:tutorialPulse 1.15s ease-in-out infinite!important;position:relative;z-index:8;outline:3px solid #fbd16c!important;outline-offset:2px}
+#tutorialRealBanner{position:sticky!important;top:4px;z-index:20!important;box-shadow:0 4px 14px #0006}
+
+/* v0.0.46 fixed four-player guided tutorial */
+#gameScreen.tutorial-fixed > :not(#fixedTutorial){display:none!important}
+#fixedTutorial{max-width:700px;margin:auto;padding:12px;color:#f7f5e8;font-family:inherit}
+.ft-top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}.ft-top button,.ft-next{border:0;border-radius:9px;background:#f1ca73;color:#20352d;padding:10px 13px;font-weight:800}
+.ft-table{background:radial-gradient(ellipse,#276a50,#10382e);border:3px solid #7a6035;border-radius:26px;padding:14px 9px;min-height:460px;display:flex;flex-direction:column;justify-content:space-between;gap:10px}
+.ft-seat{text-align:center;background:#0c3028b8;border-radius:12px;padding:7px;font-size:12px}.ft-seat b{font-size:14px}.ft-seat .ft-backs{color:#d9e9fa;letter-spacing:2px;margin:5px 0}.ft-middle{display:grid;grid-template-columns:1fr 1.2fr 1fr;gap:6px;align-items:center}.ft-center{text-align:center;display:flex;flex-direction:column;align-items:center;gap:5px}.ft-card{min-width:47px;height:67px;border-radius:7px;background:#fff;color:#182c25;border:2px solid #ddd;display:inline-flex;flex-direction:column;justify-content:center;align-items:center;font-size:18px;font-weight:900;line-height:1.2;padding:2px;box-shadow:0 3px 6px #0005}.ft-card.red{color:#d43c49}.ft-card.back{background:#285e96;color:white}.ft-card:disabled{opacity:.72}.ft-card.ft-glow,.ft-next.ft-glow{animation:tutorialPulse 1.1s infinite!important;border-color:#f8cf5e;cursor:pointer;z-index:2}
+.ft-hand{display:flex;justify-content:center;gap:3px;flex-wrap:wrap;margin-top:8px}.ft-hand .ft-card{min-width:43px;width:50px;height:70px}.ft-hand .ft-card.ft-selected{border:3px solid #6ce5c6;box-shadow:0 0 0 3px #0c8c75,0 0 14px #6ce5c6;transform:translateY(-9px)}
+.ft-message{background:#fff3c6;color:#273b30;border-radius:12px;padding:13px;margin:12px 0;line-height:1.6;font-weight:700}.ft-progress{font-size:12px;color:#e8d9a8}.ft-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}.ft-actions button{padding:11px 16px;border-radius:10px;border:2px solid #f3ca65;background:#f3ca65;color:#20352d;font-weight:800}.ft-actions button:disabled{opacity:.45}.ft-scores{background:#0c3028b8;border-radius:10px;padding:7px;font-size:12px;text-align:center}.ft-scores span{display:inline-block;margin:2px 5px}
 </style><style id="online-style">#onlineScreen .online-fields{display:grid;gap:12px;margin:15px auto;max-width:330px}#onlineScreen label{display:grid;gap:5px;text-align:left;color:#f5e1ac;font-weight:700}#onlineScreen input{width:100%;padding:13px;border-radius:10px;border:1px solid #d6b967;background:#fffdf6;color:#17382c;font-size:17px}#onlineMessage{min-height:2em;color:#ffe18d;white-space:pre-wrap}#onlineLobby{margin:16px auto;padding:14px;border:1px solid #d7b66b;border-radius:15px;background:#08382d}#onlineMembers{margin:12px 0;text-align:left;line-height:2}#onlineRoomCode{letter-spacing:3px;color:#ffe18d}#onlineScreen .entry-primary{margin:5px}#onlineGame .og-decision{border:2px solid #f7d47a;border-radius:14px;padding:10px;margin:10px 0;background:#174b39}#onlineGame .og-decision button{margin:5px;background:#ffe19a;color:#17382d;font-weight:800}
 
 /* v0.67: online match uses the CPU felt-table visual language. */
@@ -822,7 +836,7 @@ body.don-screen-shake{animation:donScreenShake 850ms cubic-bezier(.35,.05,.6,.95
 </style><style>
 #tutorialScreen{max-width:680px;margin:0 auto;padding:18px 12px 50px;color:#f5f5ee}.tut-head{text-align:center}.tut-head h2{font-size:25px;margin:6px}.tut-progress{display:flex;gap:5px;margin:15px 0}.tut-progress i{height:6px;flex:1;background:#4a615a;border-radius:8px}.tut-progress i.on{background:#f4c96c}.tut-panel{background:#16332e;border:1px solid #6d8d78;border-radius:17px;padding:17px;margin:12px 0}.tut-hint{font-size:15px;line-height:1.7;min-height:54px}.tut-table{display:grid;gap:14px;justify-items:center;padding:15px 0}.tut-cpu{font-size:15px}.tut-board{display:flex;gap:22px;align-items:center}.tut-card{width:65px;height:93px;border:2px solid #d4d7d2;border-radius:9px;background:#fff;color:#17251f;font-size:26px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-direction:column;box-shadow:0 4px 10px #0005}.tut-card.red{color:#c62940}.tut-card.can{border:3px solid #f4ca58;box-shadow:0 0 14px #f2ca5caa;cursor:pointer}.tut-card:disabled{opacity:.48;cursor:default}.tut-hand{display:flex;flex-wrap:wrap;justify-content:center;gap:7px;min-height:99px}.tut-btns{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin-top:14px}.tut-btns button{border:0;border-radius:10px;padding:12px 17px;background:#f2c96b;color:#17251f;font-weight:800}.tut-btns button.secondary{background:#3b6256;color:white}.tut-status{text-align:center;font-weight:700;color:#f7d27a;min-height:26px}.tut-label{font-size:12px;opacity:.8}
 </style><div id="donFx" aria-hidden="true"><div class="don-fx-dark"></div><div class="don-fx-wash"></div><div class="don-fx-burst"></div><div class="don-fx-ring"></div><div class="don-fx-ring ring-two"></div><div class="don-fx-inferno"></div><div class="don-fx-sparks"></div><div class="don-fx-debris"></div><svg class="don-fx-lightning" viewBox="0 0 360 720" preserveAspectRatio="none" aria-hidden="true"><path class="bolt-halo" d="M18 0 L74 99 L54 155 L143 236 L119 302 L180 360"/><path class="bolt-core" d="M18 0 L74 99 L54 155 L143 236 L119 302 L180 360"/><path class="bolt-halo" d="M350 0 L289 91 L314 160 L225 231 L247 294 L180 360"/><path class="bolt-core" d="M350 0 L289 91 L314 160 L225 231 L247 294 L180 360"/><path class="bolt-small" d="M0 440 L78 412 L105 362 L160 351 M360 468 L280 426 L250 384 L192 365 M90 720 L133 586 L116 510 L179 379"/></svg><div class="don-fx-impact"></div><div class="don-fx-flash"></div><div class="don-fx-word">ドン！</div></div><div id="lossCrackScreen" aria-hidden="true"></div><header class="brand"><h1>がばちょ <small>v0.0.43</small></h1><span class="brand-sub">GABACHO CARD GAME</span></header><p class="muted">相手の裏向きトランプと枚数を表示／CPU対戦／2〜5人／ジョーカー2〜4枚／A・2・8対応／終了時にCPU手札公開</p>
-<div id="homeScreen" class="entry-screen"><div class="entry-emblem">🃏</div><div class="entry-overline">THE CARD GAME</div><h2 class="entry-title">がばちょ</h2><p class="entry-lead">ドンを狙え。ジョーカーで逆転。</p><button class="entry-primary" onclick="showSettings()">ゲームスタート <span>▶</span></button><button class="entry-primary" onclick="showOnline()">🌐 オンラインで遊ぶ</button><button class="entry-back" onclick="showRanking()">🏆 全国ランキング</button><button class="entry-primary" onclick="startTutorial()">🎓 4人対戦で覚える</button><button class="entry-back rules-open" onclick="showRules()">📖 ルール説明</button><p class="entry-note">CPU対戦 · 2〜5人 · オフライン対応</p></div>
+<div id="homeScreen" class="entry-screen"><div class="entry-emblem">🃏</div><div class="entry-overline">THE CARD GAME</div><h2 class="entry-title">がばちょ</h2><p class="entry-lead">ドンを狙え。ジョーカーで逆転。</p><button class="entry-primary" onclick="showSettings()">ゲームスタート <span>▶</span></button><button class="entry-primary" onclick="showOnline()">🌐 オンラインで遊ぶ</button><button class="entry-back" onclick="showRanking()">🏆 全国ランキング</button><button class="entry-primary" onclick="startTutorial()">🎓 チュートリアル</button><button class="entry-back rules-open" onclick="showRules()">📖 ルール説明</button><p class="entry-note">CPU対戦 · 2〜5人 · オフライン対応</p></div>
 <div id="onlineScreen" class="entry-screen" hidden><div class="entry-overline">ONLINE LOBBY · BETA</div><h2 class="entry-heading">🌐 オンライン対戦ロビー</h2><p class="entry-lead">部屋コードを共有して友達と集合</p><div class="online-fields"><label>ニックネーム<input id="onlineName" maxlength="20" placeholder="名前を入力" autocomplete="nickname"></label><label>部屋コード<input id="onlineCode" maxlength="8" placeholder="例：AB12CD" autocapitalize="characters"></label></div><button class="entry-primary" onclick="createOnlineRoom()">部屋を作る</button><button class="entry-primary" onclick="joinOnlineRoom()">コードで参加</button><p id="onlineMessage" role="status"></p><div id="onlineLobby" hidden><h3>部屋コード：<span id="onlineRoomCode"></span></h3><button onclick="copyOnlineCode()">コードをコピー</button><div id="onlineMembers"></div><div id="onlineJokerSettings" style="margin:12px 0;padding:12px;border:1px solid #d7b66b;border-radius:10px;text-align:left"><label for="onlineJokers" style="display:block;color:#f5e1ac;font-weight:700;margin-bottom:6px">🃏 ジョーカーの枚数（ホストが選択）</label><select id="onlineJokers" onchange="onlineJokersChanged()" style="width:100%;padding:11px;border-radius:8px;background:#fffdf6;color:#17382c;font-size:16px"><option value="2">2枚</option><option value="3" selected>3枚</option><option value="4">4枚</option></select><p id="onlineJokersNote" style="font-size:12px;color:#ffe3a1;margin:6px 0 0">対戦開始前に選べます。次のゲームも同じ枚数です。</p></div><button id="onlineStart" onclick="startOnlineMatch()" hidden>ゲーム開始</button><p class="muted">2〜5人対戦β版。参加人数に合わせて開始します。ホストが接続中の間、ゲームが同期されます。通信が一時的に切れた場合は自動で再接続を試みます。ホストの退出には未対応です。</p><p id="onlineConnectionStatus" role="status" style="font-size:13px;color:#ffe3a1;margin:8px 0">通信：接続待ち</p><button class="entry-back" onclick="leaveOnlineRoom()">部屋から退出</button></div><button class="entry-back" onclick="leaveOnlineRoom();showHome()">← ホームへ戻る</button></div>
 <div id="onlinePlayScreen" hidden>
  <div class="game-topbar online-play-topbar"><button type="button" onclick="confirmLeaveOnlinePlay()">⌂ 退出</button><span>🌐 オンライン対戦 · <span id="onlinePlayRoomCode"></span></span><small id="onlinePlayStatus">通信：接続待ち</small></div>
@@ -832,7 +846,7 @@ body.don-screen-shake{animation:donScreenShake 850ms cubic-bezier(.35,.05,.6,.95
 <div id="rulesScreen" class="entry-screen rules-screen" hidden><div class="entry-overline">HOW TO PLAY</div><h2 class="entry-heading">📖 がばちょのルール</h2><div class="rules-body"><h3>🎯 勝利条件</h3><p>相手が場に出したカードの数字の合計と、自分の手札の数字の合計が一致したら「ドン！」。ドンが成立するとそのゲームは終了し、得点を精算します。設定したゲーム数が終わった時点の総合得点が最も高い人が優勝！</p><h3>🃏 基本の出し方</h3><p>最初の手札は5枚。場と同じマークか同じ数字のカードを出せます。同じ数字はまとめて複数枚出せます。Jはいつでも出せて、次のマークを指定できます。ジョーカーは場に出せず、手札に残してドンの得点倍率を高めるカードです。Aは1、ジョーカーは0として計算します。</p><h3>⚡ 特殊カード</h3><p><b>A：</b>次の人を1人飛ばします。複数枚ならその枚数分飛ばします。<br><b>2・8：</b>次の人は追加で2枚引きます。同じ数字を重ねて返せます。<br><b>ジョーカー：</b>場には出せません。手札に持っているとドンの得点倍率が上がります。</p><h3>🔁 ターンとドロー</h3><p>出せるカードがなければ1枚引きます。1ターンに任意で引けるのは1枚まで。2・8などで追加のカードを引いた後も、出せるカードがなければさらに1枚引く必要があります。</p><h3>💰 ドンと得点</h3><p>通常ドンは、ドンした人以外の手札枚数合計×100点が基本。ドンした人の手札のジョーカー1枚ごとに獲得点数が2倍になります。ドンされた人も手札合計が一致すれば「ドン返し」が可能で、通常ドン返しは2倍です。</p><p>1枚引いて成立する「引きドン」は基本点が2倍、「引きドン返し」は4倍。自分の出した場札に引きドンする「オナニー引きドン」は2倍で、ほかの全員が均等に支払います。山札の再シャッフルで巡目が進むと得点倍率も上がります。</p><h3>🌟 スタドン（開始時ドン）</h3><p>ゲーム開始直後、最初の場札の数字と自分の手札5枚の数字の合計が一致すると、カードを出す前にスタドンで即勝利！ Aは1、Jは11、Qは12、Kは13、ジョーカーは0として計算します。複数人が同時に成立した場合は先手から順番に優先します。</p><p><b>得点：</b>自分以外の全員の手札枚数合計 × 100点 × 4倍 × 2<sup>スタドン成功者の手札のジョーカー枚数</sup>。この点数を相手全員から<b>それぞれ</b>受け取ります（分担ではありません）。例：4人対戦で相手が各5枚、成功者の手札にジョーカーが2枚なら15枚×100点×4×4＝24,000点。勝者は＋72,000点、相手3人はそれぞれ−24,000点。</p><h3>🏆 最終優勝</h3><p>各ゲームの得点を累積し、全ゲーム終了後に総合1位を発表。同点1位は同時優勝です。</p></div><button class="entry-primary" onclick="showHome()">ホームへ戻る</button></div>
 <div id="tutorialScreen" class="entry-screen" hidden><div class="tut-head"><div class="entry-overline">LEARN BY PLAYING</div><h2>🎓 がばちょ練習場</h2><p>CPU3人と本物の4人対戦でルールと得点計算を覚えよう！</p></div><div class="tut-progress" id="tutProgress"></div><div class="tut-panel"><h3 id="tutTitle"></h3><p class="tut-hint" id="tutHint"></p><div class="tut-table"><div class="tut-cpu" id="tutCpu">🐶 CPU</div><div class="tut-board"><div><div class="tut-label">場のカード</div><div class="tut-card" id="tutBoard"></div></div><div><div class="tut-label">山札</div><button class="tut-card" id="tutDeck" onclick="tutorialAction('draw')" style="background:#244e72;color:white">🂠</button></div></div><div class="tut-label">あなたの手札（光るカードをタップ）</div><div class="tut-hand" id="tutHand"></div></div><div class="tut-status" id="tutStatus" aria-live="polite"></div><div class="tut-btns" id="tutActions"></div></div><button class="entry-back" onclick="exitTutorial()">← ホームへ戻る</button></div><div id="rankingScreen" class="entry-screen" hidden><div class="entry-overline">NATIONAL LEADERBOARD</div><h2 class="entry-heading">🏆 全国ランキング</h2><p class="entry-lead">ジョーカー2枚で遊んだCPU対戦の総合得点</p><div class="ranking-filters"><label>ゲーム数 <select id="rankingGames" onchange="loadRanking()"><option value="1">1ゲーム</option><option value="5">5ゲーム</option><option value="10" selected>10ゲーム</option><option value="20">20ゲーム</option></select></label><label>対戦人数 <select id="rankingPlayers" onchange="loadRanking()"><option value="all">すべて</option><option value="2">2人</option><option value="3">3人</option><option value="4">4人</option><option value="5">5人</option></select></label></div><div id="rankingStatus" class="entry-lead" role="status">ランキングを読み込み中…</div><div id="rankingRows" class="ranking-rows"></div><button class="entry-back" onclick="showHome()">← ホームへ戻る</button></div>
 <div id="settingsScreen" class="entry-screen" hidden><div class="entry-overline">GAME SETTINGS</div><h2 class="entry-heading">対戦条件を選択</h2><p class="entry-lead">人数・ジョーカー・ゲーム数を決めよう</p><div class="settings-fields"><label>対戦人数 <select id="count"><option>2</option><option>3</option><option selected>4</option><option>5</option></select></label><label>ジョーカー <select id="jokers"><option value="2" selected>2枚</option><option value="3">3枚</option><option value="4">4枚</option></select></label><label>ゲーム数 <select id="games"><option>1</option><option>5</option><option selected>10</option><option>20</option></select></label><label>CPUの強さ <select id="cpuDifficulty" onchange="updateCpuDifficultyDescription()"><option value="easy">よわい</option><option value="normal" selected>ふつう</option><option value="hard">つよい</option><option value="expert">もっとつよい</option></select><p id="cpuDifficultyDescription" class="cpu-difficulty-desc">複数枚出しや基本的な戦略を使う。</p></label></div><button class="entry-primary" onclick="startFromSettings()">この条件で開始 <span>▶</span></button><button class="entry-back" onclick="showHome()">← ホームへ戻る</button></div>
-<div id="championOverlay" class="champion-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="championTitle"><div class="champion-box"><div class="champion-confetti">✦ 🎊 ✨ 🎉 ✦</div><div class="champion-cup">🏆</div><div class="entry-overline">GABACHO CHAMPION</div><h2 id="championTitle">優勝おめでとう！</h2><div id="championName" class="champion-name"></div><div id="championScore" class="champion-score"></div><div id="championRanking" class="champion-ranking"></div><div class="rematch-actions"><button class="entry-primary" onclick="rematchSameSettings()">🔁 同じ条件でもう一度</button><button class="entry-back" onclick="rematchChangeSettings()">⚙️ 条件を変更する</button></div><button class="entry-primary" onclick="closeChampion()">結果の詳細を見る</button><div id="rankingEntry" class="ranking-entry" hidden><p>🏆 ジョーカー2枚の記録を全国ランキングに登録できます</p><input id="rankingName" maxlength="20" placeholder="ランキング用の名前（20文字まで）" autocomplete="nickname"><button id="rankingSubmit" class="entry-back" onclick="submitRanking()">このスコアを登録</button><div id="rankingEntryStatus" role="status"></div></div><button class="entry-back" onclick="closeChampion();showRanking()">🏆 全国ランキングを見る</button><button class="entry-back" onclick="championHome()">ホームへ戻る</button></div></div><div id="devScenarioPanel" hidden style="position:fixed;bottom:12px;right:10px;z-index:11000;max-width:min(340px,94vw);background:#122a27;color:white;border:2px solid #e4bb65;border-radius:14px;padding:12px;box-shadow:0 10px 30px #0009;font-size:13px"><div style="font-weight:bold;margin-bottom:7px">🛠 管理者テスト（CPU対戦限定）</div><div style="display:flex;gap:7px;flex-wrap:wrap"><button type="button" onclick="devScenario('start')" style="padding:9px;background:#e4bb65;color:#182a28;border-radius:8px">🌟 スタドンを再現</button><button type="button" onclick="devScenario('reverse')" style="padding:9px;background:#e4bb65;color:#182a28;border-radius:8px">🔁 ドン返しを再現</button><button type="button" onclick="devPanelToggle(false)" style="padding:9px;border-radius:8px">閉じる</button></div><div style="margin-top:6px;opacity:.8">現在のCPU対戦をテスト用に組み直します。オンラインには反映されません。</div></div><div id="gameScreen" hidden><div id="tutorialRealBanner" hidden style="position:relative;z-index:3;background:#244d3f;color:#fff6cf;border:2px solid #f0cb6c;border-radius:12px;padding:12px;margin:8px 0;font-size:14px;line-height:1.5"><strong>🎓 4人で実戦チュートリアル</strong><p id="tutorialRealHelp" style="margin:5px 0">CPU3人と実際のルールで対戦。得点も通常対戦と同じ計算です。</p><button type="button" onclick="endRealTutorial()" style="padding:7px 12px;border-radius:7px;background:#f0cb6c;color:#173b31;font-weight:bold">練習を終了</button></div><div class="game-topbar"><button onclick="confirmHome()">⌂ ホーム</button><span>CPU対戦</span></div><section class="setup"><div id="matchInfo"></div><div id="players"></div></section>
+<div id="championOverlay" class="champion-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="championTitle"><div class="champion-box"><div class="champion-confetti">✦ 🎊 ✨ 🎉 ✦</div><div class="champion-cup">🏆</div><div class="entry-overline">GABACHO CHAMPION</div><h2 id="championTitle">優勝おめでとう！</h2><div id="championName" class="champion-name"></div><div id="championScore" class="champion-score"></div><div id="championRanking" class="champion-ranking"></div><div class="rematch-actions"><button class="entry-primary" onclick="rematchSameSettings()">🔁 同じ条件でもう一度</button><button class="entry-back" onclick="rematchChangeSettings()">⚙️ 条件を変更する</button></div><button class="entry-primary" onclick="closeChampion()">結果の詳細を見る</button><div id="rankingEntry" class="ranking-entry" hidden><p>🏆 ジョーカー2枚の記録を全国ランキングに登録できます</p><input id="rankingName" maxlength="20" placeholder="ランキング用の名前（20文字まで）" autocomplete="nickname"><button id="rankingSubmit" class="entry-back" onclick="submitRanking()">このスコアを登録</button><div id="rankingEntryStatus" role="status"></div></div><button class="entry-back" onclick="closeChampion();showRanking()">🏆 全国ランキングを見る</button><button class="entry-back" onclick="championHome()">ホームへ戻る</button></div></div><div id="devScenarioPanel" hidden style="position:fixed;bottom:12px;right:10px;z-index:11000;max-width:min(340px,94vw);background:#122a27;color:white;border:2px solid #e4bb65;border-radius:14px;padding:12px;box-shadow:0 10px 30px #0009;font-size:13px"><div style="font-weight:bold;margin-bottom:7px">🛠 管理者テスト（CPU対戦限定）</div><div style="display:flex;gap:7px;flex-wrap:wrap"><button type="button" onclick="devScenario('start')" style="padding:9px;background:#e4bb65;color:#182a28;border-radius:8px">🌟 スタドンを再現</button><button type="button" onclick="devScenario('reverse')" style="padding:9px;background:#e4bb65;color:#182a28;border-radius:8px">🔁 ドン返しを再現</button><button type="button" onclick="devPanelToggle(false)" style="padding:9px;border-radius:8px">閉じる</button></div><div style="margin-top:6px;opacity:.8">現在のCPU対戦をテスト用に組み直します。オンラインには反映されません。</div></div><div id="gameScreen" hidden><div id="fixedTutorial" hidden><div class="ft-top"><b>🎓 チュートリアル <small id="ftProgress"></small></b><button onclick="endFixedTutorial()">✕ 終了</button></div><div id="ftTable" class="ft-table"></div><div class="ft-message" id="ftMessage" aria-live="polite"></div><div class="ft-actions" id="ftActions"></div></div><div id="tutorialRealBanner" hidden style="position:relative;z-index:3;background:#244d3f;color:#fff6cf;border:2px solid #f0cb6c;border-radius:12px;padding:12px;margin:8px 0;font-size:14px;line-height:1.5"><strong>🎓 チュートリアル</strong><p id="tutorialRealHelp" style="margin:5px 0">光っているカードやボタンを1つずつ操作しよう。得点は通常対戦と同じ計算です。</p><button type="button" onclick="endRealTutorial()" style="padding:7px 12px;border-radius:7px;background:#f0cb6c;color:#173b31;font-weight:bold">チュートリアルを終了</button></div><div class="game-topbar"><button onclick="confirmHome()">⌂ ホーム</button><span>CPU対戦</span></div><section class="setup"><div id="matchInfo"></div><div id="players"></div></section>
 <section class="table-area"><div class="table-label">場・山札</div><div id="board"></div><div class="turn-strip"><div id="roundSlot"></div><p id="status"></p></div><div id="decision" hidden><div id="question"></div><div id="decisionButtons"></div></div><div id="settle"></div><button id="backToChampion" class="entry-back" hidden onclick="showChampion()">🏆 結果発表に戻る</button><div id="rematchAfterFinal" class="rematch-actions" hidden><button class="entry-primary" onclick="rematchSameSettings()">🔁 同じ条件でもう一度</button><button class="entry-back" onclick="rematchChangeSettings()">⚙️ 条件を変更する</button></div><button id="nextGame" hidden onclick="advanceGame()">次のゲームへ ▶</button><div id="reveal"></div><div id="standings"></div></section>
 <section class="hand-area"><h3>あなたの手札 <span id="sum"></span></h3><div id="hand" class="cards"></div><div id="suitChoice" class="cpu-suit-choice" hidden><div class="cpu-suit-title">次のマークを選択（J）</div><div class="cpu-suit-options"><button onclick="chooseSuit('♠')">♠</button><button onclick="chooseSuit('♥')">♥</button><button onclick="chooseSuit('♦')">♦</button><button onclick="chooseSuit('♣')">♣</button></div></div><p id="drawDonHint" class="draw-don-hint" role="status" hidden></p><p id="handHint" class="muted">1回タップで選択・同じカードを素早く2回タップで出す（複数枚も可）</p><button id="play" onclick="play()">カードを出す</button><button id="draw" onclick="draw()">1枚引く</button><button id="penalty" onclick="acceptPenalty()">必要な枚数を引く</button><button id="pass" onclick="pass()">ターン終了</button><div id="topCardChoice" hidden class="top-card-choice"><strong>一番上にするカードを選んでください</strong><p>選んだカードのマークが次の場のマークになります</p><div id="topCardOptions"></div><button type="button" onclick="cancelTopCardChoice()">キャンセル</button></div></section>
 <section class="details"><b>対戦ログ</b><div id="log"></div><div id="liveRanking" class="live-ranking" aria-label="現在の順位表"></div></section></div>
@@ -1332,25 +1346,141 @@ const tutorialLessons=[
 ];
 let tutorialStep=0,tutorialSpecial=0,tutorialDrawn=false,tutorialDone=false;
 let tutorialRealMatch=false;
-function startTutorial(){
- tutorialRealMatch=true;
- document.getElementById('count').value='4';
- document.getElementById('jokers').value='3';
- document.getElementById('games').value='5';
- document.getElementById('cpuDifficulty').value='easy';
- document.getElementById('championOverlay').hidden=true;
- start();showScreen('gameScreen');
- const banner=document.getElementById('tutorialRealBanner');if(banner)banner.hidden=false;
-}
+let tutorialGuideStage=0;
+let tutorialGuideCard=null;
+function startTutorial(){startFixedTutorial()}
 function endRealTutorial(){tutorialRealMatch=false;clearOpeningTimers();clearTimeout(timer);document.getElementById('tutorialRealBanner').hidden=true;showHome()}
 function updateRealTutorial(){
  const el=document.getElementById('tutorialRealHelp');if(!el||!tutorialRealMatch||!g)return;
- if(g.phase==='opening')el.textContent='CPU3人と実際に対戦します。まずはカードが配られるのを待とう！';
- else if(g.phase==='over')el.textContent='得点・順位を確認しよう！ ジョーカーは手札にあるだけでドンの得点が2倍ずつ増えるよ。次のゲームも試してみよう。';
- else if(g.phase==='decision')el.textContent='ドンのチャンス！ 手札の合計と場の合計を見比べて、ドンするか決めよう。';
- else if(g.turn===0)el.textContent='あなたの番！ 場と同じ数字かマークのカードを出すか、山札から1枚引こう。Jはいつでも出せる。ジョーカーは出せないよ。';
- else el.textContent='CPUの番。相手のカードに注目！ 手札合計が場の合計と一致したらドンを狙おう。';
+ const hand=document.getElementById('hand');
+ document.querySelectorAll('.tutorial-spotlight').forEach(x=>x.classList.remove('tutorial-spotlight'));
+ const glow=(node)=>{if(node&&!node.disabled&&!node.hidden)node.classList.add('tutorial-spotlight')};
+ const hint=(msg)=>{el.textContent=msg};
+ if(g.phase==='opening'){hint('STEP 1｜4人にカードを配っています。配り終わるまで待とう！');return}
+ if(g.phase==='over'){
+  hint('得点表を確認しよう。相手の残り手札枚数×100点を基準に、ドンの種類・ジョーカー・巡目で倍率が変わるよ。次のゲームへ進もう！');
+  glow(document.getElementById('nextGame'));return;
+ }
+ if(g.phase==='decision'){
+  hint('ドン判定！ 手札合計と場の数字が一致したら「ドン！」、相手からドンされたときは「ドン返し！」を押そう。');
+  const buttons=[...document.querySelectorAll('#decisionButtons button')];glow(buttons.find(b=>b.textContent.includes('ドン')));return;
+ }
+ if(g.phase==='suit'){
+  hint('Jを出したね！ 次のマークを1つ選ぼう。ジョーカーは場に出せないよ。');
+  glow(document.querySelector('#suitChoice button'));return;
+ }
+ if(g.turn!==0){hint('CPUの番だよ。カードが出たら、場の数字と自分の手札合計を比べてドンのチャンスを探そう！');return}
+ if(g.penalty){hint('次の操作：光っている「必要な枚数を引く」を押そう。2や8のペナルティは重なることがあるよ。');glow(document.getElementById('penalty'));return}
+ if(g.drawn){hint('次の操作：「ターン終了」を押してCPUに交代しよう。引いたカードはこのターンに出せないよ。');glow(document.getElementById('pass'));return}
+ const legalCards=g.hands[0].map((c,i)=>({c,i})).filter(x=>legal([x.c]));
+ const selected=g.selected.map(i=>g.hands[0][i]);
+ if(selected.length&&legal(selected)){
+  if(selected[0].n===11){hint('次の操作：Jを選んだね。光っているマークを選ぶとカードを出せるよ。');glow(document.querySelector('#suitChoice button'));return}
+  hint('次の操作：選んだカードを「カードを出す」で場に出そう！');glow(document.getElementById('play'));return;
+ }
+ if(legalCards.length){
+  const chosen=legalCards.find(x=>x.c.n!==11)||legalCards[0];
+  hint('次の操作：光っている「'+label(chosen.c)+'」を1回タップして選ぼう。同じ数字か同じマークのカードを出せるよ。');
+  glow(hand?.children[chosen.i]);return;
+ }
+ hint('次の操作：出せるカードがないので「1枚引く」を押そう。ジョーカーは場に出せないよ。');
+ glow(document.getElementById('draw'));
 }
+
+
+// Deterministic, scripted 4-player tutorial. No random CPU moves or network calls.
+// Scoring mirrors the standard Don rule: other players' remaining card counts x 100,
+// multiplied by Don type, joker multiplier and deck-round multiplier.
+const fixedScenes=[
+ {title:'基本操作',tip:'場は♥7。同じマークの♥3をタップしよう！',board:'♥7',hand:['♥3','♣K','♠4','♦6','🃏'],cpu:[5,5,5],action:'card',target:'♥3',after:'♥3を出せた！ 同じ数字か同じマークなら出せるよ。'},
+ {title:'A（スキップ）',tip:'光る♣Aを出そう！ 次のCPUを1人飛ばすよ。',board:'♣9',hand:['♣A','♦5','♠3','♥8','🃏'],cpu:[5,5,5],action:'card',target:'♣A',after:'Aで次のプレイヤーをスキップ！'},
+ {title:'2（ドロー）',tip:'♠2を出そう！ 次のCPUが2枚引くよ。',board:'♠9',hand:['♠2','♥4','♦7','♣J','🃏'],cpu:[5,5,5],action:'card',target:'♠2',after:'次のプレイヤーCPU3が2枚引いた！',delta:[0,0,2]},
+ {title:'2の重ね出し',tip:'2を2枚選択してから「カードを出す」を押そう！ 2枚×2で次のCPUが4枚ドロー。まず1枚目の2を選択！',board:'♦2',hand:['♣2','♥2','♦5','♠8','🃏'],cpu:[5,5,5],action:'multi',targets:['♣2','♥2'],after:'2を2枚同時に出した！ 次のプレイヤーCPU3が4枚引いたよ。',delta:[0,0,4]},
+ {title:'8（ドロー）',tip:'♥8を出そう！ 8も次のCPUに2枚引かせるよ。',board:'♥6',hand:['♥8','♣3','♦9','♠K','🃏'],cpu:[5,5,5],action:'card',target:'♥8',after:'次のプレイヤーCPU3が2枚引いた！',delta:[0,0,2]},
+ {title:'J（いつでも出せる）',tip:'場は♠4だけど、♦Jはマークが違っても出せる！ タップしよう。',board:'♠4',hand:['♦J','♣6','♥9','♠A','🃏'],cpu:[5,5,5],action:'card',target:'♦J',after:'Jはどんなマークの場にも出せるよ。続いて次のマークを選ぼう！'},
+ {title:'ドン！',tip:'CPU1が♠5を出した！ 手札は♥2＋♣3＋ジョーカー0＝5。光る「ドン！」を押そう！',board:'♠5',hand:['♥2','♣3','🃏'],cpu:[4,3,5],action:'button',target:'ドン！',after:'ドン成功！ ドンした人以外の手札4＋3＋5＝12枚。12×100×2（ジョーカー1枚）＝2,400点。場にカードを出したCPU1が支払い、あなたが受け取るよ。',score:'don'},
+ {title:'引きドン！',tip:'場は♠Q（12）、手札は5＋3＝8。山札から♦4を引こう！',board:'♠Q',hand:['♥5','♣3'],cpu:[4,4,5],action:'draw',target:'山札から1枚引く',after:'♦4を引いた！ 手札合計が12になった。',follow:'引きドン！',score:'draw'},
+ {title:'ドン返し！',tip:'あなたが♥5を出したらCPU1がドン！ でもCPU1の残り手札合計も5。光る「ドン返し！」で返そう！',board:'♥5',hand:['♣2','♦3','🃏'],cpu:[2,4,5],action:'button',target:'ドン返し！',after:'ドン返し成功！ ジョーカーの倍率も得点に反映されるよ。',score:'reverse'},
+ {title:'結果・順位',tip:'ここまでの獲得点と順位を見よう。ジョーカーは場に出せず、持っているだけでドンの得点倍率が上がるよ。',board:'♥5',hand:['♣2','♦3','🃏'],cpu:[2,4,5],action:'finish',target:'チュートリアルを終了',after:'🎉 チュートリアル完了！'}
+];
+let fixedStep=0,fixedSub=0,fixedScores=[0,0,0,0],fixedHand=[],fixedCpu=[],fixedBoard='';
+function startFixedTutorial(){
+ tutorialRealMatch=false;clearOpeningTimers();clearTimeout(timer);
+ document.getElementById('championOverlay').hidden=true;
+ document.getElementById('tutorialRealBanner').hidden=true;
+ document.getElementById('gameScreen').classList.add('tutorial-fixed');
+ document.getElementById('fixedTutorial').hidden=false;
+ fixedStep=0;fixedScores=[0,0,0,0];fixedLoad();showScreen('gameScreen');
+}
+function endFixedTutorial(){document.getElementById('gameScreen').classList.remove('tutorial-fixed');document.getElementById('fixedTutorial').hidden=true;showHome()}
+function fixedLoad(){let s=fixedScenes[fixedStep];fixedSub=0;fixedSelected=[];fixedSuit='';fixedHand=[...s.hand];fixedCpu=[...s.cpu];fixedBoard=s.board;fixedRender()}
+function fixedCardMarkup(c,clickable=false,glow=false){let red=c.includes('♥')||c.includes('♦');return '<span class="ft-card '+(red?'red ':'')+(glow?'ft-glow':'')+'">'+(c==='🃏'?'🃏<small>JOKER</small>':c)+'</span>'}
+function fixedScoreDon(kind){
+ const count=fixedCpu.reduce((a,b)=>a+b,0);
+ const jokers=fixedHand.filter(c=>c==='🃏').length;
+ const mult=(kind==='draw'||kind==='reverse'?2:1)*Math.pow(2,jokers);
+ const gain=count*100*mult;
+ // A single opponent pays the full Don amount, matching the actual match engine.
+ fixedScores[0]+=gain;fixedScores[1]-=gain;
+ return {count,mult,gain};
+}
+function fixedRender(note){
+ const s=fixedScenes[fixedStep];
+ const isMulti=s.action==='multi',isJ=s.title.startsWith('J（');
+ const target=isMulti?s.targets[fixedSelected.length]:s.target;
+ const seats=(i,emoji,name)=>'<div class="ft-seat"><b>'+emoji+' '+name+'</b><div class="ft-backs">'+('🂠 '.repeat(Math.min(7,fixedCpu[i-1])))+(fixedCpu[i-1]>7?'+'+(fixedCpu[i-1]-7):'')+'</div>'+fixedCpu[i-1]+'枚 · '+fixedScores[i].toLocaleString()+'pt</div>';
+ const canDraw=s.action==='draw'&&fixedSub===0;
+ const center='<div class="ft-center"><small>場のカード</small>'+fixedCardMarkup(fixedBoard)+(fixedSuit?'<small>指定マーク：'+fixedSuit+'</small>':'')+'<small>山札（練習用）</small><button class="ft-card back '+(canDraw?'ft-glow':'')+'" '+(canDraw?'onclick="fixedAct(\'draw\')"':'disabled')+'>🂠</button></div>';
+ let hand=fixedHand.map((c,i)=>{
+  const selected=fixedSelected.includes(i);
+  const glow=(s.action==='card'&&fixedSub===0&&c===target)||(isMulti&&fixedSub===0&&c===target&&!selected);
+  return '<button class="ft-card '+((c.includes('♥')||c.includes('♦'))?'red ':'')+(glow?'ft-glow ':'')+(selected?'ft-selected ':'')+'" '+(glow?'onclick="fixedAct(\'card\','+i+')"':'disabled')+'>'+ (c==='🃏'?'🃏<small>JOKER</small>':c)+(selected?'<small>✓ 選択中</small>':'')+'</button>';
+ }).join('');
+ document.getElementById('ftProgress').textContent=(fixedStep+1)+' / '+fixedScenes.length+'｜'+s.title;
+ document.getElementById('ftTable').innerHTML='<div>'+seats(1,'🐶','CPU1')+'</div><div class="ft-middle">'+seats(3,'🐱','CPU3')+center+seats(2,'🐻','CPU2')+'</div><div class="ft-seat"><b>👤 あなた</b> · '+fixedScores[0].toLocaleString()+'pt<div class="ft-hand">'+hand+'</div><small>手札合計：'+fixedHand.reduce((a,c)=>a+(c==='🃏'?0:({'A':1,'J':11,'Q':12,'K':13}[c.slice(1)]||Number(c.slice(1))||0)),0)+'</small></div><div class="ft-scores">'+fixedScores.map((n,i)=>'<span>'+(i?'CPU'+i:'あなた')+' '+n.toLocaleString()+'pt</span>').join('')+'</div>';
+ document.getElementById('ftMessage').textContent=note||s.tip;
+ let buttons='';
+ if(s.action==='button'&&fixedSub===0)buttons='<button class="ft-glow" onclick="fixedAct(\'button\')">'+s.target+'</button>';
+ if(s.action==='draw'&&fixedSub===1)buttons='<button class="ft-glow" onclick="fixedAct(\'button\')">引きドン！</button>';
+ if(isMulti&&fixedSub===0)buttons='<button '+(fixedSelected.length===2?'class="ft-glow" onclick="fixedAct(\'play\')"':'disabled')+'>カードを出す（'+fixedSelected.length+'/2枚選択）</button>';
+ if(isJ&&fixedSub===1)buttons='<div style="width:100%;text-align:center;margin-bottom:6px">次のマークを選んでね！</div>'+['♠','♥','♦','♣'].map((suit,i)=>'<button class="ft-glow" onclick="fixedAct(\'suit\','+i+')">'+suit+'</button>').join('');
+ if(s.action==='finish')buttons='<button class="ft-glow" onclick="endFixedTutorial()">チュートリアルを終了 🎉</button>';
+ document.getElementById('ftActions').innerHTML=buttons;
+}
+function fixedComplete(s){
+ if(s.delta)s.delta.forEach((n,i)=>fixedCpu[i]+=n);
+ let note=s.after;
+ if(s.score){const result=fixedScoreDon(s.score);note+=' 今回の獲得：+'+result.gain.toLocaleString()+'pt（ドンした人以外の手札合計'+result.count+'枚×100×倍率'+result.mult+'）。場にカードを出したCPU1が支払い、あなたが受け取る。'}
+ fixedSub=2;fixedRender(note);
+ document.getElementById('ftActions').innerHTML='<button class="ft-glow" onclick="fixedNext()">次へ進む ▶</button>';
+}
+function fixedAct(type,index){
+ const s=fixedScenes[fixedStep],isMulti=s.action==='multi',isJ=s.title.startsWith('J（');
+ if(type==='card'&&s.action==='card'&&fixedSub===0){
+  if(fixedHand[index]!==s.target)return;
+  fixedBoard=fixedHand[index];fixedHand.splice(index,1);
+  if(isJ){fixedSub=1;fixedRender(s.after+' ♠ ♥ ♦ ♣ から好きなマークをタップ！');return;}
+  fixedComplete(s);return;
+ }
+ if(type==='card'&&isMulti&&fixedSub===0){
+  if(fixedSelected.length>=2||fixedSelected.includes(index)||fixedHand[index]!==s.targets[fixedSelected.length])return;
+  fixedSelected.push(index);
+  fixedRender(fixedSelected.length===1?'1枚目を選択！ 次に光るもう1枚の2をタップしよう。':'2枚選択できた！ 光る「カードを出す」を押そう。');return;
+ }
+ if(type==='play'&&isMulti&&fixedSub===0&&fixedSelected.length===2){
+  fixedBoard=fixedHand[fixedSelected[1]];
+  fixedSelected.sort((a,b)=>b-a).forEach(i=>fixedHand.splice(i,1));
+  fixedComplete(s);return;
+ }
+ if(type==='suit'&&isJ&&fixedSub===1&&index>=0&&index<4){
+  fixedSuit=['♠','♥','♦','♣'][index];fixedComplete({...s,after:'指定マークを'+fixedSuit+'に変更！ 次のプレイヤーは'+fixedSuit+'のカードを出せるよ。'});return;
+ }
+ if(type==='draw'&&s.action==='draw'&&fixedSub===0){
+  fixedHand.push('♦4');fixedSub=1;fixedRender('♦4を引いた！ 5＋3＋4＝12。次は「引きドン！」を押そう！');return;
+ }
+ if(type==='button'&&(s.action==='button'&&fixedSub===0||s.action==='draw'&&fixedSub===1))fixedComplete(s);
+}
+function fixedNext(){if(fixedStep<fixedScenes.length-1){fixedStep++;fixedLoad()}else endFixedTutorial()}
 
 function exitTutorial(){showHome()}
 function tutCardLabel(c){return c[0]==='🃏'?'JOKER':c[0]+c[1]}
@@ -1369,7 +1499,7 @@ function renderTutorial(){
  if(tutorialStep===2&&!tutorialDone)add('ドン！','don');
  if(tutorialStep===3&&!tutorialDone)add('ドン返し！','reverse');
  if(tutorialStep===4&&tutorialDrawn&&!tutorialDone)add('引きドン！','drawDon');
- if(tutorialDone)add(tutorialStep===5?'練習を終了 🎉':'次へ進む ▶','next');
+ if(tutorialDone)add(tutorialStep===5?'チュートリアルを終了 🎉':'次へ進む ▶','next');
  add('最初から','restart',true);
  document.getElementById('tutDeck').disabled=tutorialStep!==4||tutorialDrawn||tutorialDone;
  document.getElementById('tutStatus').textContent=tutorialDone?'🎉 成功！ よくできました！':(tutorialStep===1?'特殊カード '+(tutorialSpecial+1)+'/5':'');
